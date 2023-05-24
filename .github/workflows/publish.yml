@@ -25,10 +25,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Update the IG Publisher
-        run: ./_updatePublisher.sh 
-
       # Runs a set of commands using the runners shell
-      - name: Build the IG website
-        run: ./_genonce.sh 
+      - name: Update the IG Publisher and build the IG
+        run: ./_updatePublisher.sh && ./_genonce.sh 
