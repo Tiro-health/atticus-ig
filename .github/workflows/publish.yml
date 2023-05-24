@@ -27,12 +27,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Update the IG Publisher
-        run: ./_updatePublisher.sh
-      - name: Upload the publisher file
-        uses: actions/upload-artifact@v3
-        with:
-          name: output-log-file
-          path: output.log
+        run: skipPrompts=false ./_updatePublisher.sh
       - name: Build and publish the IG
         run: ./_genonce.sh
       - uses: actions/upload-artifact@v3
