@@ -40,7 +40,7 @@ jobs:
         run: skipPrompts=false ./_updatePublisher.sh
       - name: Build and publish the IG
         run: ./_genonce.sh
-     -  uses: actions/upload-artifact@v3
+      -  uses: actions/upload-artifact@v3
         with:
           name: github-pages
           path: ./output # or path/to/artifact
