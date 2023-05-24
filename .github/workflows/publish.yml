@@ -24,7 +24,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: helaili/jekyll-action@2.0.5 # Choose any one of the Jekyll Actions
       - name: Use Node.js 19.x
         uses: actions/setup-node@v3
         with:
@@ -34,6 +33,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Update the IG Publisher
         run: skipPrompts=false ./_updatePublisher.sh
+      - name: Install Jekyll
+        run: ./_installJekyll.sh
       - name: Build and publish the IG
         run: ./_genonce.sh
       - uses: actions/upload-artifact@v3
