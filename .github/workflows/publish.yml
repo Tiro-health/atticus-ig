@@ -46,6 +46,9 @@ jobs:
           path: ./output # or path/to/artifact
   # Deployment job
   deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
