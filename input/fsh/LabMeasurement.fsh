@@ -16,12 +16,12 @@ Description: "PSA is a measurement of the prostate specific antigen in a blood s
 * permittedUnit[0] = UCUM#ng/mL "nanogram per milliliter"
 * permittedUnit[+] = UCUM#g/L "gram per liter"
 
-Instance: Hemoglobin
-InstanceOf: LabMeasurement
-Usage: #example
-Title: "Hemoglobin"
-Description: "Hemoglobin is a measurement of the hemoglobin in a blood sample."
-* status = #draft
-* code =  SCT#104718002 "Hemoglobin, free measurement (procedure)"
-* permittedUnit[0] = UCUM#g/dL "milligram per deciliter"
-* permittedUnit[+] = UCUM#g/L "gram per liter"
+//Instance: Hemoglobin
+//InstanceOf: LabMeasurement
+//Usage: #example
+//Title: "Hemoglobin"
+//Description: "Hemoglobin is a measurement of the hemoglobin in a blood sample."
+//* status = #draft
+//* code =  SCT#104718002 "Hemoglobin, free measurement (procedure)"
+//* permittedUnit[0] = UCUM#g/dL "milligram per deciliter"
+//* permittedUnit[+] = UCUM#g/L "gram per liter"
