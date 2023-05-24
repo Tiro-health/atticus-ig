@@ -36,7 +36,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-      - run: gem install rouge -v 3.30.0 jekyll bundler
+      - run: gem install jekyll bundler
       - name: Build and publish the IG
         run: ./_genonce.sh
       - uses: actions/upload-artifact@v3
