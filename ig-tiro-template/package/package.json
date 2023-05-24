@@ -1,0 +1,13 @@
+﻿{
+  "name" : "tiro-health.fhir.template",
+  "type" : "fhir.template",
+  "license" : "CC0-1.0",
+  "description" : "Tiro.health FHIR Template - for use with Tiro.health-published FHIR IGs",
+  "author" : "http://tiro.health/fhir",
+  "canonical" : "http://tiro.health/templates/tiro-health.fhir.template",
+  "base" : "fhir.base.template",
+  "dependencies" : {
+    "fhir.base.template" : "current"
+  },
+  "version" : "0.6.0"
+}

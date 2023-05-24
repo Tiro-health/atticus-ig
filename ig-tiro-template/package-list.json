@@ -1,0 +1,14 @@
+﻿{
+  "package-id": "tiro-health.fhir.template",
+  "title": "Base template for FHIR IGs published by Tiro.health",
+  "canonical": "http://tiro.health/templates/tiro-health.fhir.template",
+  "introduction": "This is the basic template for FHIR guides published by Tiro.health",
+  "list": [
+    {
+      "version": "current",
+      "desc": "Continuous Integration Build (latest in version control)",
+      "status": "ci-build",
+      "current": true
+    }
+  ]
+}

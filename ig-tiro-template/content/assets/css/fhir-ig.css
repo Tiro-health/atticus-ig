@@ -1,0 +1,33 @@
+/* FHIR family-specific colors */
+:root {
+  --stripe-bg-color: #232D5B; /* 1. Stripe color */
+  --footer-highlight-text-color: #f1f1fc;
+  --publish-box-bg-color: #f1f1fc;
+  --family-title-color: #232D5B; 
+  --navbar-bg-color: #232D5B; /* 2. Header container color */
+  --footer-container-bg-color: #232D5B; /* 4. Footer container color */
+  --footer-bg-color: #232D5B; /* 4. Footer container color */
+  --btn-hover-color: #3c3e8f;  /* 6. Menu button hover color */
+  --ig-header-color: white; /* 7. IG header color */
+  --btn-active-color: #007FFF; /* 8. Menu button active color */
+}
+
+/* FHIR family-specific fonts */
+:root {
+  --font-family: 'Open Sans', sans-serif; /* 1. Font family */
+  --font-family-alt: 'Open Sans', sans-serif; /* 3. Font family for menu */
+  --font-family-alt2: 'Open Sans', sans-serif; /* 5. Font family for footer */
+}
+
+#family-nav{
+  float: left!important;
+  display: flex!important;
+}
+#family-title {
+  color: var(--family-title-color);
+}
+
+#publish-box{
+  border-radius: 0.125rem;
+  border-color: #232D5B;
+}
