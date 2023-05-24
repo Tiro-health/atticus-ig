@@ -33,8 +33,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Update the IG Publisher
         run: skipPrompts=false ./_updatePublisher.sh
-      - name: Install Jekyll
-        run: ./_installJekyll.sh
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - run: gem install jekyll bundler
       - name: Build and publish the IG
         run: ./_genonce.sh
       - uses: actions/upload-artifact@v3
