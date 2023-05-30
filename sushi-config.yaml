@@ -3,8 +3,8 @@
 # │  used properties are included. For a list of all supported properties and their functions,     │
 # │  see: https://fshschool.org/docs/sushi/configuration/.                                         │
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
-id: tiro-health-content
-canonical: http://content.tiro.health
+id: tiro-health-fhir
+canonical: http://tiro.health/fhir
 name: Tiro-healthContentIG
 # title: Example Title
 # description: Example Implementation Guide for getting started with SUSHI
@@ -24,7 +24,8 @@ publisher:
 # package id and the value is the version (or dev/current). For advanced
 # use cases, the value can be an object with keys for id, uri, and version.
 #
-# dependencies:
+dependencies:
+  hl7.fhir.uv.sdc: 3.0.0
 #   hl7.fhir.us.core: 3.1.0
 #   hl7.fhir.us.mcode:
 #     id: mcode
@@ -204,7 +205,7 @@ instanceOptions:
   # Determines for which types of Instances SUSHI will automatically set meta.profile
   # if InstanceOf references a profile:
   #
-  # setMetaProfile: always # always | never | inline-only | standalone-only
+  setMetaProfile: always # always | never | inline-only | standalone-only
   #
   #
   # Determines for which types of Instances SUSHI will automatically set id
