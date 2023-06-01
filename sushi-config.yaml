@@ -5,9 +5,9 @@
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
 id: tiro-health-fhir
 canonical: http://tiro.health/fhir
-name: Tiro-healthContentIG
-# title: Example Title
-# description: Example Implementation Guide for getting started with SUSHI
+name: Tiro-healthIG
+title: Tiro.health Implementation Guide
+description: ImplementationGuide to get started integrating with Tiro.health
 status: draft # draft | active | retired | unknown
 version: 0.1.0
 fhirVersion: 5.0.0 # https://www.hl7.org/fhir/valueset-FHIR-version.html

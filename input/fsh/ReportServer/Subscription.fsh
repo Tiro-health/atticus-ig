@@ -27,6 +27,7 @@ Description: "This subscription triggers an event when a specific report is upda
   * filterParameter = "id"
   * comparator = #eq
   * value = "example-report-id"
+* endpoint = "https://example.com/endpoint"
 * channelType = #rest-hook
 * content = #full-resource
 
@@ -38,5 +39,6 @@ Description: "This subscription triggers an event when a report is updated and t
 * topic = Canonical(ReportUpdates)
 * status = #requested
 * reason = "Monitor the updates of transformed FHIR resources for a all reports."
+* endpoint = "https://example.com/endpoint"
 * channelType = #rest-hook
 * content = #full-resource

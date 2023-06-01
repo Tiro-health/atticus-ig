@@ -25,31 +25,31 @@ Description: "Example of a Composition from a Prostate Cancer Staging report."
 * title = "Prostate Cancer Staging Composition"
 * status = #final
 * language = #nl
-* section
+* section[+]
   * title = "Medische voorgeschiedenis"
   * code.coding[0] = SCT#1003642006 "Past medical history section"
   * code.coding[+] = ReportSections#medical-history "Medical history section"
   * text.status = #generated
   * text.div = "<div>Hier volgt een leesbaar textoverzicht van de algemene medische voorgeschiedenis van de patiënt.</div>"
-* section
+* section[+]
   * title = "Prostaat-gerateerde voorgeschiedenis"
   * code.coding[0] = SCT#422625006 "history of present illness section"
   * code.coding[+] = ReportSections#prostate-history "Prostate history section"
   * text.status = #generated
   * text.div = "<div>Hier volgt een leesbaar textoverzicht van de prostaat-gerelateerde medische voorgeschiedenis van de patiënt.</div>"
-* section
+* section[+]
   * title = "Anamnese en klinisch onderzoek"
   * code = SCT#371529009 "History and physical report"
   * text.status = #generated
   * text.div = "<div>Hier volgt een leesbaar textoverzicht van de anamnese en het klinisch onderzoek van de patiënt.</div>"
-* section
+* section[+]
   * title = "Technische onderzoeken"
   * code = SCT#4201000179104 "Imaging report"
   * text.status = #generated
   * text.div = "<div>Hier volgt een leesbaar textoverzicht van de technische onderzoeken van de patiënt.</div>"
-* section
+* section[+]
   * title = "Staging prostaatkanker"
-* section
+* section[+]
   * title = "Besluit bij verhoogde PSA"
   * code = SCT#722091001 "Conclusion interpretation document"
   * text.status = #generated
