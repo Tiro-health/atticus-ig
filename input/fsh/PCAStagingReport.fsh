@@ -25,24 +25,41 @@ Description: "Example of a Composition from a Prostate Cancer Staging report."
 * title = "Prostate Cancer Staging Composition"
 * status = #final
 * language = #nl
-* section[+].title = "Medische voorgeschiedenis"
-* section[=].code = SCT#1003642006 "Past medical history section"
-* section[+].title = "Prostaat-gerateerde voorgeschiedenis"
-* section[=].code = SCT#422625006 "history of present illness section"
-* section[+].title = "Anamnese en klinisch onderzoek"
-* section[=].code = SCT#371529009 "History and physical report"
-* section[+].title = "Technische onderzoeken"
-* section[=].code = SCT#4201000179104 "Imaging report"
-* section[+].title = "Staging prostaatkanker"
-* section[+].title = "Besluit bij verhoogde PSA"
-* section[=].code = SCT#722091001 "Conclusion interpretation document"
-
+* section
+  * title = "Medische voorgeschiedenis"
+  * code.coding[0] = SCT#1003642006 "Past medical history section"
+  * code.coding[+] = ReportSections#medical-history "Medical history section"
+  * text.status = #generated
+  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de algemene medische voorgeschiedenis van de patiënt.</div>"
+* section
+  * title = "Prostaat-gerateerde voorgeschiedenis"
+  * code.coding[0] = SCT#422625006 "history of present illness section"
+  * code.coding[+] = ReportSections#prostate-history "Prostate history section"
+  * text.status = #generated
+  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de prostaat-gerelateerde medische voorgeschiedenis van de patiënt.</div>"
+* section
+  * title = "Anamnese en klinisch onderzoek"
+  * code = SCT#371529009 "History and physical report"
+  * text.status = #generated
+  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de anamnese en het klinisch onderzoek van de patiënt.</div>"
+* section
+  * title = "Technische onderzoeken"
+  * code = SCT#4201000179104 "Imaging report"
+  * text.status = #generated
+  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de technische onderzoeken van de patiënt.</div>"
+* section
+  * title = "Staging prostaatkanker"
+* section
+  * title = "Besluit bij verhoogde PSA"
+  * code = SCT#722091001 "Conclusion interpretation document"
+  * text.status = #generated
+  * text.div = "<div>Hier volgt een leesbaar textoverzicht van het besluit bij verhoogde PSA van de patiënt.</div>"
 
 Instance: PCacTStage
 InstanceOf: Observation
 Usage: #example
 Title: "PCa T Stage"
-Description: ""
+Description: "Clinical T Stage observation of the prostate tumor."
 * code = SCT#399537006 "Clinical TNM stage grouping (observable entity)"
 * status = #registered
 * subject = Reference(PCaPatient) 
@@ -51,12 +68,11 @@ Description: ""
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * performer = Reference(DrHause)
 
-
 Instance: PCaEAURisk
 InstanceOf: Observation
 Usage: #example
 Title: "PCa EAU Risk Group"
-Description: ""
+Description: "EAU Risk Group observation of the prostate tumor."
 * code = AUTO#urn:uuid:030861fb-a73f-499a-9e7e-471d720c25cf "EAU risicogroep"
 * status = #registered
 * subject = Reference(PCaPatient) 
@@ -157,3 +173,42 @@ Description: "FHIR Document containing all resources related to the Prostate Can
 * entry[+].resource = PCaCondition
 * entry[+].resource = PCaPatient
 * entry[+].resource = DrHause
+
+Profile: PCaMDT
+Parent: EpisodeOfCare
+Id: pca-mdt
+Title: "PCaMDT"
+Description: "Multi-disciplinary team (MDT) meeting for prostate cancer."
+* status = #finished
+* diagnosis
+  * condition.reference = Reference(PCaCondition) 
+  * use = http://hl7.org/fhir/encounter-diagnosis-use#final "Final"
+
+Instance: PCaMDTResources
+InstanceOf: GraphDefinition
+Usage: #example
+Title: "Prostate Cancer MDT"
+Description: "Defines the set of resources to created during the MDT Prostate Cancer."
+* name = "PCaMDT"
+* status = #draft
+* date = 2023-05-31
+* node[0]
+  * nodeId = "patient"
+  * description = "The subject of the MDT"
+  * type = #Patient
+* node[1]
+  * nodeId = "psa"
+  * description = "PSA measurement of the patient"
+  * type = #Observation
+* node[2]
+  * nodeId = "biopsy"
+  * description = "Biopsy of the patient"
+  * type = #DiagnosticReport
+* link[0]
+  * sourceId = "psa"
+  * path = "subject"
+  * targetId = "patient"
+* link[1]
+  * sourceId = "biopsy"
+  * path = "subject"
+  * targetId = "patient"
