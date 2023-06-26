@@ -1,19 +1,3 @@
-Instance: DrHause
-InstanceOf: Practitioner 
-Usage: #example
-Title: "Dr. Hause"
-Description: "Example medical doctor specialized in urology/oncology"
-
-Instance: PCaPatient
-InstanceOf: Patient
-Usage: #example
-Title: "Prostate Cancer Patient"
-Description: "Example patient that is diagnosed with prostate cancer."
-* identifier.value = "8242"
-* identifier.system = "http://hospital.be/official-patient-id"
-* gender = #male
-* birthDate = "2023-04-06"
-
 Instance: PCaStagingComposition
 InstanceOf: Composition 
 Usage: #example
@@ -152,10 +136,10 @@ Description: "Patient is diagnosed with prostate cancer."
 * participant[0].actor = Reference(DrHause)
 * participant[0].function = http://terminology.hl7.org/CodeSystem/provenance-participant-type#custodian "Custodian"
 * participant[0].function.text = "Treating physician"
-* stage.assessment[0] = Reference(PCacTStage) 
-* stage.assessment[1] = Reference(PCaEAURisk) 
-* stage.assessment[2] = Reference(PCaGleason) 
-* stage.assessment[3] = Reference(PCaPSA2)
+* stage.assessment[+] = Reference(PCacTStage) 
+* stage.assessment[+] = Reference(PCaEAURisk) 
+* stage.assessment[+] = Reference(PCaGleason) 
+* stage.assessment[+] = Reference(PCaPSA2) 
 
 Instance: PCaStagingReport
 InstanceOf: Bundle 
