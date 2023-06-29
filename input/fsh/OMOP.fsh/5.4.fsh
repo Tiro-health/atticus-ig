@@ -8,7 +8,7 @@ Description: "Base model for a OMOP-CDM 5.4."
 Logical: OMOPPerson 
 Parent: OMOPRecord
 Id: OMOPPerson
-Title: "Person"
+Title: "OMOP Person"
 Description: "Model resembling the OMOP-CDM 5.4 Person table."
 * gender 1..1 Coding "Gender of the person."
 * year_of_birth 1..1 integer "Year of birth of the person."
