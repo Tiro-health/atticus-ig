@@ -15,11 +15,27 @@ Description: "A table is a template block that contains a repeating set of rows 
 * url 1..1 MS
 * status 1..1 MS
 * subjectType = #Patient
-* item 1..* MS
+* item 1..1 MS
 * item.linkId = #records
+* item.type 1..1 MS
 * item.type = #group
+* item.repeats 1..1 MS
 * item.repeats = true
-* item.item 0..0 MS
+* item.item 1..* MS
+
+Instance: TableExample
+InstanceOf: Table
+Usage: #example
+Title: "Example Table"
+Description: "An example table."
+* url = "http://example.com/table"
+* status = #draft
+* item[+]
+  * item[+].type = #date
+  * item[=].linkId = "Datum"
+  * item[+].type = #string
+  * item[=].linkId = "Omschrijving"
+
 
 //Resource: TiroHealthTemplateBlock
 //Parent: DomainResource
