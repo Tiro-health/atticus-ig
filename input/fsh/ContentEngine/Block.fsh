@@ -7,6 +7,20 @@ Description: "A template block is a section of a template that defines a block o
 * status 1..1 MS
 * subjectType = #Patient
 
+Profile: Table
+Parent: TemplateBlock 
+Id: Table
+Title: "Table"
+Description: "A table is a template block that contains a repeating set of rows with a uniform set of columns."
+* url 1..1 MS
+* status 1..1 MS
+* subjectType = #Patient
+* item 1..* MS
+* item.linkId = #records
+* item.type = #group
+* item.repeats = true
+* item.item 0..0 MS
+
 //Resource: TiroHealthTemplateBlock
 //Parent: DomainResource
 //Id: TiroHealthTemplateBlock
