@@ -37,7 +37,7 @@ jobs:
         run: npm install -g fsh-sushi
       # Runs a set of commands using the runners shell
       - name: Update the IG Publisher
-        run: skipPrompts=false ./_updatePublisher.sh
+        run: skipPrompts=true ./_updatePublisher.sh
       - name: Build and publish the IG
         run: ./_genonce.sh
       - name: Upload IG to GitHub Pages
