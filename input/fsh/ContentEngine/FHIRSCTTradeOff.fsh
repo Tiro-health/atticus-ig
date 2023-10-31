@@ -11,7 +11,7 @@ InstanceOf: Procedure
 Usage: #example
 Title: "URS because of TCC"
 Description: "Ureterenoscopie because of a TCC"
-* status = #done
+* status = #completed
 * code.text = "URS because of TCC"
 * code.coding[0] = $SCT#38678700:2363702006=255109008 "Uretorenoscopy"
 * subject = Reference(DemoPatient)
@@ -21,8 +21,8 @@ InstanceOf: Procedure
 Usage: #example
 Title: "URS because of TCC"
 Description: "Ureterenoscopie because of a TCC"
-* status = #done
-* category = $SCT#387713003: "Surgical procedure (procedure)"
+* status = #completed
+* category = $SCT#387713003 "Surgical procedure (procedure)"
 * code.text = "URS because of TCC"
 * code.coding[0] = $SCT#38678700:2363702006=255109008 "Uretorenoscopy because of TCC"
 * code.coding[1] = $SCT#38678700 "Uretorenoscopy"
@@ -33,7 +33,7 @@ InstanceOf: Procedure
 Usage: #example
 Title: "URS because of TCC"
 Description: "Uretorenoscopy because of a TCC"
-* status = #done
+* status = #completed
 * category = $SCT#387713003 "Surgical procedure (procedure)"
 * code.text = "URS because of TCC"
 * code.coding[0] = $SCT#386787002 "ureterorenoscopie"
@@ -46,7 +46,7 @@ InstanceOf: Procedure
 Usage: #example
 Title: "URS because of TCC"
 Description: "Uretorenoscopy because of a TCC"
-* status = #done
+* status = #completed
 * category = $SCT#387713003 "Surgical procedure (procedure)"
 * code.text = "URS because of TCC"
 * code.coding[0] = $SCT#386787002 "ureterorenoscopie"
