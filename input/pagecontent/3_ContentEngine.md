@@ -1,5 +1,3 @@
-# Content Engine
-
 ## Introduction
 
 ## Terminology
@@ -10,4 +8,4 @@
 
 ## Quality Indicators and Registries
 
-Example: [Follow-up after BCG](Measure-follow-up-after-BCG)
+Example: [Follow-up after BCG](Measure-FUafterMOC.html)
