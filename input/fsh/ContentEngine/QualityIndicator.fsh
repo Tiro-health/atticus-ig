@@ -14,17 +14,18 @@ InstanceOf: QualityIndicator
 Usage: #example
 Title: "Follow-up after TURB"
 Description: ""
+* status = #draft
 * group.population[+]
-    * code = #numerator
-    * description = "TURB procedures followed by a MOC or Follow-up containing anatomical pathology report with a diagnosis of bladder cancer"
+  * code = #numerator
+  * description = "TURB procedures followed by a MOC or Follow-up containing anatomical pathology report with a diagnosis of bladder cancer"
 * group.population[+]
-    * code = #denominator
-    * description = """TURB procedures
-    The following procedures are excluded:
-    - TURB procedures with a specified reason of 'after previous instillation' (='na voorgaande instillatie')
-    - Absence of the following fields: `supervisor`, `afdeling` or `eadnr`
-    """
+  * code = #denominator
+  * description = """TURB procedures
+  The following procedures are excluded:
+  - TURB procedures with a specified reason of 'after previous instillation' (='na voorgaande instillatie')
+  - Absence of the following fields: `supervisor`, `afdeling` or `eadnr`
+  """
 * group.stratifier[+]
-    * description = "Hospital"
+  * description = "Hospital"
 * group.stratifier[+]
-    * description = "Time period between TURB and MOC/Follow-up"
+  * description = "Time period between TURB and MOC/Follow-up"
