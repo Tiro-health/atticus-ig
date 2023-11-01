@@ -14,3 +14,6 @@ The IG is organised in two navigational structures:
 2. By system:
 
    The Tiro.health platform has a clear seperation between content artifacts and patient-related data which makes that the system is devided in a **ReportServer** managing all the patient-related resources and a **ContentEngine** managing all the patiënt-agnostic resources.
+
+   - [ReportServer](./3_ReportServer.html)
+   - [ContentEngine](./4_ContentEngine.html)
