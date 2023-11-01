@@ -13,7 +13,8 @@ Instance: FUafterMOC
 InstanceOf: QualityIndicator 
 Usage: #example
 Title: "Follow-up after TURB"
-Description: ""
+Description: "Percentage of patients with a TURB procedure for bladder cancer who have a MOC or Follow-up containing anatomical pathology report with a diagnosis of bladder cancer within 6 months after the TURB procedure."
+* name = "FUafterMOC"
 * status = #draft
 * group.population[+]
   * code = #numerator
@@ -25,7 +26,7 @@ Description: ""
   - TURB procedures with a specified reason of 'after previous instillation' (='na voorgaande instillatie')
   - Absence of the following fields: `supervisor`, `afdeling` or `eadnr`
   """
-* group.stratifier[+]
+* group.stratifier[+] // These correspond to the filters in the dashboard
   * description = "Hospital"
 * group.stratifier[+]
   * description = "Time period between TURB and MOC/Follow-up"
