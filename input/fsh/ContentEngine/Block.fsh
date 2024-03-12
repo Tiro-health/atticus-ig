@@ -1,5 +1,5 @@
 Profile: TemplateBlock
-Parent: Questionnaire 
+Parent: Questionnaire
 Id: TemplateBlock
 Title: "TemplateBlock"
 Description: "A template block is a section of a template that defines a block of content that can be included in a document."
@@ -8,7 +8,7 @@ Description: "A template block is a section of a template that defines a block o
 * subjectType = #Patient
 
 Profile: Table
-Parent: TemplateBlock 
+Parent: TemplateBlock
 Id: Table
 Title: "Table"
 Description: "A table is a template block that contains a repeating set of rows with a uniform set of columns."
@@ -16,12 +16,14 @@ Description: "A table is a template block that contains a repeating set of rows 
 * status 1..1 MS
 * subjectType = #Patient
 * item 1..1 MS
+* item ^short = "The group of columns in the table."
 * item.linkId = #records
 * item.type 1..1 MS
 * item.type = #group
 * item.repeats 1..1 MS
 * item.repeats = true
 * item.item 1..* MS
+* item.item ^short = "A column in the table."
 
 Instance: TableExample
 InstanceOf: Table
@@ -54,7 +56,7 @@ Description: "An example table."
 //Mapping: TemplateBlock
 //Source: TiroHealthTemplateBlock
 //Target: "TemplateBlock"
-//Id: TemplateBlock 
+//Id: TemplateBlock
 //Title: "TemplateBlock"
 //Description: "A mapping between the TiroHealthTemplateBlock and the TemplateBlock profile."
 //* url -> "url"
