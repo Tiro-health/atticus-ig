@@ -16,7 +16,8 @@ Description: "A table is a template block that contains a repeating set of rows 
 * status 1..1 MS
 * subjectType = #Patient
 * item 1..1 MS
-* item ^short = "The group of columns in the table."
+* item ^short = "Columns of a table."
+* item ^definition = "A group of columns defining the content of the table."
 * item.linkId = #records
 * item.type 1..1 MS
 * item.type = #group
@@ -24,6 +25,7 @@ Description: "A table is a template block that contains a repeating set of rows 
 * item.repeats = true
 * item.item 1..* MS
 * item.item ^short = "A column in the table."
+* item.item ^definition = "A column in the table."
 
 Instance: TableExample
 InstanceOf: Table
