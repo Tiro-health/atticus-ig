@@ -16,16 +16,29 @@ Description: "A table is a template block that contains a repeating set of rows 
 * status 1..1 MS
 * subjectType = #Patient
 * item 1..1 MS
-* item ^short = "Columns of a table."
-* item ^definition = "A group of columns defining the content of the table."
-* item.linkId = #records
+* item ^short = "Record of a table."
+* item ^definition = "The group of items that make up a record in the table."
+* item.linkId = #record
 * item.type 1..1 MS
-* item.type = #group
+* item.type = #group (exactly)
 * item.repeats 1..1 MS
 * item.repeats = true
 * item.item 1..* MS
 * item.item ^short = "A column in the table."
 * item.item ^definition = "A column in the table."
+* item.item.repeats = false
+
+Profile: QuestionTree
+Parent: TemplateBlock
+Id: QuestionTree
+Title: "QuestionTree"
+Description: "A question tree is a template block that contains a tree of questions. Each question may have one or more answers and may have one or more child questions."
+* url 1..1 MS
+* status 1..1 MS
+* subjectType = #Patient
+* item 1..1 MS 
+* item ^short = "A question in the tree."
+* item ^definition = "A question in the tree."
 
 Instance: TableExample
 InstanceOf: Table

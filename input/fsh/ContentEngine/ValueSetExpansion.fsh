@@ -7,7 +7,7 @@ Description: "This extension adds a score to each code in the expansion of a val
 * value[x] 1..1
 
 Instance: ValueSetWithExpansionScore
-InstanceOf: ValueSet 
+InstanceOf: ValueSet
 Usage: #example
 Title: "Value Set With Expansion Score"
 Description: "This value set has an expansion with scores for each code."
@@ -15,10 +15,11 @@ Description: "This value set has an expansion with scores for each code."
 * expansion
   * timestamp = 2019-01-01T00:00:00Z
   * contains
+    * system = "http://example.org"
     * code = #a
     * display = "A"
     * extension[MatchScore].valueDecimal = 0.5
-    
+
 Extension: PreExpandFlag
 Id: valueset-pre-expand-flag
 Title: "Pre Expand Flag"
