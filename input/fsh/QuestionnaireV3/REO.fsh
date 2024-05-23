@@ -8,6 +8,10 @@ Description: "Render library to render a FHIR Questionnaire in a tree like quest
 * version = "3.0.0"
 * type.text = "React/NPM package to render a FHIR Questionnaire"
 * type.coding = http://terminology.hl7.org/CodeSystem/library-type#logic-library "Logic Library"
+* name = "questionnaire-v3"
+* title = "Questionnaire Version 3"
+* purpose = "Render a FHIR Questionnaire in a tree like question-answer layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
+* publisher = "Tiro Health"
 
 Extension: RenderType
 Id: render-type
