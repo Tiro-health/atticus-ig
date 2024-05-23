@@ -1,5 +1,33 @@
 Alias: $questionnaire-item-control = http://hl7.org/fhir/questionnaire-item-control
 Alias: $library-type = http://terminology.hl7.org/CodeSystem/library-type
+Alias: $ext-itemControl = http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
+
+Profile: TiroQuestionnaire
+Parent: Questionnaire 
+Id: tiro-questionnaire
+Title: "Tiro Questionnaire"
+Description: "Profile for a Tiro Questionnaire"
+* extension contains 
+    RenderType named renderType 1..1 MS and
+    Orientation named orientation 0..1
+
+* item ^slicing.discriminator.type = #value
+* item ^slicing.discriminator.path = "extension(http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl)"
+* item ^slicing.description = "Slice that splits the items between answer and subquestions"
+* item ^slicing.ordered = true // Since order influences presentation for Questionnaires, this is important
+* item ^slicing.rules = #openAtEnd
+* item contains 
+    answer 0..1 MS
+* item[answer]
+  * type = #group
+  * extension contains 
+    $ext-itemControl named itemControl 1..1 MS
+  * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
+    //* valueCodeableConcept
+    //  * coding[+] = $questionnaire-item-control#list
+    //  * coding[+] = TiroQuestionnaireItemControl#answer-container
+    //  * text = "Answer Container"
+
 
 Instance: QuestionnaireRenderer
 InstanceOf: Library 
@@ -44,9 +72,9 @@ Context: Questionnaire, Questionnaire.item
 * value[x] only code
 * valueCode from QuestionnaireItemOrientation (required)
 
-CodeSystem: TiroHealthQuestionnaireItemControl
-Id: tiro-health-questionnaire-item-control
-Title: "Tiro Health Questionnaire Item Control"
+CodeSystem: TiroQuestionnaireItemControl
+Id: tiro-questionnaire-item-control
+Title: "Tiro Questionnaire Item Control"
 Description: "Custom Questionnaire Item Control by Tiro Health"
 * #answer-container "Answer Container" "Container for answers (rows) part of a question."
 * #answer-row "Answer Row" "Row of answers part of a question."
@@ -61,7 +89,7 @@ RuleSet: AnswerContainer
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Answer Container" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#answer-container
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-container
 
 RuleSet: AnswerRow
 * type = #group
@@ -69,7 +97,7 @@ RuleSet: AnswerRow
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Answer Row" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#answer-row
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-row
 
 RuleSet: QuestionContainer
 * type = #group
@@ -77,7 +105,7 @@ RuleSet: QuestionContainer
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Question Container" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#question-container
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-container
 
 RuleSet: Comments
 * type = #text
@@ -85,7 +113,7 @@ RuleSet: Comments
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Comments" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text
-  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#comments
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#comments
 
 RuleSet: CodingDropdown
 * type = #coding
@@ -93,7 +121,7 @@ RuleSet: CodingDropdown
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Coding Dropdown" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#drop-down
-  * valueCodeableConcept.coding[0] = TiroHealthQuestionnaireItemControl#drop-down
+  * valueCodeableConcept.coding[0] = TiroQuestionnaireItemControl#drop-down
 
 RuleSet: CodingChips
 * type = #coding
@@ -101,7 +129,7 @@ RuleSet: CodingChips
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Coding Chips" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
-  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#chips 
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#chips 
 
 /**
  * REO Multidisciplinary Discussion Template 
