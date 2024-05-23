@@ -1,3 +1,6 @@
+Alias: $questionnaire-item-control = http://hl7.org/fhir/questionnaire-item-control
+Alias: $library-type = http://terminology.hl7.org/CodeSystem/library-type
+
 Instance: QuestionnaireRenderer
 InstanceOf: Library 
 Usage: #example
@@ -7,7 +10,7 @@ Description: "Render library to render a FHIR Questionnaire in a tree like quest
 * url = "http://tiro.health/render-type/questionnaire|v3.0.0"
 * version = "3.0.0"
 * type.text = "React/NPM package to render a FHIR Questionnaire"
-* type.coding = http://terminology.hl7.org/CodeSystem/library-type#logic-library "Logic Library"
+* type.coding = $library-type#logic-library "Logic Library"
 * name = "questionnaire-v3"
 * title = "Questionnaire Version 3"
 * purpose = "Render a FHIR Questionnaire in a tree like question-answer layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
@@ -41,23 +44,68 @@ Context: Questionnaire, Questionnaire.item
 * value[x] only code
 * valueCode from QuestionnaireItemOrientation (required)
 
+CodeSystem: TiroHealthQuestionnaireItemControl
+Id: tiro-health-questionnaire-item-control
+Title: "Tiro Health Questionnaire Item Control"
+Description: "Custom Questionnaire Item Control by Tiro Health"
+* #answer-container "Answer Container" "Container for answers (rows) part of a question."
+* #answer-row "Answer Row" "Row of answers part of a question."
+* #question-container "Question Container" "Structure to group answers and subquestions in a hierarchical tree layout."
+* #comments "Comments" "Text field to add comments to a question. This component is visually more subtle than a full text field."
+* #drop-down "Dropdown" "Dropdown to select a single answer from a list of options."
+* #chips "Chips" "Chips to select one or more answers from a list of options."
+
 RuleSet: AnswerContainer
 * type = #group
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Answer Container" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
+  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#answer-container
 
 RuleSet: AnswerRow
 * type = #group
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Answer Row" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
+  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#answer-row
 
 RuleSet: QuestionContainer
 * type = #group
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Question Container" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
+  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#question-container
 
 RuleSet: Comments
 * type = #text
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Comments" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text
+  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#comments
 
 RuleSet: CodingDropdown
 * type = #coding
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Coding Dropdown" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#drop-down
+  * valueCodeableConcept.coding[0] = TiroHealthQuestionnaireItemControl#drop-down
 
 RuleSet: CodingChips
 * type = #coding
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Coding Chips" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
+  * valueCodeableConcept.coding[1] = TiroHealthQuestionnaireItemControl#chips 
+
+/**
+ * REO Multidisciplinary Discussion Template 
+ */
 
 CodeSystem: UZLeuvenREOAddendum 
 Id: uz-leuven-reo-addendum 
