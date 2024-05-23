@@ -43,6 +43,9 @@ Description: "Render library to render a FHIR Questionnaire in a tree like quest
 * title = "Questionnaire Version 3"
 * purpose = "Render a FHIR Questionnaire in a tree like question-answer layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
 * publisher = "Tiro Health"
+* dataRequirement[+]
+  * type = #Questionnaire
+  * profile = Canonical(TiroQuestionnaire)
 
 Extension: RenderType
 Id: render-type
