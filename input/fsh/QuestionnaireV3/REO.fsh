@@ -232,9 +232,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
             * insert CodingChips
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie-mesothelioom/answer/row-0/lokalisatie-mesothelioom"
             * type = #coding
-            * answerOption[+] // should be a subset of the LungCancerDiagnosis value set
-              * valueCoding = $SCT#40768004 "links"
-              * valueCoding = $SCT#51872008 "rechts"
+            * answerOption[+].valueCoding = $SCT#40768004 "links"
+            * answerOption[+].valueCoding = $SCT#51872008 "rechts"
           * item[1]
             * insert Comments
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie-mesothelioom/answer/row-0/comments"
