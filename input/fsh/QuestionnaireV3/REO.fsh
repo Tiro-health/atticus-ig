@@ -266,16 +266,19 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/t-stage"
             * code = $SCT#399504009 "cT category"
+            * text = "cT category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-t-stage-lung-cancer"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/n-stage"
             * code = $SCT#277206009 "cN category"
+            * text = "cN category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-n-stage-lung-cancer"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/m-stage"
             * code = $SCT#399387003 "cM category"
+            * text = "cM category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-m-stage-lung-cancer" 
           * item[+]
             * insert Comments
@@ -305,16 +308,19 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/t-stage"
             * code = $SCT#399504009 "cT category"
+            * text = "cT category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-t-stage-mesothelioma"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/n-stage"
             * code = $SCT#277206009 "cN category"
+            * text = "cN category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-n-stage-mesothelioma"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/m-stage"
             * code = $SCT#399387003 "cM category"
+            * text = "cM category"
             * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-m-stage-mesothelioma" 
           * item[+]
             * insert Comments
