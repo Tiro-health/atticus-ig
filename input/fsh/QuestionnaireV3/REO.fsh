@@ -173,9 +173,9 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * item[0]
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-0/lokalisatie-links"
             * type = #coding
-            * answerOption[+] // should be a subset of the LungCancerDiagnosis value set
-              * valueCoding = $SCT#82407001 "linker onderkwab"
-              * valueCoding = $SCT#82408000 "linker bovenkwab"
+            * answerOption[+].valueCoding = $SCT#82414001 "linker long"
+            * answerOption[+].valueCoding = $SCT#82407001 "linker onderkwab"
+            * answerOption[+].valueCoding = $SCT#82408000 "linker bovenkwab"
           * item[1]
             * insert Comments
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-0/comments"
@@ -185,10 +185,9 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * item[0]
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-1/lokalisatie-rechts"
             * type = #coding
-            * answerOption[+] // should be a subset of the LungCancerDiagnosis value set
-              * valueCoding = $SCT#64353002 "rechter onderkwab"
-              * valueCoding = $SCT#113250009 "rechter middenkwab"
-              * valueCoding = $SCT#11339004 "rechter bovenkwab"
+            * answerOption[+].valueCoding = $SCT#64353002 "rechter onderkwab"
+            * answerOption[+].valueCoding = $SCT#113250009 "rechter middenkwab"
+            * answerOption[+].valueCoding = $SCT#11339004 "rechter bovenkwab"
           * item[1]
             * insert Comments
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-1/comments"
@@ -198,10 +197,9 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * item[0]
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-2/lokalisatie-hoofdbronchus"
             * type = #coding
-            * answerOption[+] // should be a subset of the LungCancerDiagnosis value set
-              * valueCoding = $SCT#75245000 "hoofdbronchus Li"
-              * valueCoding = $SCT#70074004 "hoofdbronchus Re"
-              * valueCoding = $SCT#44567001 "trachea"
+            * answerOption[+].valueCoding = $SCT#75245000 "hoofdbronchus Li"
+            * answerOption[+].valueCoding = $SCT#70074004 "hoofdbronchus Re"
+            * answerOption[+].valueCoding = $SCT#44567001 "trachea"
           * item[1]
             * insert Comments
             * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/answer/row-2/comments"
@@ -318,6 +316,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * item[+]
             * insert Comments
             * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/comments"
+      
         
       
       
