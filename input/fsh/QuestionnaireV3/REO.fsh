@@ -38,22 +38,16 @@ Context: Questionnaire, Questionnaire.item
 * valueCode from QuestionnaireItemOrientation (required)
 
 RuleSet: AnswerContainer
-* linkId = "answer"
 * type = #group
 
-RuleSet: AnswerRow(number)
-* linkId = "row-{number}"
+RuleSet: AnswerRow
 * type = #group
 
-RuleSet: QuestionContainer(linkIdSuffix)
-* linkId = "q-{linkIdSuffix}"
+RuleSet: QuestionContainer
 * type = #group
 
 RuleSet: Comments
-* item[+]
-  * linkId = "comments"
-  * type = #text
-  * text = "Comments"
+* type = #text
 
 CodeSystem: LungCancerDiagnosisUZLeuvenAddendum
 Id: lung-cancer-diagnosis-uzleuven-addendum
@@ -98,39 +92,49 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
 * extension[Orientation].valueCode = #vertical
 * item[0]
   * linkId = "presentatie"
-  * text = "# Presentatie"
+  * text = "# Presentatie" // some syntax to automatically generate a ordinal prefix
   * type = #group
   * repeats = true
   * code = $SCT#255259006 "First presentation" // probably not the right code
   * item[+] // DATE OF DIAGNOSIS
-    * insert QuestionContainer(datum)
+    * insert QuestionContainer
+    * linkId = "presentatie/incidentie-datum"
     * text = "IncidentieDatum"
     * code =  $SCT#432213005 "Date of diagnosis"
     * item[0]
       * insert AnswerContainer
+      * linkId = "presentatie/incidentie-datum/answer"
       * item[0]
-        * insert AnswerRow(0)
+        * insert AnswerRow
+        * linkId = "presentatie/incidentie-datum/answer/row-0"
         * item[0]
-          * linkId = "datum"
+          * linkId = "presentatie/incidentie-datum/answer/row-0/date"
           * type = #date
           * required = true
           * code =  $SCT#432213005 "Date of diagnosis" // maybe overkill??
-        * insert Comments
+        * item[1]
+          * insert Comments
+          * linkId = "presentatie/incidentie-datum/answer/row-0/comments"
 
   * item[+] // DIAGNOSIS
-    * insert QuestionContainer(diagnosis)
+    * insert QuestionContainer
+    * linkId = "presentatie/diagnose"
     * text = "Diagnose"
     * code =  $SCT#439401001 "Diagnosis"
     * item[0]
       * insert AnswerContainer
+      * linkId = "presentatie/diagnose/answer"
       * item[0]
-        * insert AnswerRow(0)
+        * insert AnswerRow
+        * linkId = "presentatie/diagnose/answer/row-0"
         * item[0]
           * linkId = "diagnose"
           * type = #coding
           * code =  $SCT#432213005 "Diagnosis"
           * answerValueSet = Canonical(LungCancerDiagnosis)
-        * insert Comments
+        * item[1]
+          * insert Comments
+          * linkId = "presentatie/diagnose/answer/row-0/comments"
 
 
 
