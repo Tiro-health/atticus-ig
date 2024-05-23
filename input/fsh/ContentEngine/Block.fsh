@@ -18,15 +18,22 @@ Description: "A table is a template block that contains a repeating set of rows 
 * item 1..1 MS
 * item ^short = "Record of a table."
 * item ^definition = "The group of items that make up a record in the table."
-* item.linkId = #record
-* item.type 1..1 MS
-* item.type = #group (exactly)
-* item.repeats 1..1 MS
-* item.repeats = true
-* item.item 1..* MS
-* item.item ^short = "A column in the table."
-* item.item ^definition = "A column in the table."
-* item.item.repeats = false
+  * linkId = #record
+  * type 1..1 MS
+  * type = #group (exactly)
+  * repeats 1..1 MS
+  * repeats = true
+  * item 1..* MS
+  * item ^short = "A column in the table."
+  * item ^definition = "A column in the table."
+    * repeats = false
+
+ValueSet: QuestionTreeAnswerItemCode
+Id: question-tree-answer-item-code
+Title: "Question Tree Answer Item Code"
+Description: "The type of an answer in a question tree."
+* include codes from system http://hl7.org/fhir/ValueSet/questionnaire-item-type
+* exclude http://hl7.org/fhir/item-type#code
 
 Profile: QuestionTree
 Parent: TemplateBlock
@@ -36,9 +43,23 @@ Description: "A question tree is a template block that contains a tree of questi
 * url 1..1 MS
 * status 1..1 MS
 * subjectType = #Patient
-* item 1..1 MS 
+* item 0..* MS 
+* item.type = #group
 * item ^short = "A question in the tree."
 * item ^definition = "A question in the tree."
+* item
+  * item ^slicing.discriminator.type = #value
+  * item ^slicing.discriminator.path = "type"
+  * item ^slicing.rules = #closed
+  * item ^slicing.ordered = true
+  * item ^slicing.description = "Items contain answers first and then child questions."
+  * item contains
+    answer 0..* and
+    childQuestion 0..*
+  * item[answer].type = #choice
+  * item[answer].repeats = false
+  * item[childQuestion].type = #group
+
 
 Instance: TableExample
 InstanceOf: Table
