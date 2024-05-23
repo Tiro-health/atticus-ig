@@ -160,7 +160,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
-        * operator = #exist
+        * operator = #exists
         * answerBoolean = true
       * enableBehavior = #all
       * disabledDisplay = #hidden
@@ -252,7 +252,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
-        * operator = #exist
+        * operator = #exists
         * answerBoolean = true
       * enableBehavior = #all
       * item[+]
