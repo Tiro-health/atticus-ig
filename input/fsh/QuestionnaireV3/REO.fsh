@@ -1,8 +1,12 @@
 Alias: $questionnaire-item-control = http://hl7.org/fhir/questionnaire-item-control
 Alias: $library-type = http://terminology.hl7.org/CodeSystem/library-type
-Alias: $ext-itemControl = http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
-Alias: vsOrder = http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder
-Alias: lookup = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-lookupQuestionnaire
+Alias: $itemControl = http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
+Alias: $vsOrder = http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder
+Alias: $lookup = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-lookupQuestionnaire
+Alias: $optionsToggle = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerOptionsToggleExpression
+Alias: $variable = http://hl7.org/fhir/StructureDefinition/variable
+Alias: $clinical-m-stage-lung-cancer-addendum = http://tiro.health/fhir/CodeSystem/clinical-m-stage-lung-cancer-addendum
+
 
 Profile: TiroQuestionnaire
 Parent: Questionnaire 
@@ -23,7 +27,7 @@ Description: "Profile for a Tiro Questionnaire"
 * item[answer]
   * type = #group
   * extension contains 
-    $ext-itemControl named itemControl 1..1 MS
+    $itemControl named itemControl 1..1 MS
   * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
     //* valueCodeableConcept
     //  * coding[+] = $questionnaire-item-control#list
@@ -241,6 +245,63 @@ Description: "Diagnosis of Lung Cancer"
 * $SCT#373068000 "Onbekend"
 * $SCT#74964007 "Andere" // this should be covered by the `Questionnaire.item.answerConstraint` field
 
+ValueSet: ClinicalTStageLungCancer
+Id: clinical-tstage-lung-cancer
+Title: "Clinical T-Stage Lung Cancer"
+Description: "Clinical T-Stage for Lung Cancer"
+* $SCT#1222604002 "Tx"
+  * ^extension[$vsOrder].valueInteger = 0
+* $SCT#1228882005 "T0"
+  * ^extension[$vsOrder].valueInteger = 1
+* $SCT#1228884006 "Tis"
+  * ^extension[$vsOrder].valueInteger = 2
+* $SCT#1228891009 "T1mi"
+  * ^extension[$vsOrder].valueInteger = 3
+* $SCT#1228889001 "T1"
+  * ^extension[$vsOrder].valueInteger = 4
+* $SCT#1228892002 "T1a"
+  * ^extension[$vsOrder].valueInteger = 5
+* $SCT#1228895000 "T1b"
+  * ^extension[$vsOrder].valueInteger = 6
+* $SCT#1228899006 "T1c"
+  * ^extension[$vsOrder].valueInteger = 7
+* $SCT#1228929004 "T2"
+  * ^extension[$vsOrder].valueInteger = 8
+* $SCT#1228931008 "T2a"
+  * ^extension[$vsOrder].valueInteger = 9
+* $SCT#1228934000 "T2b"
+  * ^extension[$vsOrder].valueInteger = 10
+* $SCT#1228938002 "T3"
+  * ^extension[$vsOrder].valueInteger = 11
+* $SCT#1228944003 "T4"
+  * ^extension[$vsOrder].valueInteger = 12
+
+ValueSet: ClinicalNStageLungCancer
+Id: clinical-nstage-lung-cancer
+Title: "Clinical N-Stage Lung Cancer"
+Description: "Clinical N-Stage for Lung Cancer"
+* $SCT#1229966003 "Nx"
+* $SCT#1229967007 "N0"
+* $SCT#1229973008 "N1"
+* $SCT#1229978004 "N2"
+* $SCT#1229981009 "N2a"
+* $SCT#1229982002 "N2b"
+* $SCT#1229984001 "N3"
+
+ValueSet: ClinicalMStageLungCancer
+Id: clinical-mstage-lung-cancer
+Title: "Clinical M-Stage Lung Cancer"
+Description: "Clinical M-Stage for Lung Cancer"
+* $SCT#1229901006 "M0"
+* $SCT#1229903009 "M1"
+* $SCT#1229904003 "M1a"
+* $SCT#1229907005 "M1b"
+* $SCT#1229910003 "M1c"
+* $SCT#1229912006 "M1c1"
+* $clinical-m-stage-lung-cancer-addendum#cm1c2 "M1c2"
+* $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
+
+
 ValueSet: LungCancerLocationOfMetastasis
 Id: lung-cancer-location-of-metastasis
 Title: "Lung Cancer Location Of Metastasis"
@@ -258,9 +319,9 @@ Id: detected-not-detected
 Title: "Detected|Not Detected"
 Description: "LOINC Answer List LL744-4 for Detected|Not Detected"
 * $LOINC#LA11882-0 "Detected"
-  * ^extension[vsOrder].valueInteger = 0 
+  * ^extension[$vsOrder].valueInteger = 0 
 * $LOINC#LA11883-8 "Not Detected"
-  * ^extension[vsOrder].valueInteger = 1
+  * ^extension[$vsOrder].valueInteger = 1
 
 
 ValueSet: JaNee
@@ -268,9 +329,9 @@ Id: ja-nee
 Title: "Ja|Nee"
 Description: "SNOMED-CT codes for 'ja' and 'nee'"
 * $SCT#373066001 "ja"
-  * ^extension[vsOrder].valueInteger = 0 
+  * ^extension[$vsOrder].valueInteger = 0 
 * $SCT#373067005 "nee"
-  * ^extension[vsOrder].valueInteger = 1
+  * ^extension[$vsOrder].valueInteger = 1
 
 Instance: REOPreviousProblem
 InstanceOf: Questionnaire
@@ -313,6 +374,10 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
     * linkId = "presentatie/diagnose"
     * text = "Diagnose"
     * code =  $SCT#439401001 "Diagnosis"
+    * extension[$variable][+]
+      * valueExpression.name = #isMesothelioma
+      * valueExpression.language = #text/fhirpath
+      * valueExpression.expression = "%context.repeat(item).where(linkId = 'presentatie/diagnose/answer/row-0/diagnose').answer.value.code in ('399477001', '65278006')"
     * item[0]
       * insert AnswerContainer
       * linkId = "presentatie/diagnose/answer"
@@ -448,19 +513,82 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/t-stage"
             * code = $SCT#399504009 "cT category"
             * text = "cT-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-t-stage-lung-cancer"
+            * answerValueSet = Canonical(ClinicalTStageLungCancer) 
+            * extension[$optionsToggle][+]
+              * extension[option][+]
+                * valueCoding = $SCT#1228884006 "Tis"
+              * extension[option][+]
+                * valueCoding = $SCT#1228891009 "T1mi"
+              * extension[option][+]
+                * valueCoding = $SCT#1228892002 "T1a"
+              * extension[option][+]
+                * valueCoding = $SCT#1228895000 "T1b"
+              * extension[option][+]
+                * valueCoding = $SCT#1228899006 "T1c"
+              * extension[option][+]
+                * valueCoding = $SCT#1228931008 "T2a"
+              * extension[option][+]
+                * valueCoding = $SCT#1228934000 "T2b"
+              * extension[expression]
+                * valueExpression.language = #text/fhirpath
+                * valueExpression.expression = "not(%isMesothelioma)"
+                * valueExpression.description = "Enable Tis, T1mi, T1a, T1b, T1c, T2a, T2b when not Mesothelioma"
+            * extension[$optionsToggle][+]
+              * extension[option][+]
+                * valueCoding = $SCT#1228889001 "T1"
+              * extension[option][+]
+                * valueCoding = $SCT#1228929004 "T2"
+              * extension[expression]
+                * valueExpression.language = #text/fhirpath
+                * valueExpression.expression = "%isMesothelioma"
+                * valueExpression.description = "Enable T1, T2 when Mesothelioma"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/n-stage"
             * code = $SCT#277206009 "cN category"
             * text = "cN-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-n-stage-lung-cancer"
+            * answerValueSet = Canonical(ClinicalNStageLungCancer)
+            * extension[$optionsToggle][+]
+              * extension[option][+]
+                * valueCoding = $SCT#1229981009 "N2a"
+              * extension[option][+]
+                * valueCoding = $SCT#1229982002 "N2b"
+              * extension[option][+]
+                * valueCoding = $SCT#1229984001 "N3"
+              * extension[expression]
+                * valueExpression.language = #text/fhirpath
+                * valueExpression.expression = "not(%isMesothelioma)"
+                * valueExpression.description = "Enable N2a, N2b, N3 when not Mesothelioma"
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/m-stage"
             * code = $SCT#399387003 "cM category"
             * text = "cM-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-m-stage-lung-cancer" 
+            * answerValueSet = Canonical(ClinicalMStageLungCancer)
+            * extension[$optionsToggle][+]
+              * extension[option][+]
+                * valueCoding = $SCT#1229904003 "M1a"
+              * extension[option][+]
+                * valueCoding = $SCT#1229907005 "M1b"
+              * extension[option][+]
+                * valueCoding = $SCT#1229910003 "M1c"
+              * extension[option][+]
+                * valueCoding = $SCT#1229912006 "M1c1"
+              * extension[option][+]
+                * valueCoding = $SCT#1229912006 "M1c2"
+              * extension[option][+]
+                * valueCoding = $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
+              * extension[expression]
+                * valueExpression.language = #text/fhirpath
+                * valueExpression.expression = "not(%isMesothelioma)"
+                * valueExpression.description = "Enable M1a, M1b, M1c, M1c1, M1c2, Mx when notMesothelioma"
+            * extension[$optionsToggle][+]
+              * extension[option][+]
+                * valueCoding = $SCT#1229903009 "M1"
+              * extension[expression]
+                * valueExpression.language = #text/fhirpath
+                * valueExpression.expression = "%isMesothelioma"
+                * valueExpression.description = "Enable M1 when Mesothelioma"
           * item[+]
             * insert Comments
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/comments"
@@ -497,51 +625,6 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
       * enableBehavior = #any
       * disabledDisplay = #hidden
-      * item[+]
-        * insert AnswerContainer
-        * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer"
-        * item[+]
-          * insert AnswerRow
-          * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0"
-          * item[+]
-            * insert CodingDropdown
-            * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/t-stage"
-            * code = $SCT#399504009 "cT category"
-            * text = "cT-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-t-stage-mesothelioma"
-          * item[+]
-            * insert CodingDropdown
-            * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/n-stage"
-            * code = $SCT#277206009 "cN category"
-            * text = "cN-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-n-stage-mesothelioma"
-          * item[+]
-            * insert CodingDropdown
-            * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/m-stage"
-            * code = $SCT#399387003 "cM category"
-            * text = "cM-stage"
-            * answerValueSet = "http://tiro.health/fhir/ValueSet/clinical-m-stage-mesothelioma" 
-          * item[+]
-            * insert Comments
-            * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom/answer/row-0/comments"
-        * item[+]
-          * insert QuestionContainer
-          * linkId = "presentatie/diagnose/tnm-classificatie/locatie-metastase"
-          * text = "Locatie van metastase"
-          * code = $SCT#385421009 "Site of distant metastasis"
-          * repeats = true
-          * enableWhen[+] // TODO: why doing inverse logic?
-            * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie-mesothelioom/answer/row-0/m-stage"
-            * operator = #=
-            * answerCoding = $SCT#1229901006 "M0"
-          * enableWhen[+]
-            * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie-mesothelioom/answer/row-0/m-stage"
-            * operator = #exists
-            * answerBoolean = true
-          * enableBehavior = #all
-          * disabledDisplay = #hidden
-          * answerValueSet = Canonical(LungCancerLocationOfMetastasis)
-          * answerConstraint = #optionsOrType
     * item[+]
       * insert CodingChips
       * linkId = "presentatie/diagnose/mutatie"
