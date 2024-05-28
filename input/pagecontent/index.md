@@ -1,19 +1,15 @@
 # Tiro.health - FHIR IG
 
 This Implementation Guide documents how Tiro.health exposes data through a FHIR API.
-The IG is organised in two navigational structures:
 
-1. By topic:
+1. [Anatomy of a report](./1_AnatomyOfReport.html)
 
-   Most projects are focussed on a specific disease area or specialty.
-   Current availabel topics are
+2. Definition a template
 
-   - [Prostate Cancer](./1_ProstateCancer.html)
-   - [Lung Cancer](./2_RespiratoryOncology.html)
+## Examples for specific use cases
 
-2. By system:
+Most projects are focussed on a specific disease area or specialty.
+Current availabel use-cases are
 
-   The Tiro.health platform has a clear seperation between content artifacts and patient-related data which makes that the system is devided in a **ReportServer** managing all the patient-related resources and a **ContentEngine** managing all the patiënt-agnostic resources.
-
-   - [ContentEngine](./3_ContentEngine.html)
-   - [ReportServer](./4_ReportServer.html)
+- [Prostate Cancer](./3_ProstateCancer.html)
+- [Lung Cancer](./4_RespiratoryOncology.html)
