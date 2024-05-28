@@ -35,10 +35,10 @@ Description: "Profile for a Tiro Questionnaire"
     //  * text = "Answer Container"
 
 
-Instance: QuestionnaireRenderer
+Instance: TreeLayoutRenderer
 InstanceOf: Library 
 Usage: #example
-Title: "Questionnaire Renderer Version 3"
+Title: "Tree Layout Renderer (Version 3)"
 Description: "Render library to render a FHIR Questionnaire in a tree like question-answer layout"
 * status = #active
 * version = "3.0.0"
@@ -51,6 +51,24 @@ Description: "Render library to render a FHIR Questionnaire in a tree like quest
 * dataRequirement[+]
   * type = #Questionnaire
   * profile = Canonical(TiroQuestionnaire)
+
+Instance: TableLayoutRenderer
+InstanceOf: Library
+Usage: #example
+Title: "Table Layout Renderer"
+Description: "Render library to render a FHIR Questionnaire in a table layout"
+* status = #active
+* version = "2.0.0"
+* type.text = "React/NPM package to render a FHIR Questionnaire"
+* type.coding = $library-type#logic-library "Logic Library"
+* name = "table-v2"
+* title = "Table Layout Renderer"
+* purpose = "Render a FHIR Questionnaire in a table layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
+* publisher = "Tiro Health"
+* dataRequirement[+]
+  * type = #Questionnaire
+  * profile = Canonical(TiroQuestionnaire)
+
 
 Instance: CharlsonComorbidityIndex
 InstanceOf: Questionnaire 
@@ -341,7 +359,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
 * status = #active
 * version = "5.0.1"
 * language = #nl-BE
-* extension[RenderType].valueCanonical = Canonical(QuestionnaireRenderer) 
+* extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer) 
 * extension[Orientation].valueCode = #vertical
 * item[0]
   * linkId = "presentatie"
@@ -829,17 +847,128 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * linkId = "presentatie/diagnose/opmerkingen"
       * insert TextArea
       * text = "Extra opmerkingen"    
-        
+
+Extension: InitialValueTemplate
+Id: initial-value-template
+Title: "Initial Value Template"
+Description: "Set of initial values for a questionnaire"
+Context: Questionnaire.item
+* extension contains
+  name 1..1 MS and
+  item 0..* MS
+* extension[name] ^short = "Name of the template"
+* extension[name].value[x] only string
+* extension[item] ^short = "Answer values for the template"
+* extension[item].extension contains
+  linkId 1..1 MS and
+  answer 1..1 MS
+* extension[item].extension[linkId] ^short = "LinkId of the item"
+* extension[item].extension[linkId].value[x] only string
+* extension[item].extension[answer] ^short = "Answer value for the item"
+* extension[item].extension[answer].value[x] 1.. MS
 
 
-
-
-          
-      
-        
-      
-      
-
-
-
-
+Instance: REOPreviousTherapies
+InstanceOf: Questionnaire
+Usage: #example
+Title: "REO Previous Therapies"
+Description: "Previous therapies overview for REO Multidisplincary Discussion"
+* status = #active
+* version = "4.0.0"
+* language = #nl-BE
+* extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
+* extension[Orientation].valueCode = #vertical
+* item[0]
+  * linkId = "record"
+  * type = #group
+  * repeats = true
+  * extension[InitialValueTemplate][+]
+    * extension[name].valueString = "radiotherapie"
+    * extension[item][+]
+      * extension[linkId].valueString = "record/behandeling"
+      * extension[answer].valueCoding = $SCT#429858000 "Radiotherapy"
+  * extension[InitialValueTemplate][+]
+    * extension[name].valueString = "systeemtherapie"
+    * extension[item][+]
+      * extension[linkId].valueString = "record/behandeling"
+      * extension[answer].valueCoding = $SCT#429840000 "Systemic therapy"
+  * extension[InitialValueTemplate][+]
+    * extension[name].valueString = "chirurgie"
+    * extension[item][+]
+      * extension[linkId].valueString = "record/behandeling"
+      * extension[answer].valueCoding = $SCT#429840000 "Surgery"
+  * item[+]
+    * linkId = "record/therapie-lijn"
+    * insert CodingDropdown
+    * text = "#"
+    * answerValueSet = "http://tiro.health/fhir/CodeSystem/reo-line-of-therapy/vs"
+  * item[+]
+    * linkId = "record/period"
+    * type = #group
+    * text = "Periode"
+  * item[+]
+    * linkId = "record/behandeling"
+    * insert CodingDropdown
+    * text = "Therapie"
+    * answerValueSet = "http://tiro.health/fhir/ValueSet/therapy"
+    * readOnly = true
+  * item[+]
+    * linkId = "record/omschrijving"
+    * text = "Omschrijving"
+    * insert TextArea
+  * item[+]
+    * linkId = "record/specificatie"
+    * type = #group
+    * text = "Specificatie"
+    * item[+]
+      * linkId = "record/specificatie/radiotherapie"
+      * type = #group
+      * item[+]
+        * linkId = "record/specificatie/radiotherapie/bestralingsdosis"
+        * type = #group
+        * item[+]
+          * linkId = "record/specificatie/radiotherapie/bestralingsdosis/factie"
+          * insert DecimalTextbox(#{Sessions} "")
+        * item[+]
+          * linkId = "record/specificatie/radiotherapie/bestralingsdosis/fractie-dosis"
+          * insert DecimalTextbox(#{Dose} "Gy")
+    * item[+]
+      * linkId = "record/specificatie/systeemtherapie"
+      * type = #group
+      * item[+]
+        * linkId = "record/specificatie/systeemtherapie/recist"
+        * insert CodingDropdown
+        * text = "RECIST"
+        * answerValueSet = "http://tiro.health/fhir/CodeSystem/recist-nl/vs"
+    * item[+]
+      * linkId = "record/specificatie/chirurgie"
+      * type = #group
+      * enableBehavior = #any
+      * enableWhen[+]
+        * question = "record/behandeling"
+        * operator = #=
+        * answerCoding = $SCT#429840000 "Surgery"
+      * item[+]
+        * linkId = "record/specificatie/chirurgie/p-tnm"
+        * type = #group
+        * item[+]
+          * linkId = "record/specificatie/chirurgie/p-tnm/t"
+          * insert CodingDropdown
+          * text = "pT"
+          * answerValueSet = "http://tiro.health/fhir/ValueSet/p-t-stage"
+        * item[+]
+          * linkId = "record/specificatie/chirurgie/p-tnm/n"
+          * insert CodingDropdown
+          * text = "pN"
+          * answerValueSet = "http://tiro.health/fhir/ValueSet/p-n-stage"
+        * item[+]
+          * linkId = "record/specificatie/chirurgie/p-tnm/m"
+          * insert CodingDropdown
+          * text = "pM"
+          * answerValueSet = "http://tiro.health/fhir/ValueSet/p-m-stage"
+        * item[+]
+          * linkId = "record/specificatie/chirurgie/p-tnm/p-r-stage"
+          * insert CodingChips
+          * text = "pR"
+          * answerValueSet = "http://tiro.health/fhir/ValueSet/p-r-stage"
+       
