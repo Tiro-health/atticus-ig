@@ -6,7 +6,8 @@ Alias: $lookup = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnair
 Alias: $optionsToggle = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerOptionsToggleExpression
 Alias: $variable = http://hl7.org/fhir/StructureDefinition/variable
 Alias: $clinical-m-stage-lung-cancer-addendum = http://tiro.health/fhir/CodeSystem/clinical-m-stage-lung-cancer-addendum
-
+Alias: $mime = http://terminology.hl7.org/CodeSystem/v3-mediatypes
+Alias: $CLINVAR = http://www.ncbi.nlm.nih.gov/clinvar
 
 Profile: TiroQuestionnaire
 Parent: Questionnaire 
@@ -99,6 +100,33 @@ Title: "Render Type"
 Description: "Render Type extension for the FHIR Questionnaire resource which indicates the layout preference for the Questionnaire"
 Context: Questionnaire
 * value[x] only canonical
+
+CodeSystem: TemplateLanguages
+Id: template-languages
+Title: "Template Languages"
+Description: "Available template languages to generate a narrative for a Questionnaire item"
+* ^supplements = "http://hl7.org/fhir/CodeSystem/template-languages"
+* ^content = #complete
+* #text/x.tiro-health.liquid "Liquid" "Liquid template language with custom Tiro.health tags and filters."
+* #text/x.tiro-health.jinja2 "Jinja2" "Jinja2 template language with custom Tiro.health tags and filters."
+
+ValueSet: TemplateLanguages
+Id: template-languages
+Title: "Template Languages"
+Description: "Available template languages to generate a narrative for a Questionnaire item"
+* $mime#text/x.tiro-health.liquid "Liquid"
+* $mime#text/x.tiro-health.jinja2 "Jinja2"
+
+Extension: NarrativeTemplate
+Id: narrative-template
+Title: "Narrative Template"
+Description: "Extension to add a template to generate a narrative for Questionnaire items"
+Context: Questionnaire.item
+* ^purpose = """
+             Attache a narrative template to a Questionnaire item to generate a narrative for the item.
+             """
+* value[x] only Expression
+* valueExpression.language from TemplateLanguages (required)
 
 CodeSystem: QuestionnaireItemOrientation
 Id: questionnaire-item-orientation
@@ -223,11 +251,12 @@ RuleSet: TextArea
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-area
 
+
 /**
  * REO Multidisciplinary Discussion Template 
  */
 
-CodeSystem: UZLeuvenREOAddendum 
+CodeSystem: REO 
 Id: uz-leuven-reo-addendum 
 Title: "Addition codes to be used with the REO Multidisciplinary Discussion at UZ Leuven"
 Description: "Extra codes for the REO Multidisciplinary Discussion at UZ Leuven"
@@ -240,6 +269,16 @@ Description: "Extra codes for the REO Multidisciplinary Discussion at UZ Leuven"
 * #oncogenic-driver-absent "geen oncogene driver"
 * #reprofiling-weefsel-biopt "Reprofiling weefsel biopt"
 * #reprofiling-liquid-biopt "Reprofiling liquid biopt"
+* #egfr-exon-18 "ex18"
+* #egfr-exon-19 "ex19"
+* #egfr-exon-20-insertion "ex20 (ins)"
+* #egfr-exon-20-other "ex20 (other)"
+* #egfr-exon-21 "ex21"
+* #egfr-amp "amp" 
+* #alk-fusion "fusion"
+* #alk-G1202R "G1202R"
+* #alk-I1171N "I1171N"
+* #alk-L1196M "L1196M"
 
 ValueSet: LungCancerDiagnosis
 Id: lung-cancer-diagnosis
@@ -248,15 +287,15 @@ Description: "Diagnosis of Lung Cancer"
 * ^language = #nl-BE
 * $SCT#255725002 "NSCLC - adenocarcinoom"
 * $SCT#723301009 "NSCLC - spinocellulair carcinoom"
-* UZLeuvenREOAddendum#nsclc-nos "NSCLC NOS"
+* REO#nsclc-nos "NSCLC NOS"
 * $SCT#1260072008 "NSCLC - sarcomatoïd carcinoom"
 * $SCT#254632001 "Kleincellig longcarcinoom (SCLC)"
 * $SCT#189607006 "Carcinoïd - Typisch"
 * $SCT#128658008 "Carcinoïd - Atypisch"
-* UZLeuvenREOAddendum#carcinoid-nos "Carcinoïd NOS"
+* REO#carcinoid-nos "Carcinoïd NOS"
 * $SCT#65278006 "Mesothelioom - Epithelioïd"
 * $SCT#399477001 "Mesothelioom - Sarcomatoïd"
-* UZLeuvenREOAddendum#carcinoma-mixed "Mixed Carcinoma"
+* REO#carcinoma-mixed "Mixed Carcinoma"
 * $SCT#128628002 "Large cell neuroendocrine carcinoma (LCNEC)"
 * $SCT#707596000 "Carcinosarcoma"
 * $SCT#11671000 "Adenoïd cystisch carcinoma" 
@@ -330,7 +369,7 @@ Description: "Location of metastasis for Lung Cancer"
 * $SCT#94161006 "bijnier"
 * $SCT#94381002 "lever"
 * $SCT#94391008 "long"
-* UZLeuvenREOAddendum#extra-thoracic-lymph-nodes "extrathoracale lymfeklieren" 
+* REO#extra-thoracic-lymph-nodes "extrathoracale lymfeklieren" 
 
 ValueSet: DetectedNotDetected
 Id: detected-not-detected
@@ -341,6 +380,12 @@ Description: "LOINC Answer List LL744-4 for Detected|Not Detected"
 * $LOINC#LA11883-8 "Not Detected"
   * ^extension[$vsOrder].valueInteger = 1
 
+ValueSet: PositiveNegative
+Id: positive-negative
+Title: "Positive Negative"
+Description: "Positive Negative from LOINC Answer List LL360-9"
+* $LOINC#LA6576-8 "Positive"
+* $LOINC#LA6577-6 "Negative"
 
 ValueSet: JaNee
 Id: ja-nee
@@ -361,6 +406,9 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
 * language = #nl-BE
 * extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer) 
 * extension[Orientation].valueCode = #vertical
+* extension[NarrativeTemplate]
+  * valueExpression.language = #text/x.tiro-health.liquid
+  * valueExpression.expression = "{{ subquestions | join: '\n' }}"
 * item[0]
   * linkId = "presentatie"
   * text = "# Presentatie" // some syntax to automatically generate a ordinal prefix
@@ -396,6 +444,15 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * valueExpression.name = #isMesothelioma
       * valueExpression.language = #text/fhirpath
       * valueExpression.expression = "%context.repeat(item).where(linkId = 'presentatie/diagnose/answer/row-0/diagnose').answer.value.code in ('399477001', '65278006')"
+    * extension[NarrativeTemplate]
+      * valueExpression.language = #text/x.tiro-health.liquid
+      // short cut for printing basic types needed
+      * valueExpression.expression = """
+        Diagnose: {{ %item.answer.value.print().join(',') }}
+        {% indent 2 %}
+        {{subquestions}}
+        {% endindent %}
+        """
     * item[0]
       * insert AnswerContainer
       * linkId = "presentatie/diagnose/answer"
@@ -505,7 +562,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
     * item[+]
       * insert QuestionContainer
       * linkId = "presentatie/diagnose/tnm-classificatie" // merge both TNM classifications and use answerOptionsToggleExpression
-      * text = "TNM classification" 
+      * text = "TNM classificatie" 
       * code = $SCT#399566009 "TNM category"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
@@ -526,6 +583,9 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * item[+]
           * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0"
           * insert AnswerRow
+          * extension[NarrativeTemplate]
+            * valueExpression.language = #text/x.tiro-health.liquid
+            * valueExpression.expression = """c{{ %item.answer.value.ofType(Coding).display.join() }} ({{ subquestions }})"""
           * item[+]
             * insert CodingDropdown
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/t-stage"
@@ -610,39 +670,27 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * item[+]
             * insert Comments
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/comments"
-        * item[+]
-          * insert QuestionContainer
-          * linkId = "presentatie/diagnose/tnm-classificatie/locatie-metastase"
-          * text = "Locatie van metastase"
-          * code = $SCT#385421009 "Site of distant metastasis"
-          * repeats = true
-          * enableWhen[+] // TODO: why doing inverse logic?
-            * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie/answer/row-0/m-stage"
-            * operator = #=
-            * answerCoding = $SCT#1229901006 "M0"
-          * enableWhen[+]
-            * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie/answer/row-0/m-stage"
-            * operator = #exists
-            * answerBoolean = true
-          * enableBehavior = #all
-          * disabledDisplay = #hidden
-          * answerValueSet = Canonical(LungCancerLocationOfMetastasis)
-          * answerConstraint = #optionsOrType
-    * item[+]
-      * insert QuestionContainer
-      * linkId = "presentatie/diagnose/tnm-classificatie-mesothelioom"
-      * text = "TNM classification mesothelioom"
-      * code = $SCT#399566009 "TNM category"
-      * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
-        * operator = #=
-        * answerCoding = $SCT#399477001 "Mesothelioom - Sarcomatoïd"
-      * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
-        * operator = #=
-        * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
-      * enableBehavior = #any
-      * disabledDisplay = #hidden
+      * item[+]
+        * insert CodingChips
+        * linkId = "presentatie/diagnose/tnm-classificatie/locatie-metastase"
+        * text = "Locatie van metastase"
+        * code = $SCT#385421009 "Site of distant metastasis"
+        * repeats = true
+        * extension[NarrativeTemplate]
+          * valueExpression.language = #text/x.tiro-health.liquid
+          * valueExpression.expression = "{{%item.answer.value.print().join(',')}}"
+        * enableWhen[+] // TODO: why doing inverse logic?
+          * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie/locatie-metastase"
+          * operator = #=
+          * answerCoding = $SCT#1229901006 "M0"
+        * enableWhen[+]
+          * question = "presentatie/diagnose/answer/row-0/diagnose/tnm-classificatie/locatie-metastase"
+          * operator = #exists
+          * answerBoolean = true
+        * enableBehavior = #all
+        * disabledDisplay = #hidden
+        * answerValueSet = Canonical(LungCancerLocationOfMetastasis)
+        * answerConstraint = #optionsOrType
     * item[+]
       * insert CodingChips
       * linkId = "presentatie/diagnose/mutatie"
@@ -650,8 +698,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * code = $SCT#55446002 "Genetic mutation"
       * enableBehavior = #any
       * disabledDisplay = #hidden
-      * answerOption[+].valueCoding = UZLeuvenREOAddendum#oncogenic-driver-present "oncogene driver"
-      * answerOption[+].valueCoding = UZLeuvenREOAddendum#oncogenic-driver-absent "geen oncogene driver"
+      * answerOption[+].valueCoding = REO#oncogenic-driver-present "oncogene driver"
+      * answerOption[+].valueCoding = REO#oncogenic-driver-absent "geen oncogene driver"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
         * operator = #=
@@ -667,8 +715,100 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
         * operator = #=
-        * answerCoding = UZLeuvenREOAddendum#nsclc-nos "NSCLC NOS"
-      // TODO: add all mutations
+        * answerCoding = REO#nsclc-nos "NSCLC NOS"
+      * extension[NarrativeTemplate]
+        * valueExpression.language = #text/x.tiro-health.liquid
+        * valueExpression.expression = """
+        {%- if item.answer.value.code == 'oncogenic-driver-present' %}
+        Mutaties: {{ subquestions | split: '\n' | join: '; '}}
+        {%- endif %}
+        """
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/egfr"
+        * insert CodingChips
+        * text = "EGFR"
+        * code = $CLINVAR#HGNC:3236 "EGFR"
+        * answerValueSet = Canonical(PositiveNegative)
+        * extension[NarrativeTemplate]
+          * valueExpression.language = #text/x.tiro-health.liquid
+          * valueExpression.expression = """
+          {%- if item.answer.value.code == 'LA6576-8' #present %}
+          {{ %item.answer.value.print().join(' ')}}
+          {%- endif %}
+          """
+        * item[+]
+          * linkId = "presentatie/diagnose/mutatie/egfr/exon"
+          * insert CodingChips
+          * repeats = true
+          * answerOption[+].valueCoding = REO#egfr-exon-18 "ex18"
+          * answerOption[+].valueCoding = REO#egfr-exon-19 "ex19"
+          * answerOption[+].valueCoding = REO#egfr-exon-20-insertion "ex20 (ins)"
+          * answerOption[+].valueCoding = REO#egfr-exon-20-other "ex20 (other)"
+          * answerOption[+].valueCoding = REO#egfr-exon-21 "ex21"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/alk"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:427 "ALK"
+        * text = "ALK"
+        * repeats = true
+        * answerValueSet = Canonical(PositiveNegative)
+        * extension[NarrativeTemplate]
+          * valueExpression.language = #text/x.tiro-health.liquid
+          * valueExpression.expression = """
+          {%- if item.answer.value.code == 'LA6576-8' #present %}
+          {{ %item.answer.value.print().join(' ')}}
+          {%- endif %}
+          """
+        * item[+]
+          * linkId = "presentatie/diagnose/mutatie/alk/co-mutatie" 
+          * insert CodingChips
+          * answerOption[+].valueCoding = REO#alk-fusion "fusion"
+          * answerOption[+].valueCoding = REO#alk-G1202R "G1202R"
+          * answerOption[+].valueCoding = REO#alk-I1171N "I1171N"
+          * answerOption[+].valueCoding = REO#alk-L1196M "L1196M"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/ros1"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:10261 "ROS1"
+        * text = "ROS1"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/kras"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:6407 "KRAS"
+        * text = "KRAS"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/braf"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:1097 "BRAF"
+        * text = "BRAF"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/ret"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:9967 "RET"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/her2"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:28871 "HER2"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/met"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:7029 "MET"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/ntrk"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:8031 "NTRK"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/nrg1"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:7997 "NRG1"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/pik3ca"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:8975 "PIK3CA"
+      * item[+]
+        * linkId = "presentatie/diagnose/mutatie/rb1"
+        * insert CodingChips
+        * code = $CLINVAR#HGNC:9884 "RB1"
     * item[+]
       * insert QuestionContainer
       * linkId = "presentatie/diagnose/ihc-profile"
@@ -691,7 +831,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableWhen[+]
         * question = "presentatie/diagnose/answer/row-0/diagnose"
         * operator = #=
-        * answerCoding = UZLeuvenREOAddendum#nsclc-nos "NSCLC NOS"
+        * answerCoding = REO#nsclc-nos "NSCLC NOS"
       * item[+]
         * linkId = "presentatie/diagnose/ihc-profile/pd-l1"
         * insert DecimalTextbox(#% "%")
@@ -724,7 +864,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * linkId = "presentatie/diagnose/reprofile-weefsel-biopt"
       * insert CodingChips
       * text = "Reprofile weefsel biopt"
-      * code = UZLeuvenREOAddendum#reprofiling-weefsel-biopt "Reprofiling weefsel biopt"
+      * code = REO#reprofiling-weefsel-biopt "Reprofiling weefsel biopt"
       * answerValueSet = Canonical(JaNee)
       * item[+]
         * linkId = "presentatie/diagnose/reprofile-weefsel-biopsie/comments"
@@ -737,7 +877,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * linkId = "presentatie/diagnose/reprofile-liquid-biopt"
       * insert Comments
       * text = "Reprofile liquid biopt"
-      * code = UZLeuvenREOAddendum#reprofiling-liquid-biopt "Reprofiling liquid biopt"
+      * code = REO#reprofiling-liquid-biopt "Reprofiling liquid biopt"
       * answerValueSet = Canonical(JaNee)
       * item[+]
         * linkId = "presentatie/diagnose/reprofile-liquid-biopsie/comments"
