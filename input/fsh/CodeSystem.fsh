@@ -1,6 +1,7 @@
 Alias: $SCT = http://snomed.info/sct
 Alias: $UCUM = http://unitsofmeasure.org
 Alias: $LOINC = http://loinc.org
+Alias: $CLINVAR = http://www.ncbi.nlm.nih.gov/clinvar
 Alias: AUTO = http://tiro.health/fhir/CodeSystem/auto-generated
 
 CodeSystem: SCT

@@ -1,76 +1,3 @@
-Alias: $questionnaire-item-control = http://hl7.org/fhir/questionnaire-item-control
-Alias: $library-type = http://terminology.hl7.org/CodeSystem/library-type
-Alias: $itemControl = http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl
-Alias: $vsOrder = http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder
-Alias: $lookup = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-lookupQuestionnaire
-Alias: $optionsToggle = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerOptionsToggleExpression
-Alias: $variable = http://hl7.org/fhir/StructureDefinition/variable
-Alias: $clinical-m-stage-lung-cancer-addendum = http://tiro.health/fhir/CodeSystem/clinical-m-stage-lung-cancer-addendum
-Alias: $mime = http://terminology.hl7.org/CodeSystem/v3-mediatypes
-Alias: $CLINVAR = http://www.ncbi.nlm.nih.gov/clinvar
-
-Profile: TiroQuestionnaire
-Parent: Questionnaire 
-Id: tiro-questionnaire
-Title: "Tiro Questionnaire"
-Description: "Profile for a Tiro Questionnaire"
-* extension contains 
-    RenderType named renderType 1..1 MS and
-    Orientation named orientation 0..1
-
-* item ^slicing.discriminator.type = #value
-* item ^slicing.discriminator.path = "extension(http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl)"
-* item ^slicing.description = "Slice that splits the items between answer and subquestions"
-* item ^slicing.ordered = true // Since order influences presentation for Questionnaires, this is important
-* item ^slicing.rules = #openAtEnd
-* item contains 
-    answer 0..1 MS
-* item[answer]
-  * type = #group
-  * extension contains 
-    $itemControl named itemControl 1..1 MS
-  * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
-    //* valueCodeableConcept
-    //  * coding[+] = $questionnaire-item-control#list
-    //  * coding[+] = TiroQuestionnaireItemControl#answer-container
-    //  * text = "Answer Container"
-
-
-Instance: TreeLayoutRenderer
-InstanceOf: Library 
-Usage: #example
-Title: "Tree Layout Renderer (Version 3)"
-Description: "Render library to render a FHIR Questionnaire in a tree like question-answer layout"
-* status = #active
-* version = "3.0.0"
-* type.text = "React/NPM package to render a FHIR Questionnaire"
-* type.coding = $library-type#logic-library "Logic Library"
-* name = "questionnaire-v3"
-* title = "Questionnaire Version 3"
-* purpose = "Render a FHIR Questionnaire in a tree like question-answer layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
-* publisher = "Tiro Health"
-* dataRequirement[+]
-  * type = #Questionnaire
-  * profile = Canonical(TiroQuestionnaire)
-
-Instance: TableLayoutRenderer
-InstanceOf: Library
-Usage: #example
-Title: "Table Layout Renderer"
-Description: "Render library to render a FHIR Questionnaire in a table layout"
-* status = #active
-* version = "2.0.0"
-* type.text = "React/NPM package to render a FHIR Questionnaire"
-* type.coding = $library-type#logic-library "Logic Library"
-* name = "table-v2"
-* title = "Table Layout Renderer"
-* purpose = "Render a FHIR Questionnaire in a table layout. This FHIR Library Resources is used to keep track of the version changes of the underlying React/NPM package."
-* publisher = "Tiro Health"
-* dataRequirement[+]
-  * type = #Questionnaire
-  * profile = Canonical(TiroQuestionnaire)
-
-
 Instance: CharlsonComorbidityIndex
 InstanceOf: Questionnaire 
 Usage: #example
@@ -93,164 +20,6 @@ Description: "Self Administered Comorbidty Questionnaire"
 * name = "sacq"
 * title = "SACQ"
 * publisher = "Tiro Health"
-
-Extension: RenderType
-Id: render-type
-Title: "Render Type"
-Description: "Render Type extension for the FHIR Questionnaire resource which indicates the layout preference for the Questionnaire"
-Context: Questionnaire
-* value[x] only canonical
-
-CodeSystem: TemplateLanguages
-Id: template-languages
-Title: "Template Languages"
-Description: "Available template languages to generate a narrative for a Questionnaire item"
-* ^supplements = "http://hl7.org/fhir/CodeSystem/template-languages"
-* ^content = #complete
-* #text/x.tiro-health.liquid "Liquid" "Liquid template language with custom Tiro.health tags and filters."
-* #text/x.tiro-health.jinja2 "Jinja2" "Jinja2 template language with custom Tiro.health tags and filters."
-
-ValueSet: TemplateLanguages
-Id: template-languages
-Title: "Template Languages"
-Description: "Available template languages to generate a narrative for a Questionnaire item"
-* $mime#text/x.tiro-health.liquid "Liquid"
-* $mime#text/x.tiro-health.jinja2 "Jinja2"
-
-Extension: NarrativeTemplate
-Id: narrative-template
-Title: "Narrative Template"
-Description: "Extension to add a template to generate a narrative for Questionnaire items"
-Context: Questionnaire.item
-* ^purpose = """
-             Attache a narrative template to a Questionnaire item to generate a narrative for the item.
-             """
-* value[x] only Expression
-* valueExpression.language from TemplateLanguages (required)
-
-CodeSystem: QuestionnaireItemOrientation
-Id: questionnaire-item-orientation
-Title: "Questionnaire Item Orientation"
-Description: "Orientation of the items in the Questionnaire"
-* #horizontal "Horizontal"
-* #vertical "Vertical"
-
-ValueSet: QuestionnaireItemOrientation
-Id: questionnaire-item-orientation
-Title: "Questionnaire Item Orientation"
-Description: "Orientation of the items in the Questionnaire"
-* include codes from system QuestionnaireItemOrientation
-
-Extension: Orientation
-Id: Orientation
-Title: "Item Orientation"
-Description: "Orientation of the items in the Questionnaire"
-Context: Questionnaire, Questionnaire.item
-* value[x] only code
-* valueCode from QuestionnaireItemOrientation (required)
-
-CodeSystem: TiroQuestionnaireItemControl
-Id: tiro-questionnaire-item-control
-Title: "Tiro Questionnaire Item Control"
-Description: "Custom Questionnaire Item Control by Tiro Health"
-* #answer-container "Answer Container" "Container for answers (rows) part of a question."
-* #answer-row "Answer Row" "Row of answers part of a question."
-* #question-container "Question Container" "Structure to group answers and subquestions in a hierarchical tree layout."
-* #comments "Comments" "Text field to add comments to a question. This component is visually more subtle than a full text field."
-* #drop-down "Dropdown" "Dropdown to select a single answer from a list of options."
-* #chips "Chips" "Chips to select one or more answers from a list of options."
-* #text-box "Textbox" "Textbox to enter characters."
-* #text-area "Text Area" "Text area to enter multiple lines of text."
-* #calculator "Calculator" "Calculator to calculate a value based on a formula."
-
-RuleSet: AnswerContainer
-* type = #group
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Answer Container" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-container
-
-RuleSet: AnswerRow
-* type = #group
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Answer Row" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-row
-
-RuleSet: QuestionContainer
-* type = #group
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Question Container" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-container
-
-RuleSet: Comments
-* type = #text
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Comments" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#comments
-
-RuleSet: CodingDropdown
-* type = #coding
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Coding Dropdown" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#drop-down
-  * valueCodeableConcept.coding[0] = TiroQuestionnaireItemControl#drop-down
-
-RuleSet: CodingChips
-* type = #coding
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Coding Chips" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#chips 
-
-RuleSet: SupportLink(url)
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-supportLink"
-  * valueUri = "{url}"
-
-RuleSet: DecimalTextbox(unit)
-* type = #decimal
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Decimal Textbox" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-unit"
-  * valueCoding = $UCUM{unit}
-
-RuleSet: Textbox
-* type = #string
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Textbox" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
-
-RuleSet: Calculator
-* type = #reference
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Calculator"
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#lookup
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#calculator
-
-RuleSet: TextArea
-* type = #text
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Text Area" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-area
-
 
 /**
  * REO Multidisciplinary Discussion Template 
@@ -302,58 +71,11 @@ Description: "Diagnosis of Lung Cancer"
 * $SCT#373068000 "Onbekend"
 * $SCT#74964007 "Andere" // this should be covered by the `Questionnaire.item.answerConstraint` field
 
-ValueSet: ClinicalTStageLungCancer
-Id: clinical-tstage-lung-cancer
-Title: "Clinical T-Stage Lung Cancer"
-Description: "Clinical T-Stage for Lung Cancer"
-* $SCT#1222604002 "Tx"
-  * ^extension[$vsOrder].valueInteger = 0
-* $SCT#1228882005 "T0"
-  * ^extension[$vsOrder].valueInteger = 1
-* $SCT#1228884006 "Tis"
-  * ^extension[$vsOrder].valueInteger = 2
-* $SCT#1228891009 "T1mi"
-  * ^extension[$vsOrder].valueInteger = 3
-* $SCT#1228889001 "T1"
-  * ^extension[$vsOrder].valueInteger = 4
-* $SCT#1228892002 "T1a"
-  * ^extension[$vsOrder].valueInteger = 5
-* $SCT#1228895000 "T1b"
-  * ^extension[$vsOrder].valueInteger = 6
-* $SCT#1228899006 "T1c"
-  * ^extension[$vsOrder].valueInteger = 7
-* $SCT#1228929004 "T2"
-  * ^extension[$vsOrder].valueInteger = 8
-* $SCT#1228931008 "T2a"
-  * ^extension[$vsOrder].valueInteger = 9
-* $SCT#1228934000 "T2b"
-  * ^extension[$vsOrder].valueInteger = 10
-* $SCT#1228938002 "T3"
-  * ^extension[$vsOrder].valueInteger = 11
-* $SCT#1228944003 "T4"
-  * ^extension[$vsOrder].valueInteger = 12
-
-ValueSet: ClinicalNStageLungCancer
-Id: clinical-nstage-lung-cancer
-Title: "Clinical N-Stage Lung Cancer"
-Description: "Clinical N-Stage for Lung Cancer"
-* $SCT#1229966003 "Nx"
-* $SCT#1229967007 "N0"
-* $SCT#1229973008 "N1"
-* $SCT#1229978004 "N2"
-* $SCT#1229981009 "N2a"
-* $SCT#1229982002 "N2b"
-* $SCT#1229984001 "N3"
-
-ValueSet: ClinicalMStageLungCancer
-Id: clinical-mstage-lung-cancer
-Title: "Clinical M-Stage Lung Cancer"
-Description: "Clinical M-Stage for Lung Cancer"
-* $SCT#1229901006 "M0"
-* $SCT#1229903009 "M1"
-* $SCT#1229904003 "M1a"
-* $SCT#1229907005 "M1b"
-* $SCT#1229910003 "M1c"
+ValueSet: ClinicalMStageLungCancerREO
+Id: clinical-mstage-lung-cancer-reo
+Title: "Clinical M-Stage Lung Cancer with REO Addendum"
+Description: "Clinical M-Stage for Lung Cancer with REO Addendum"
+* codes from valueset ClinicalMStageLungCancer 
 * $SCT#1229912006 "M1c1"
 * $clinical-m-stage-lung-cancer-addendum#cm1c2 "M1c2"
 * $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
@@ -642,7 +364,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
             * linkId = "presentatie/diagnose/tnm-classificatie/answer/row-0/m-stage"
             * code = $SCT#399387003 "cM category"
             * text = "cM-stage"
-            * answerValueSet = Canonical(ClinicalMStageLungCancer)
+            * answerValueSet = Canonical(ClinicalMStageLungCancerREO)
             * extension[$optionsToggle][+]
               * extension[option][+]
                 * valueCoding = $SCT#1229904003 "M1a"
@@ -732,7 +454,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * extension[NarrativeTemplate]
           * valueExpression.language = #text/x.tiro-health.liquid
           * valueExpression.expression = """
-          {%- if item.answer.value.code == 'LA6576-8' #present %}
+          {%- if %item.answer.value.code == 'LA6576-8' #present %}
           {{ %item.answer.value.print().join(' ')}}
           {%- endif %}
           """
