@@ -109,19 +109,19 @@ Description: "Clinical TNM Stage"
     * linkId = "t-stage"
     * text = "T Stage"
     * code = $SCT#399504009 "cT category"
-    * type = #choice
+    * type = #coding
     * answerValueSet = Canonical(ClinicalTStageLungCancer)
   * item[+]
     * linkId = "n-stage"
     * text = "N Stage"
     * code = $SCT#399534004 "cN category"
-    * type = #choice
+    * type = #coding
     * answerValueSet = Canonical(ClinicalNStageLungCancer)
   * item[+]
     * linkId = "m-stage"
     * text = "M Stage"
     * code = $SCT#399387003 "cM category"
-    * type = #choice
+    * type = #coding
     * answerValueSet = Canonical(ClinicalMStageLungCancer)
 
 
