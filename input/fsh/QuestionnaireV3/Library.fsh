@@ -1,9 +1,9 @@
 
-Instance: BloodPressure
+Instance: BloodPressureFormated
 InstanceOf: Questionnaire
 Usage: #example
-Title: "Blood Pressure"
-Description: "Input Group for Blood Pressure"
+Title: "Blood Pressure (formatted input)"
+Description: "Text field for Blood Pressure which decomposes automatically into Systolic and Diastolic components"
 * status = #active
 * version = "1.0.0"
 * item[+]
@@ -31,6 +31,30 @@ Description: "Input Group for Blood Pressure"
     * extension[$calculated].valueExpression
       * language = #text/fhirpath
       * expression = "%resource.item.where(linkId='blood-pressure').answer.value.split(' / ')[1].toInteger()"
+
+Instance: BloodPressureInputGroup
+InstanceOf: Questionnaire
+Usage: #example
+Title: "Blood Pressure (grouped input)"
+Description: "Blood Pressure with Systolic and Diastolic components"
+* status = #active
+* version = "1.0.0"
+* item[+]
+  * linkId = "blood-pressure"
+  * text = "Blood Pressure"
+  * type = #group
+  * item[+]
+    * linkId = "systolic"
+    * text = "Systolic"
+    * type = #integer
+    * extension[$minValue].valueInteger = 0
+    * extension[$maxValue].valueInteger = 300
+  * item[+]
+    * linkId = "diastolic"
+    * text = "Diastolic"
+    * type = #integer
+    * extension[$minValue].valueInteger = 0
+    * extension[$maxValue].valueInteger = 300
 
 Instance: DateOfDiagnosis 
 InstanceOf: Questionnaire
@@ -132,7 +156,9 @@ Title: "Input Component Library"
 Description: "Library of reusable input controls and input groups for FHIR Questionnaire items"
 * type = #searchset
 * entry[+]
-  * resource = BloodPressure
+  * resource = BloodPressureFormated
+* entry[+]
+  * resource = BloodPressureInputGroup
 * entry[+]
   * resource = DateOfDiagnosis
 * entry[+]
