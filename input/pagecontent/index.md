@@ -1,15 +1,32 @@
-# Tiro.health - FHIR IG
+# Atticus - FHIR IG
 
-This Implementation Guide documents how Tiro.health exposes data through a FHIR API.
+This Implementation Guide documents the FHIR API of our report sevices Atticus and of our shared content library *Cicero*.
+
+## Atticus
+
+All structured data and narrative data in Atticus is available through FHIR REST API's.
+
 
 1. [Anatomy of a report](./1_AnatomyOfReport.html)
 
-2. Definition a template
+2. The lifecycle of a Report (CRUD and more)
+This section discusses how to create and manage reports through backend API's. This includes the creation, updating, submission and validation of a Report.
 
-## Examples for specific use cases
+3. SMART on FHIR launch
 
-Most projects are focussed on a specific disease area or specialty.
-Current availabel use-cases are
+4. Creating a new template
 
-- [Prostate Cancer](./3_ProstateCancer.html)
-- [Lung Cancer](./4_RespiratoryOncology.html)
+
+5. Managing Data Dictionaries
+
+
+6. Creating a new project
+
+
+## Cicero
+
+1. Input Component Library
+
+2. Report Section Library
+
+3. Terminology Service
