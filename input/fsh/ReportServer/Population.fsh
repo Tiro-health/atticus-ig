@@ -14,7 +14,7 @@ RuleSet: BlockReference(linkId, canonical)
     * language = #text/fhirpath
     * expression = "{linkId}/"
   * item[0]
-    * linkId = "{linId}/reference"
+    * linkId = "{linkId}/reference"
     * type = #display
     * extension[$subQuestionnaire]
       * valueCanonical = "{canonical}"
