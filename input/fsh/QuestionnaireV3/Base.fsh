@@ -85,6 +85,8 @@ Context: Questionnaire.item
 * valueString 1..1 MS
 
 RuleSet: LibraryItem
+* date = 2024-06-20
+* publisher = "Tiro.health"
 * extension[$assemble-expectation]
   * valueCode = #assemble-child
 

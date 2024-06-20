@@ -62,11 +62,14 @@ InstanceOf: Questionnaire
 Usage: #example
 Title: "Diagnose datum"
 Description: "Datum waarop de diagnose is gesteld."
+* title = "Diagnose datum"
+* description = "Datum waarop de diagnose is gesteld."
+* id = "6482fabe"
+* url = "http://content.tiro.health/library/6482fabe"
 * insert LibraryItem
 * status = #active
+* language = #nl-BE
 * version = "1.0.0"
-* date = 2024-06-20
-* publisher = "Tiro.health"
 * item[+]
   * linkId = "diagnosis-date"
   * text = "Incidentiedatum"
@@ -75,6 +78,56 @@ Description: "Datum waarop de diagnose is gesteld."
   * insert DateTextbox
   * extension[$entryFormat].valueString = "YYYY-MM-DD"
   * extension[Regex].valueString = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+
+ValueSet: WHOScore
+Id: who-score
+Title: "WHO Score"
+Description: "SNOMED-CT bevindingen functioneringsniveau volgens Wereldgezondheidsorganisatie"
+* include codes from system $SCT where concept is-a #373802001 "WHO performance status finding"
+
+Instance: WHOScoreDropdown
+InstanceOf: Questionnaire
+Usage: #example
+Title: "WHO Score"
+Description: "Functioneringsniveau volgens Wereldgezondheidsorganisatie"
+* title = "Diagnose datum"
+* language = #nl-BE
+* description = "Datum waarop de diagnose is gesteld."
+* id = "f8538c7a"
+* url = "http://content.tiro.health/library/f8538c7a"
+* insert LibraryItem
+* status = #active
+* version = "1.0.0"
+* item[+]
+  * linkId = "who-score"
+  * text = "WHO Score"
+  * insert CodingDropdown
+  * answerValueSet = Canonical(WHOScore)
+
+Instance: SmokingStatus
+InstanceOf: Questionnaire
+Usage: #example
+Title: "Smoking Status"
+Description: "Smoking Status"
+* id = "ec49bd25"
+* url = "http://content.tiro.health/library/ec49bd25"
+* title = "Rookstatus"
+* description = "Rookstatus van de patiënt opgedeeld in drie categorieën: nooit gerookt, ex-roker en actieve roker."
+* language = #nl-BE
+* status = #active
+* item[+]
+  * linkId = "smoking-status"
+  * insert CodingChips
+  * text = "Smoking Status"
+  * code = $SCT#229819007 "Smoking status"
+  * answerOption[+]
+    * valueCoding = $SCT#266919005 "nooit gerookt"
+  * answerOption[+]
+    * valueCoding = $SCT#8517006 "ex-roker"
+  * answerOption[+]
+    * valueCoding = $SCT#77176002 "actieve roker"
+
+
 
 // Clinical TNM Stage for Lung Cancer
 
