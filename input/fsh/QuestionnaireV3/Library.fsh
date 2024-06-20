@@ -56,19 +56,23 @@ Description: "Blood Pressure with Systolic and Diastolic components"
     * extension[$minValue].valueInteger = 0
     * extension[$maxValue].valueInteger = 300
 
+
 Instance: DateOfDiagnosis 
 InstanceOf: Questionnaire
 Usage: #example
-Title: "Date of Diagnosis"
-Description: "Date of Diagnosis"
+Title: "Diagnose datum"
+Description: "Datum waarop de diagnose is gesteld."
 * insert LibraryItem
 * status = #active
 * version = "1.0.0"
+* date = 2024-06-20
+* publisher = "Tiro.health"
 * item[+]
   * linkId = "diagnosis-date"
-  * text = "Date of Diagnosis"
+  * text = "Incidentiedatum"
   * type = #date
   * code = $SCT#432213005 "Date of Diagnosis"
+  * insert DateTextbox
   * extension[$entryFormat].valueString = "YYYY-MM-DD"
   * extension[Regex].valueString = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
 

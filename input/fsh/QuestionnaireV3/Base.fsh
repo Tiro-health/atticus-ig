@@ -155,10 +155,7 @@ CodeSystem: TiroQuestionnaireItemControl
 Id: tiro-questionnaire-item-control
 Title: "Tiro Questionnaire Item Control"
 Description: "Custom Questionnaire Item Control by Tiro Health"
-* #answer-container "Answer Container" "Container for answers (rows) part of a question."
-* #answer-row "Answer Row" "Row of answers part of a question."
-* #question-container "Question Container" "Structure to group answers and subquestions in a hierarchical tree layout."
-* #comments "Comments" "Text field to add comments to a question. This component is visually more subtle than a full text field."
+* #question-group "Question Group" "Structure to group answers and subquestions in a hierarchical tree layout."
 * #drop-down "Dropdown" "Dropdown to select a single answer from a list of options."
 * #chips "Chips" "Chips to select one or more answers from a list of options."
 * #text-box "Textbox" "Textbox to enter characters."
@@ -181,21 +178,13 @@ RuleSet: AnswerRow
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-row
 
-RuleSet: QuestionContainer
+RuleSet: QuestionGroup
 * type = #group
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Question Container" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-container
-
-RuleSet: Comments
-* type = #text
-* extension[+]
-  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Comments" 
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#comments
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-group
 
 RuleSet: CodingDropdown
 * type = #coding
@@ -231,6 +220,14 @@ RuleSet: DecimalTextbox(unit)
 
 RuleSet: Textbox
 * type = #string
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Textbox" 
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
+
+RuleSet: DateTextbox
+* type = #date
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Textbox" 
