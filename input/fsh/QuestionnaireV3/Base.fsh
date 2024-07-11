@@ -14,6 +14,7 @@ Alias: $calculated = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-question
 Alias: $regex = http://hl7.org/fhir/StructureDefinition/regex
 Alias: $subQuestionnaire = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-subQuestionnaire
 Alias: $assemble-expectation = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-assemble-expectation
+Alias: $unit = http://hl7.org/fhir/StructureDefinition/questionnaire-unit
 
 Profile: TiroQuestionnaire
 Parent: Questionnaire 
@@ -105,6 +106,15 @@ Context: Questionnaire.item
 * value[x] only string
 * valueString 1..1 MS 
 
+Extension: AnswerComment
+Id: answer-comment
+Title: "Answer Comment"
+Description: "Extension to add a comment to an answer in a QuestionnaireResponse"
+Context: QuestionnaireResponse.item.answer
+* value[x] only Annotation 
+* valueAnnotation 1..1 MS
+
+
 CodeSystem: TemplateLanguages
 Id: template-languages
 Title: "Template Languages"
@@ -162,6 +172,7 @@ Description: "Custom Questionnaire Item Control by Tiro Health"
 * #chips "Chips" "Chips to select one or more answers from a list of options."
 * #text-box "Textbox" "Textbox to enter characters."
 * #text-area "Text Area" "Text area to enter multiple lines of text."
+* #date-field "Date Field" "Date field to enter a date."
 * #calculator "Calculator" "Calculator to calculate a value based on a formula."
 
 RuleSet: AnswerContainer
@@ -228,13 +239,13 @@ RuleSet: Textbox
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
 
-RuleSet: DateTextbox
+RuleSet: DateField
 * type = #date
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Textbox" 
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#date-field
 
 RuleSet: Calculator
 * type = #reference
@@ -252,4 +263,6 @@ RuleSet: TextArea
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-area
 
+RuleSet: QuestionnaireV3
+* extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
 

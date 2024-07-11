@@ -139,7 +139,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
   * code = $SCT#255259006 "First presentation" // probably not the right code
   * item[+] // DATE OF DIAGNOSIS
     * linkId = "presentatie/incidentie-datum"
-    * insert DateTextbox
+    * insert DateField
     * text = "IncidentieDatum"
     * code =  $SCT#432213005 "Date of diagnosis"
   * item[+] // DIAGNOSIS
@@ -631,7 +631,7 @@ Description: "Previous therapies overview for REO Multidisplincary Discussion"
 * status = #active
 * version = "4.0.0"
 * language = #nl-BE
-* extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
+* insert QuestionnaireV3
 * extension[Orientation].valueCode = #vertical
 * item[0]
   * linkId = "record"

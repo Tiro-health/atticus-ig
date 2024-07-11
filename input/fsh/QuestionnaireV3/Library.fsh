@@ -75,7 +75,7 @@ Description: "Datum waarop de diagnose is gesteld."
   * text = "Incidentiedatum"
   * type = #date
   * code = $SCT#432213005 "Date of Diagnosis"
-  * insert DateTextbox
+  * insert DateField
   * extension[$entryFormat].valueString = "YYYY-MM-DD"
   * extension[Regex].valueString = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
 
@@ -90,9 +90,9 @@ InstanceOf: Questionnaire
 Usage: #example
 Title: "WHO Score"
 Description: "Functioneringsniveau volgens Wereldgezondheidsorganisatie"
-* title = "Diagnose datum"
+* title = "WHO Score"
 * language = #nl-BE
-* description = "Datum waarop de diagnose is gesteld."
+* description = "Functioneringsniveau volgens Wereldgezondheidsorganisatie"
 * id = "f8538c7a"
 * url = "http://content.tiro.health/library/f8538c7a"
 * insert LibraryItem
