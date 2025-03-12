@@ -156,11 +156,16 @@ Description: "Composition containing the Lung Cancer Staging Report."
   * title = "Staging"
   * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>The patient was diagnosed with non-small cell lung cancer on 2023-05-23. The cTNM staging is T3N1M1. The patient has bony metastasis. The PD-L1 expression is 80%.</p></div>"
   * text.status = #generated
-  * entry[0] = Reference(LCaStagingResponse)
+  * entry[+] = Reference(LCaStagingResponse)
+  * entry[+] = Reference(CTStage)
+  * entry[+] = Reference(CNStage)
+  * entry[+] = Reference(CMStage)
+  * entry[+] = Reference(PDL1Expression)
 * section[+]
   * title = "Conclusion"
   * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Based on the results of the staging, the patient has a stage IV lung cancer.</p></div>"
   * text.status = #generated
+  * entry[+] = Reference(TNMStageGroups)
 
 Instance: LungCancerStaging
 InstanceOf: Condition
@@ -172,17 +177,19 @@ Description: "Lung Cancer Staging Condition."
 * clinicalStatus = #active
 * subject = Reference(LCaPatient)
 
+
 Instance: CTStage
 InstanceOf: Observation
 Usage: #example
 Title: "CT Stage"
 Description: "CT Stage Observation."
 * status = #final
-* code = $SCT#399504009 "Clinical TNM assessment"
+* code = $SCT#399504009 "cT category"
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * valueCodeableConcept = $SCT#1228938002 "T3"
+* focus[+] = Reference(LungCancerStaging)
 
 Instance: CNStage
 InstanceOf: Observation
@@ -190,11 +197,13 @@ Usage: #example
 Title: "CN Stage"
 Description: "CN Stage Observation."
 * status = #final
-* code = $SCT#399534004 "Clinical TNM assessment"
+* code = $SCT#399534004 "cN category"
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * valueCodeableConcept = $SCT#1229973008 "N1"
+* focus[+] = Reference(LungCancerStaging)
+* performer = Reference(DrHause)
 
 Instance: CMStage
 InstanceOf: Observation
@@ -202,12 +211,13 @@ Usage: #example
 Title: "CM Stage"
 Description: "CM Stage Observation."
 * status = #final
-* code = $SCT#399537006 "Clinical TNM stage grouping"
+* code = $SCT#399387003 "cM category"
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * valueCodeableConcept = $SCT#1229903009 "M1"
-
+* focus[+] = Reference(LungCancerStaging)
+* performer = Reference(DrHause)
 
 Instance: PDL1Expression
 InstanceOf: Observation
@@ -221,6 +231,8 @@ Description: "PD-L1 Expression Observation."
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * valueQuantity = 80 '%'
+* focus[+] = Reference(LungCancerStaging)
+* performer = Reference(DrHause)
 
 Instance: TNMStageGroups
 InstanceOf: Observation
@@ -237,6 +249,7 @@ Description: "TNM Stage Group Observation."
 * hasMember[+] = Reference(CTStage)
 * hasMember[+] = Reference(CNStage)
 * hasMember[+] = Reference(CMStage)
+* focus[+] = Reference(LungCancerStaging)
 
 Instance: Metastasis
 InstanceOf: Observation

@@ -156,7 +156,7 @@ Description: "Orientation of the items in the Questionnaire"
 * include codes from system QuestionnaireItemOrientation
 
 Extension: Orientation
-Id: Orientation
+Id: orientation
 Title: "Item Orientation"
 Description: "Orientation of the items in the Questionnaire"
 Context: Questionnaire, Questionnaire.item
@@ -174,6 +174,14 @@ Description: "Custom Questionnaire Item Control by Tiro Health"
 * #text-area "Text Area" "Text area to enter multiple lines of text."
 * #date-field "Date Field" "Date field to enter a date."
 * #calculator "Calculator" "Calculator to calculate a value based on a formula."
+
+Extension: EnableSuggestions
+Id: enable-suggestions
+Title: "Enable Suggestions"
+Description: "Enable suggestions for the answer to a question"
+Context: Questionnaire.item 
+* value[x] only boolean
+* valueBoolean 1..1 MS
 
 RuleSet: AnswerContainer
 * type = #group

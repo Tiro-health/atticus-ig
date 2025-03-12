@@ -4,7 +4,7 @@
 # │  see: https://fshschool.org/docs/sushi/configuration/.                                         │
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
 id: tiro-health-fhir
-canonical: http://tiro.health/fhir
+canonical: http://fhir.tiro.health
 name: Tiro-healthIG
 title: Tiro.health Implementation Guide
 description: ImplementationGuide to get started integrating with Tiro.health
