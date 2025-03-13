@@ -178,8 +178,8 @@ Description: "Custom Questionnaire Item Control by Tiro Health"
 Extension: EnableSuggestions
 Id: enable-suggestions
 Title: "Enable Suggestions"
-Description: "Enable suggestions for the answer to a question"
-Context: Questionnaire.item 
+Description: "Enable suggestions for inline mentions in text fields"
+Context: Questionnaire.item
 * value[x] only boolean
 * valueBoolean 1..1 MS
 
