@@ -17,11 +17,11 @@ Alias: $assemble-expectation = http://hl7.org/fhir/uv/sdc/StructureDefinition/sd
 Alias: $unit = http://hl7.org/fhir/StructureDefinition/questionnaire-unit
 
 Profile: TiroQuestionnaire
-Parent: Questionnaire 
+Parent: Questionnaire
 Id: tiro-questionnaire
 Title: "Tiro Questionnaire"
 Description: "Profile for a Tiro Questionnaire"
-* extension contains 
+* extension contains
     RenderType named renderType 1..1 MS and
     Orientation named orientation 0..1
 
@@ -30,11 +30,11 @@ Description: "Profile for a Tiro Questionnaire"
 * item ^slicing.description = "Slice that splits the items between answer and subquestions"
 * item ^slicing.ordered = true // Since order influences presentation for Questionnaires, this is important
 * item ^slicing.rules = #openAtEnd
-* item contains 
+* item contains
     answer 0..1 MS
 * item[answer]
   * type = #group
-  * extension contains 
+  * extension contains
     $itemControl named itemControl 1..1 MS
   * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
     //* valueCodeableConcept
@@ -44,7 +44,7 @@ Description: "Profile for a Tiro Questionnaire"
 
 
 Instance: TreeLayoutRenderer
-InstanceOf: Library 
+InstanceOf: Library
 Usage: #example
 Title: "Tree Layout Renderer (Version 3)"
 Description: "Render library to render a FHIR Questionnaire in a tree like question-answer layout"
@@ -104,16 +104,23 @@ Title: "Regex"
 Description: "Regular expression to validate the answer to a question"
 Context: Questionnaire.item
 * value[x] only string
-* valueString 1..1 MS 
+* valueString 1..1 MS
 
 Extension: AnswerComment
 Id: answer-comment
 Title: "Answer Comment"
 Description: "Extension to add a comment to an answer in a QuestionnaireResponse"
 Context: QuestionnaireResponse.item.answer
-* value[x] only Annotation 
+* value[x] only Annotation
 * valueAnnotation 1..1 MS
 
+Extension: NarrativeTemplate
+Id: narrative-template
+Title: "Narrative Template"
+Description: "Extension to add a template to generate a narrative for a QuestionnaireResponse"
+Context: Questionnaire
+* value[x] only Expression
+* valueExpression 1..1 MS
 
 CodeSystem: TemplateLanguages
 Id: template-languages
@@ -187,7 +194,7 @@ RuleSet: AnswerContainer
 * type = #group
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Answer Container" 
+  * valueCodeableConcept.text = "Answer Container"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-container
 
@@ -195,7 +202,7 @@ RuleSet: AnswerRow
 * type = #group
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Answer Row" 
+  * valueCodeableConcept.text = "Answer Row"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-row
 
@@ -203,7 +210,7 @@ RuleSet: QuestionGroup
 * type = #group
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Question Container" 
+  * valueCodeableConcept.text = "Question Container"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-group
 
@@ -211,7 +218,7 @@ RuleSet: CodingDropdown
 * type = #coding
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Coding Dropdown" 
+  * valueCodeableConcept.text = "Coding Dropdown"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#drop-down
   * valueCodeableConcept.coding[0] = TiroQuestionnaireItemControl#drop-down
 
@@ -219,9 +226,9 @@ RuleSet: CodingChips
 * type = #coding
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Coding Chips" 
+  * valueCodeableConcept.text = "Coding Chips"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#chips 
+  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#chips
 
 RuleSet: SupportLink(url)
 * extension[+]
@@ -232,7 +239,7 @@ RuleSet: DecimalTextbox(unit)
 * type = #decimal
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Decimal Textbox" 
+  * valueCodeableConcept.text = "Decimal Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
 * extension[+]
@@ -243,7 +250,7 @@ RuleSet: Textbox
 * type = #string
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Textbox" 
+  * valueCodeableConcept.text = "Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
 
@@ -251,7 +258,7 @@ RuleSet: DateField
 * type = #date
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Textbox" 
+  * valueCodeableConcept.text = "Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#date-field
 
@@ -267,10 +274,9 @@ RuleSet: TextArea
 * type = #text
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
-  * valueCodeableConcept.text = "Text Area" 
+  * valueCodeableConcept.text = "Text Area"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
   * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-area
 
 RuleSet: QuestionnaireV3
 * extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
-
