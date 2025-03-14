@@ -114,14 +114,6 @@ Context: QuestionnaireResponse.item.answer
 * value[x] only Annotation
 * valueAnnotation 1..1 MS
 
-Extension: NarrativeTemplate
-Id: narrative-template
-Title: "Narrative Template"
-Description: "Extension to add a template to generate a narrative for a QuestionnaireResponse"
-Context: Questionnaire
-* value[x] only Expression
-* valueExpression 1..1 MS
-
 CodeSystem: TemplateLanguages
 Id: template-languages
 Title: "Template Languages"
@@ -141,10 +133,10 @@ Description: "Available template languages to generate a narrative for a Questio
 Extension: NarrativeTemplate
 Id: narrative-template
 Title: "Narrative Template"
-Description: "Extension to add a template to generate a narrative for Questionnaire items"
+Description: "Extension to add a template to generate a narrative for the QuestionnaireResponse"
 Context: Questionnaire.item
 * ^purpose = """
-             Attache a narrative template to a Questionnaire item to generate a narrative for the item.
+             Attach a narrative template to a Questionnaire to generate a narrative for the QuestionnaireResponse.
              """
 * value[x] only Expression
 * valueExpression.language from TemplateLanguages (required)
