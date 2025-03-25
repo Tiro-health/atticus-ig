@@ -39,7 +39,7 @@ Description: "Profile for a Tiro Questionnaire"
   * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
     //* valueCodeableConcept
     //  * coding[+] = $questionnaire-item-control#list
-    //  * coding[+] = TiroQuestionnaireItemControl#answer-container
+    //  * coding[+] = TiroItemControl#answer-container
     //  * text = "Answer Container"
 
 
@@ -162,8 +162,8 @@ Context: Questionnaire, Questionnaire.item
 * value[x] only code
 * valueCode from QuestionnaireItemOrientation (required)
 
-CodeSystem: TiroQuestionnaireItemControl
-Id: tiro-questionnaire-item-control
+CodeSystem: TiroItemControl
+Id: tiro-item-control
 Title: "Tiro Questionnaire Item Control"
 Description: "Custom Questionnaire Item Control by Tiro Health"
 * #question-group "Question Group" "Structure to group answers and subquestions in a hierarchical tree layout."
@@ -188,7 +188,7 @@ RuleSet: AnswerContainer
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Answer Container"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-container
+  * valueCodeableConcept.coding[1] = TiroItemControl#answer-container
 
 RuleSet: AnswerRow
 * type = #group
@@ -196,7 +196,7 @@ RuleSet: AnswerRow
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Answer Row"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#answer-row
+  * valueCodeableConcept.coding[1] = TiroItemControl#answer-row
 
 RuleSet: QuestionGroup
 * type = #group
@@ -204,7 +204,7 @@ RuleSet: QuestionGroup
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Question Container"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#list
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#question-group
+  * valueCodeableConcept.coding[1] = TiroItemControl#question-group
 
 RuleSet: CodingDropdown
 * type = #coding
@@ -212,7 +212,7 @@ RuleSet: CodingDropdown
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Coding Dropdown"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#drop-down
-  * valueCodeableConcept.coding[0] = TiroQuestionnaireItemControl#drop-down
+  * valueCodeableConcept.coding[0] = TiroItemControl#drop-down
 
 RuleSet: CodingChips
 * type = #coding
@@ -220,7 +220,7 @@ RuleSet: CodingChips
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Coding Chips"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#chips
+  * valueCodeableConcept.coding[1] = TiroItemControl#chips
 
 RuleSet: SupportLink(url)
 * extension[+]
@@ -233,7 +233,7 @@ RuleSet: DecimalTextbox(unit)
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Decimal Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
+  * valueCodeableConcept.coding[1] = TiroItemControl#text-box
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-unit"
   * valueCoding = $UCUM{unit}
@@ -244,7 +244,7 @@ RuleSet: Textbox
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-box
+  * valueCodeableConcept.coding[1] = TiroItemControl#text-box
 
 RuleSet: DateField
 * type = #date
@@ -252,7 +252,7 @@ RuleSet: DateField
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Textbox"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#date-field
+  * valueCodeableConcept.coding[1] = TiroItemControl#date-field
 
 RuleSet: Calculator
 * type = #reference
@@ -260,7 +260,7 @@ RuleSet: Calculator
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Calculator"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#lookup
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#calculator
+  * valueCodeableConcept.coding[1] = TiroItemControl#calculator
 
 RuleSet: TextArea
 * type = #text
@@ -268,7 +268,7 @@ RuleSet: TextArea
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Text Area"
   * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
-  * valueCodeableConcept.coding[1] = TiroQuestionnaireItemControl#text-area
+  * valueCodeableConcept.coding[1] = TiroItemControl#text-area
 
 RuleSet: QuestionnaireV3
 * extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
