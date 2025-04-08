@@ -114,7 +114,7 @@ Context: QuestionnaireResponse.item.answer
 * value[x] only Annotation
 * valueAnnotation 1..1 MS
 
-CodeSystem: TemplateLanguages
+CodeSystem: CSTemplateLanguages
 Id: template-languages
 Title: "Template Languages"
 Description: "Available template languages to generate a narrative for a Questionnaire item"
@@ -127,8 +127,7 @@ ValueSet: TemplateLanguages
 Id: template-languages
 Title: "Template Languages"
 Description: "Available template languages to generate a narrative for a Questionnaire item"
-* $mime#text/x.tiro-health.liquid "Liquid"
-* $mime#text/x.tiro-health.jinja2 "Jinja2"
+* include codes from system CSTemplateLanguages
 
 Extension: NarrativeTemplate
 Id: narrative-template
@@ -141,7 +140,7 @@ Context: Questionnaire.item
 * value[x] only Expression
 * valueExpression.language from TemplateLanguages (required)
 
-CodeSystem: QuestionnaireItemOrientation
+CodeSystem: CSQuestionnaireItemOrientation
 Id: questionnaire-item-orientation
 Title: "Questionnaire Item Orientation"
 Description: "Orientation of the items in the Questionnaire"
@@ -152,7 +151,7 @@ ValueSet: QuestionnaireItemOrientation
 Id: questionnaire-item-orientation
 Title: "Questionnaire Item Orientation"
 Description: "Orientation of the items in the Questionnaire"
-* include codes from system QuestionnaireItemOrientation
+* include codes from system CSQuestionnaireItemOrientation
 
 Extension: Orientation
 Id: orientation

@@ -131,7 +131,7 @@ Title: "Prostate Cancer"
 Description: "Patient is diagnosed with prostate cancer."
 * code = $SCT#254900004
 * clinicalStatus = #active
-* subject = Reference(PcaPatient) 
+* subject = Reference(PCaPatient) 
 * recordedDate = "2023-05-23T00:00:00+00:00"
 * participant[0].actor = Reference(DrHause)
 * participant[0].function = http://terminology.hl7.org/CodeSystem/provenance-participant-type#custodian "Custodian"
