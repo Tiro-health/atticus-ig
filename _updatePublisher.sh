@@ -15,7 +15,7 @@ update_sh_url=$scriptdlroot/_updatePublisher.sh
 build_sh_url=$scriptdlroot/_build.sh
 build_bat_url=$scriptdlroot/_build.bat
 
-skipPrompts=false
+skipPrompts=true
 FORCE=false
 
 if ! type "curl" > /dev/null; then
