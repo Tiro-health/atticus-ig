@@ -5,7 +5,7 @@ SETLOCAL
 SET dlurl=https://github.com/HL7/fhir-ig-publisher/releases/latest/download/publisher.jar
 SET publisher_jar=publisher.jar
 SET input_cache_path=%CD%\input-cache\
-SET skipPrompts=false
+SET skipPrompts=true
 
 SET scriptdlroot=https://raw.githubusercontent.com/HL7/ig-publisher-scripts/main
 SET build_bat_url=%scriptdlroot%/_build.bat
