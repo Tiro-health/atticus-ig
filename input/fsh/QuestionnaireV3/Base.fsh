@@ -132,10 +132,21 @@ Description: "Available template languages to generate a narrative for a Questio
 Extension: NarrativeTemplate
 Id: narrative-template
 Title: "Narrative Template"
-Description: "Extension to add a template to generate a narrative for the QuestionnaireResponse"
+Description: "FHIR Extension for narrative templates used in Questionnaires. This extension contains a template that is used to dynamically generate the narrative content of a Questionnaire based on provided data."
 Context: Questionnaire.item
 * ^purpose = """
              Attach a narrative template to a Questionnaire to generate a narrative for the QuestionnaireResponse.
+             """
+* value[x] only Expression
+* valueExpression.language from TemplateLanguages (required)
+
+Extension: NarrativeTemplateSnippet
+Id: narrative-template-snippet
+Title: "Narrative Template Snippet"
+Description: "FHIR Extension for narrative snippets used in narrative templates within Questionnaires. These snippets are loaded into the rendering environment and can be referenced by narrative templates or by other snippets to generate dynamic content."
+Context: Questionnaire.item
+* ^purpose = """
+             Refer to a narrative template snippet inside a narrative template to generate dynamic content.
              """
 * value[x] only Expression
 * valueExpression.language from TemplateLanguages (required)
