@@ -183,6 +183,7 @@ Description: "Custom Questionnaire Item Control by Tiro Health"
 * #text-area "Text Area" "Text area to enter multiple lines of text."
 * #date-field "Date Field" "Date field to enter a date."
 * #calculator "Calculator" "Calculator to calculate a value based on a formula."
+* #summarized-group "Summarized Group" "Group that summarizes the answers of its child items."
 
 Extension: EnableSuggestions
 Id: enable-suggestions
