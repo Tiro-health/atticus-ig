@@ -1,6 +1,6 @@
-Extension: QuestionnaireItemIncludInGroupSummary
-Id: questionnaire-item-includInGroupSummary
-Title: "Questionnaire Item Includ In Group Summary"
+Extension: QuestionnaireItemIncludeInGroupSummary
+Id: questionnaire-item-includeInGroupSummary
+Title: "Questionnaire Item Include In Group Summary"
 Description: "Indicates whether the question is included in the summary of the parent group."
 Context: Questionnaire.item
 * value[x] only boolean
