@@ -16,11 +16,12 @@ This section discusses how to create and manage reports through backend API's. T
 
 4. Creating a new template
 
+5. [Data Provenance Tracking](./5_Provenance.html)
+Learn how Atticus tracks the origin and lifecycle of form data using FHIR Provenance resources.
 
-5. Managing Data Dictionaries
+6. Managing Data Dictionaries
 
-
-6. Creating a new project
+7. Creating a new project
 
 
 ## Cicero
