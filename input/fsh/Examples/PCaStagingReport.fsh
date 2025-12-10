@@ -3,7 +3,7 @@ InstanceOf: Composition
 Usage: #example
 Title: "Prostate Cancer Staging Composition"
 Description: "Example of a Composition from a Prostate Cancer Staging report."
-* type = LOINC#1234 "Prostate Cancer Consultation"
+* type = $LOINC#11488-4 "Consultation Note"
 * date = 2023-05-24
 * author = Reference(DrHause)
 * title = "Prostate Cancer Staging Composition"

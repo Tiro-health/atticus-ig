@@ -126,9 +126,14 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
 * status = #active
 * version = "5.0.1"
 * language = #nl-BE
-* extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer) 
-* extension[Orientation].valueCode = #vertical
-* extension[NarrativeTemplate]
+* extension[+]
+  * url = "http://fhir.tiro.health/StructureDefinition/render-type"
+  * valueCanonical = Canonical(TreeLayoutRenderer)
+* extension[+]
+  * url = "http://fhir.tiro.health/StructureDefinition/orientation"
+  * valueCode = #vertical
+* extension[+]
+  * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
   * valueExpression.language = #text/x.tiro-health.liquid
   * valueExpression.expression = "{{ subquestions | join: '\n' }}"
 * item[0]
@@ -148,11 +153,13 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
     * text = "Diagnose"
     * answerConstraint = #optionsOrType
     * code =  $SCT#439401001 "Diagnosis"
-    * extension[$variable][+]
+    * extension[+]
+      * url = $variable
       * valueExpression.name = #isMesothelioma
       * valueExpression.language = #text/fhirpath
       * valueExpression.expression = "%context.repeat(item).where(linkId = 'presentatie/diagnose').answer.value.code in ('399477001', '65278006')"
-    * extension[NarrativeTemplate]
+    * extension[+]
+      * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
       * valueExpression.language = #text/x.tiro-health.liquid
       // short cut for printing basic types needed
       * valueExpression.expression = """
@@ -237,7 +244,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * operator = #exists
         * answerBoolean = true
       * enableBehavior = #all
-      * extension[NarrativeTemplate]
+      * extension[+]
+        * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
         * valueExpression.language = #text/x.tiro-health.liquid
         * valueExpression.expression = """c{{ %item.answer.value.ofType(Coding).display.join() }} ({{ subquestions }})"""
       * item[+]
@@ -245,49 +253,67 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * linkId = "presentatie/diagnose/tnm-classificatie/t-stage"
         * code = $SCT#399504009 "cT category"
         * text = "cT-stage"
-        * answerValueSet = Canonical(ClinicalTStageLungCancer) 
-        * extension[$optionsToggle][+]
-          * extension[option][+]
+        * answerValueSet = Canonical(ClinicalTStageLungCancer)
+        * extension[+]
+          * url = $optionsToggle
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228884006 "Tis"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228891009 "T1mi"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228892002 "T1a"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228895000 "T1b"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228899006 "T1c"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228931008 "T2a"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1228934000 "T2b"
-          * extension[expression]
+          * extension[+]
+            * url = "expression"
             * valueExpression.language = #text/fhirpath
             * valueExpression.expression = "not(%isMesothelioma)"
             * valueExpression.description = "Enable Tis, T1mi, T1a, T1b, T1c, T2a, T2b when not Mesothelioma"
-          * extension[$optionsToggle][+]
-            * extension[option][+]
-              * valueCoding = $SCT#1228889001 "T1"
-            * extension[option][+]
-              * valueCoding = $SCT#1228929004 "T2"
-            * extension[expression]
-              * valueExpression.language = #text/fhirpath
-              * valueExpression.expression = "%isMesothelioma"
-              * valueExpression.description = "Enable T1, T2 when Mesothelioma"
+        * extension[+]
+          * url = $optionsToggle
+          * extension[+]
+            * url = "option"
+            * valueCoding = $SCT#1228889001 "T1"
+          * extension[+]
+            * url = "option"
+            * valueCoding = $SCT#1228929004 "T2"
+          * extension[+]
+            * url = "expression"
+            * valueExpression.language = #text/fhirpath
+            * valueExpression.expression = "%isMesothelioma"
+            * valueExpression.description = "Enable T1, T2 when Mesothelioma"
       * item[+]
         * insert CodingDropdown
         * linkId = "presentatie/diagnose/tnm-classificatie/n-stage"
         * code = $SCT#277206009 "cN category"
         * text = "cN-stage"
         * answerValueSet = Canonical(ClinicalNStageLungCancer)
-        * extension[$optionsToggle][+]
-          * extension[option][+]
+        * extension[+]
+          * url = $optionsToggle
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229981009 "N2a"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229982002 "N2b"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229984001 "N3"
-          * extension[expression]
+          * extension[+]
+            * url = "expression"
             * valueExpression.language = #text/fhirpath
             * valueExpression.expression = "not(%isMesothelioma)"
             * valueExpression.description = "Enable N2a, N2b, N3 when not Mesothelioma"
@@ -297,27 +323,38 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * code = $SCT#399387003 "cM category"
         * text = "cM-stage"
         * answerValueSet = Canonical(ClinicalMStageLungCancerREO)
-        * extension[$optionsToggle][+]
-          * extension[option][+]
+        * extension[+]
+          * url = $optionsToggle
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229904003 "M1a"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229907005 "M1b"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229910003 "M1c"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229912006 "M1c1"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229912006 "M1c2"
-          * extension[option][+]
+          * extension[+]
+            * url = "option"
             * valueCoding = $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
-          * extension[expression]
+          * extension[+]
+            * url = "expression"
             * valueExpression.language = #text/fhirpath
             * valueExpression.expression = "not(%isMesothelioma)"
             * valueExpression.description = "Enable M1a, M1b, M1c, M1c1, M1c2, Mx when notMesothelioma"
-        * extension[$optionsToggle][+]
-          * extension[option][+]
+        * extension[+]
+          * url = $optionsToggle
+          * extension[+]
+            * url = "option"
             * valueCoding = $SCT#1229903009 "M1"
-          * extension[expression]
+          * extension[+]
+            * url = "expression"
             * valueExpression.language = #text/fhirpath
             * valueExpression.expression = "%isMesothelioma"
             * valueExpression.description = "Enable M1 when Mesothelioma"
@@ -327,7 +364,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * text = "Locatie van metastase"
       * code = $SCT#385421009 "Site of distant metastasis"
       * repeats = true
-      * extension[NarrativeTemplate]
+      * extension[+]
+        * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
         * valueExpression.language = #text/x.tiro-health.liquid
         * valueExpression.expression = "{{%item.answer.value.print().join(',')}}"
       * enableWhen[+] // TODO: why doing inverse logic?
@@ -367,7 +405,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * question = "presentatie/diagnose"
         * operator = #=
         * answerCoding = REO#nsclc-nos "NSCLC NOS"
-      * extension[NarrativeTemplate]
+      * extension[+]
+        * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
         * valueExpression.language = #text/x.tiro-health.liquid
         * valueExpression.expression = """
         {%- if item.answer.value.code == 'oncogenic-driver-present' %}
@@ -380,7 +419,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * text = "EGFR"
         * code = $CLINVAR#HGNC:3236 "EGFR"
         * answerValueSet = Canonical(PositiveNegative)
-        * extension[NarrativeTemplate]
+        * extension[+]
+          * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
           * valueExpression.language = #text/x.tiro-health.liquid
           * valueExpression.expression = """
           {%- if %item.answer.value.code == 'LA6576-8' #present %}
@@ -403,7 +443,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * text = "ALK"
         * repeats = true
         * answerValueSet = Canonical(PositiveNegative)
-        * extension[NarrativeTemplate]
+        * extension[+]
+          * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
           * valueExpression.language = #text/x.tiro-health.liquid
           * valueExpression.expression = """
           {%- if item.answer.value.code == 'LA6576-8' #present %}

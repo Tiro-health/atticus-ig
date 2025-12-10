@@ -15,9 +15,8 @@ update_sh_url=$scriptdlroot/_updatePublisher.sh
 build_sh_url=$scriptdlroot/_build.sh
 build_bat_url=$scriptdlroot/_build.bat
 
-skipPrompts=true
+skipPrompts=false
 FORCE=false
-response=""
 
 if ! type "curl" > /dev/null; then
 	echo "ERROR: Script needs curl to download latest IG Publisher. Please install curl."
@@ -41,19 +40,18 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
-response="n"
 if [ ! -d "$input_cache_path" ] ; then
   if [ $FORCE != true ]; then
     echo "$input_cache_path does not exist"
     message="create it?"
     read -r -p "$message" response
-  else
-    response="y"
+    else
+    response=y
   fi
+fi
 
-  if [[ $response =~ ^[yY].*$ ]] ; then
-    mkdir -p ./input-cache
-  fi
+if [[ $response =~ ^[yY].*$ ]] ; then
+  mkdir ./input-cache
 fi
 
 publisher="$input_cache_path$publisher_jar"
@@ -80,6 +78,7 @@ else
 fi
 
 if [[ $skipPrompts == false ]]; then
+
   if [[ $upgrade == true ]]; then
     message="Overwrite $jarlocation? (Y/N) "
   else
@@ -88,21 +87,20 @@ if [[ $skipPrompts == false ]]; then
   fi
   read -r -p "$message" response
 else
-  response="y"
+  response=y
 fi
-
 if [[ $skipPrompts == true ]] || [[ $response =~ ^[yY].*$ ]]; then
+
 	echo "Downloading most recent publisher to $jarlocationname - it's ~100 MB, so this may take a bit"
 	curl -L $dlurl -o "$jarlocation" --create-dirs
 else
 	echo cancelled publisher update
 fi
 
-response=""
 if [[ $skipPrompts != true ]]; then
     message="Update scripts? (enter 'y' or 'Y' to continue, any other key to cancel)?"
     read -r -p "$message" response
-fi
+  fi
 
 if [[ $skipPrompts == true ]] || [[ $response =~ ^[yY].*$ ]]; then
   echo "Downloading most recent scripts "
@@ -110,6 +108,7 @@ if [[ $skipPrompts == true ]] || [[ $response =~ ^[yY].*$ ]]; then
   curl -L $build_bat_url -o /tmp/_build.new
   cp /tmp/_build.new _build.bat
   rm /tmp/_build.new
+
 
   curl -L $build_sh_url -o /tmp/_build.new
   cp /tmp/_build.new _build.sh

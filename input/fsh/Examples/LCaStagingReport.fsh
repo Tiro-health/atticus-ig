@@ -93,7 +93,9 @@ Description: "Questionnaire for Lung Cancer Staging."
   * type = #decimal
   * text = "PD-L1 expression"
   * code = $SCT#1255770005 "PD-L1 expression"
-  * extension[$unit].valueCoding = $UCUM#%
+  * extension[+]
+    * url = $unit
+    * valueCoding = $UCUM#%
 // resourceId, path met linkId, "change",  ???
 Instance: LCaStagingResponse
 InstanceOf: QuestionnaireResponse

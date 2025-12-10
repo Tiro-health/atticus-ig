@@ -73,11 +73,14 @@ Description: "Datum waarop de diagnose is gesteld."
 * item[+]
   * linkId = "diagnosis-date"
   * text = "Incidentiedatum"
-  * type = #date
   * code = $SCT#432213005 "Date of Diagnosis"
   * insert DateField
-  * extension[$entryFormat].valueString = "YYYY-MM-DD"
-  * extension[Regex].valueString = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+  * extension[+]
+    * url = $entryFormat
+    * valueString = "YYYY-MM-DD"
+  * extension[+]
+    * url = "http://fhir.tiro.health/StructureDefinition/regex"
+    * valueString = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
 
 ValueSet: WHOScore
 Id: who-score
