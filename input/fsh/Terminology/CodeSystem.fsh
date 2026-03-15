@@ -24,3 +24,12 @@ Title: "Auto Generated Codes"
 Description: "Tiro.health Auto Generate Codes in case common standard CodeSystems are insufficïent."
 * ^url = "http://tiro.health/fhir/CodeSystem/auto-generated"
 * ^content = #not-present
+
+CodeSystem: DictationProvider
+Id: dictation-provider
+Title: "Dictation Provider"
+Description: "Dictation providers supported by the Atticus report renderer"
+* ^status = #active
+* ^content = #complete
+* #corti "Corti" "Corti AI dictation provider"
+* #squire "Squire" "Squire Health dictation provider"
