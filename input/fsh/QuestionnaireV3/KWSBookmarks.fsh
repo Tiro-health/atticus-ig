@@ -6,12 +6,16 @@ CodeSystem: KWSQuestionnaireLaunchContext
 Id: kwsquestionnaire-launch-context
 Title: "KWS Questionnaire Launch Context"
 Description: "Additional launch context for FHIR Questionnaires launched from KWS."
+* ^experimental = false
+* ^caseSensitive = true
 * #nxh-bookmarks "Bookmarks" "Launch Questionnaire with a list of KWS bookmarks wrapped in a Basic resource."
 
 CodeSystem: KWSBookmark
 Id: kws-bookmark
 Title: "KWS Bookmark"
 Description: "A bookmark for KWS resources."
+* ^experimental = false
+* ^caseSensitive = true
 * #KWS_PID_DeHeerOfMevrouw
 * #KWS_PID_HemOfHaar
 * #KWS_PID_HijOfZij
@@ -33,6 +37,7 @@ ValueSet: KWSBookmarkValueSet
 Id: kwsbookmark-value-set
 Title: "KWS Bookmark Value Set"
 Description: "All available bookmarks for Questionnaire population."
+* ^experimental = false
 * include codes from system KWSBookmark
 
 Extension: BookmarkLaunchContext
@@ -156,9 +161,9 @@ Description: "An ongoing encounter with Jan Jansens"
 * plannedStartDate = "2024-06-22"
 * plannedEndDate = "2024-06-22"
 * status = #in-progress
+* subject = Reference(JanJansens)
 * participant
   * actor = Reference(JanJansens)
-  * type = #patient 
 
 Instance: DrPauwels
 InstanceOf: Practitioner
@@ -259,33 +264,39 @@ Title: "Report Population Bundle"
 Description: "A bundle containing a resources to populate the report."
 * type = #batch
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Patient/random-patient-id-123"
   * request.method = #POST
   * request.url = "Patient"
   * request.ifNoneExist = "identifier=https://fhir.nexuzhealth.com/standards/fhir/NamingSystem/kws/pm/patient/eadnr|123456"
   * resource = JanJansens
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Encounter/random-encounter-id-123"
   * request.method = #POST
   * request.url = "Encounter"
   * request.ifNoneExist = "identifier=https://fhir.nexuzhealth.com/standards/fhir/NamingSystem/kws/bifrost/receptie/cnr|123456"
   * resource = JanJansensContact
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Practitioner/random-practitioner-id-123"
   * request.method = #POST
   * request.url = "Practitioner"
   * request.ifNoneExist = "identifier=https://fhir.nexuzhealth.com/standards/fhir/NamingSystem/kws/amalthea/basVerstrekker/verstreknr|123456"
   * resource = DrPauwels
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/PractitionerRole/AbdominalSurgeon"
   * request.method = #POST
   * request.url = "PractitionerRole"
   * request.ifNoneExist = "identifier=https://fhir.nexuzhealth.com/standards/fhir/NamingSystem/kws/amalthea/basVerstrekker/verstreknr|123456"
   * resource = AbdominalSurgeon
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Basic/random-bookmarks-id-123"
   * request.method = #POST
   * request.url = "Basic"
   * resource = BookmarkSnapshot
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Composition/random-report-id-321"
   * request.method = #POST
   * request.url = "Composition"
-  * resource = InitialReport 
+  * resource = InitialReport
 
 Instance: Response
 InstanceOf: QuestionnaireResponse

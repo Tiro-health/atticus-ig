@@ -38,7 +38,7 @@ Description: "Request for a population of patients."
   * resource = ReportTemplate
 * parameter[+]
   * name = "subject"
-  * valueReference = Reference(Patient)
+  * valueReference = Reference(LCaPatient)
 * parameter[+]
   * name = "encounter"
-  * valueReference = Reference(Encounter)
+  * valueReference = Reference(LCaStagingEncounter)

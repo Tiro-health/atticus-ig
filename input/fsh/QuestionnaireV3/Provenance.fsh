@@ -2,6 +2,8 @@ CodeSystem: FormActivity
 Id: form-activity
 Title: "Form Activity"
 Description: "Activities that can be performed on form fields and which will be tracked through provenance"
+* ^experimental = false
+* ^caseSensitive = true
 * #user "User input" "Manually entered data by the user"
 * #manual "Manual input" "Manually entered data by the user without additional system assistance"
 * #static "Static value" "A preconfigured value that has been picked by a user. The values in the preset have been used to populate fields."
@@ -21,6 +23,8 @@ CodeSystem: AgentTypes
 Id: agent-types
 Title: "Agent Types"
 Description: "Agent Types that process data to populate form fields."
+* ^experimental = false
+* ^caseSensitive = true
 * #fhirpath-engine "FHIRPath Engine" "FHIRPath expression engine"
 * #population-engine "Population Engine" "Engine that populates forms from external data sources"
 * #preset-engine "Preset Engine" "Engine that applies preset configurations"
@@ -31,6 +35,7 @@ ValueSet: FormActivityVS
 Id: form-activity-vs
 Title: "Form Activity ValueSet"
 Description: "Activities that can be performed on form fields"
+* ^experimental = false
 * include codes from system FormActivity
 
 
@@ -38,6 +43,7 @@ ValueSet: AgentTypesVS
 Id: agent-types-vs
 Title: "Agent Types ValueSet"
 Description: "Types of automated agents that can populate form fields"
+* ^experimental = false
 * include codes from system AgentTypes
 
 
@@ -86,6 +92,24 @@ Description: "Profile for tracking the origin and method of data entry for form 
 * agent.onBehalfOf MS
 * agent.onBehalfOf only Reference(Practitioner or Organization)
 
+
+// Stub instances referenced by Provenance examples
+
+Instance: qr-123
+InstanceOf: QuestionnaireResponse
+Usage: #example
+Title: "Example QuestionnaireResponse"
+Description: "Stub QuestionnaireResponse referenced by provenance examples"
+* questionnaire = "http://fhir.tiro.health/Questionnaire/example"
+* status = #completed
+* authored = "2025-10-29T10:30:00Z"
+
+Instance: pract-789
+InstanceOf: Practitioner
+Usage: #example
+Title: "Example Practitioner"
+Description: "Stub Practitioner referenced by provenance examples"
+* name.text = "Dr. Example"
 
 // Example Instances
 

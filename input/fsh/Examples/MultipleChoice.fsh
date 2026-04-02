@@ -2,6 +2,8 @@ CodeSystem: ExampleCode
 Id: example-code
 Title: "Example Code"
 Description: "Example code for use in examples."
+* ^experimental = false
+* ^caseSensitive = true
 * #code1 "Example Code 1"
 * #code2 "Example Code 2"
 * #code3 "Example Code 3" 
@@ -56,7 +58,7 @@ Usage: #example
 Title: "Multiple Choice Response Example"
 Description: "Questionnaire response demonstrating the use of multiple choice questions defined as seperate items."
 * contained[0] = MultipleChoiceExample
-* questionnaire = Canonical(MultipleChoiceExample)
+* questionnaire = "#MultipleChoiceExample"
 * status = #completed
 * item[+]
   * linkId = "question"

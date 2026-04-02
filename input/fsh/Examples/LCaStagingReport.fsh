@@ -76,15 +76,10 @@ Description: "Questionnaire for Lung Cancer Staging."
   * insert CodingChips
   * text = "Location of metastasis"
   * code = $SCT#385421009 "Site of distant metastasis"
-  * enableWhen[+] 
-    * question = "ctnm/m"
-    * operator = #=
-    * answerCoding = $SCT#1229901006 "M0"
   * enableWhen[+]
-    * question = "ctnm/m"
-    * operator = #exists
-    * answerBoolean = true
-  * enableBehavior = #all
+    * question = "m"
+    * operator = #!=
+    * answerCoding = $SCT#1229901006 "American Joint Committee on Cancer cM0"
   * disabledDisplay = #hidden
   * answerValueSet = Canonical(LungCancerLocationOfMetastasis)
   * answerConstraint = #optionsOrType
@@ -92,7 +87,7 @@ Description: "Questionnaire for Lung Cancer Staging."
   * linkId = "pd-l1"
   * type = #decimal
   * text = "PD-L1 expression"
-  * code = $SCT#1255770005 "PD-L1 expression"
+  * code = $SCT#1255770005 "Presence of PD-L1 in primary malignant neoplasm of lung by immunohistochemistry"
   * extension[+]
     * url = $unit
     * valueCoding = $UCUM#%
@@ -123,15 +118,15 @@ Description: "QuestionnaireResponse for Lung Cancer Staging."
   * item[+]
     * linkId = "t"
     * answer[0]
-      * valueCoding = $SCT#1228938002 "T3"
+      * valueCoding = $SCT#1228938002 "cT3"
   * item[+]
     * linkId = "n"
     * answer[0]
-      * valueCoding = $SCT#1229973008 "N1"
+      * valueCoding = $SCT#1229973008 "cN1"
   * item[+]
     * linkId = "m"
     * answer[0]
-      * valueCoding = $SCT#1229903009 "M1"
+      * valueCoding = $SCT#1229903009 "American Joint Committee on Cancer cM1"
 * item[+]
   * linkId = "metastasis-location"
   * answer[0]
@@ -148,7 +143,7 @@ Title: "LCaStaging Composition"
 Description: "Composition containing the Lung Cancer Staging Report."
 * title = "Lung Cancer Staging Report"
 * status = #final
-* type.coding = $LOINC#18841-7 "Hospital consultation note"
+* type.coding = $LOINC#18841-7 "Hospital consultations Document"
 * type.text = "Lung Cancer Staging Report"
 * subject = Reference(LCaPatient)
 * date = "2023-05-23T00:00:00+00:00"
@@ -159,10 +154,13 @@ Description: "Composition containing the Lung Cancer Staging Report."
   * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>The patient was diagnosed with non-small cell lung cancer on 2023-05-23. The cTNM staging is T3N1M1. The patient has bony metastasis. The PD-L1 expression is 80%.</p></div>"
   * text.status = #generated
   * entry[+] = Reference(LCaStagingResponse)
+  * entry[+] = Reference(LCaStagingTemplate)
+  * entry[+] = Reference(LungCancerStaging)
   * entry[+] = Reference(CTStage)
   * entry[+] = Reference(CNStage)
   * entry[+] = Reference(CMStage)
   * entry[+] = Reference(PDL1Expression)
+  * entry[+] = Reference(Metastasis)
 * section[+]
   * title = "Conclusion"
   * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Based on the results of the staging, the patient has a stage IV lung cancer.</p></div>"
@@ -176,7 +174,7 @@ Title: "Lung Cancer Staging"
 Description: "Lung Cancer Staging Condition."
 * category[+] = http://terminology.hl7.org/CodeSystem/condition-category#problem-list-item "Problem List Item"
 * code = $SCT#254637007 "Non-small cell lung cancer"
-* clinicalStatus = #active
+* clinicalStatus = http://terminology.hl7.org/CodeSystem/condition-clinical#active
 * subject = Reference(LCaPatient)
 
 
@@ -190,7 +188,7 @@ Description: "CT Stage Observation."
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
-* valueCodeableConcept = $SCT#1228938002 "T3"
+* valueCodeableConcept = $SCT#1228938002 "cT3"
 * focus[+] = Reference(LungCancerStaging)
 
 Instance: CNStage
@@ -203,7 +201,7 @@ Description: "CN Stage Observation."
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
-* valueCodeableConcept = $SCT#1229973008 "N1"
+* valueCodeableConcept = $SCT#1229973008 "cN1"
 * focus[+] = Reference(LungCancerStaging)
 * performer = Reference(DrHause)
 
@@ -217,7 +215,7 @@ Description: "CM Stage Observation."
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
-* valueCodeableConcept = $SCT#1229903009 "M1"
+* valueCodeableConcept = $SCT#1229903009 "American Joint Committee on Cancer cM1"
 * focus[+] = Reference(LungCancerStaging)
 * performer = Reference(DrHause)
 
@@ -227,7 +225,7 @@ Usage: #example
 Title: "PD-L1 Expression"
 Description: "PD-L1 Expression Observation."
 * status = #final
-* code.coding[+] = $SCT#1255770005 "Presence of PD-L1 in primary malignant neoplasm of lung by immunohistochemistry	"
+* code.coding[+] = $SCT#1255770005 "Presence of PD-L1 in primary malignant neoplasm of lung by immunohistochemistry"
 * code.text = "PD-L1"
 * subject = Reference(LCaPatient)
 * performer = Reference(DrHause)
@@ -245,7 +243,7 @@ Description: "TNM Stage Group Observation."
 * code = $SCT#399537006 "Clinical TNM stage grouping"
 * subject = Reference(LCaPatient)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
-* valueCodeableConcept = $SCT#1222843001 "Stage IV"
+* valueCodeableConcept = $SCT#1222843001 "American Joint Committee on Cancer stage IV:0"
 * performer = Reference(DrHause)
 * method = $SCT#1269566009 "American Joint Commission on Cancer, Cancer Staging Manual, 9th version neoplasm staging system"
 * hasMember[+] = Reference(CTStage)
@@ -260,7 +258,7 @@ Title: "Metastasis"
 Description: "Metastasis Observation."
 * status = #final
 * code = $SCT#94222008 "Cancer metastatic to bone"
-* bodySite = $SCT#272673000 "Bone structure of skeleton"
+* bodySite = $SCT#272673000 "Bone structure"
 * subject = Reference(LCaPatient)
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * performer = Reference(DrHause)
@@ -271,31 +269,47 @@ Usage: #example
 Title: "Lung Cancer Staging Report"
 Description: "Bundle containing the Lung Cancer Staging Report including the QuestionnaireResponse and related resources."
 * type = #document
+* identifier.system = "urn:ietf:rfc:3986"
+* identifier.value = "urn:uuid:c2d3e4f5-a6b7-8901-bcde-f12345678901"
+* timestamp = "2025-10-29T10:30:00Z"
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Composition/LCaStagingComposition"
   * resource = LCaStagingComposition
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/QuestionnaireResponse/LCaStagingResponse"
   * resource = LCaStagingResponse
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Encounter/LCaStagingEncounter"
   * resource = LCaStagingEncounter
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Patient/LCaPatient"
   * resource = LCaPatient
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Practitioner/DrHause"
   * resource = DrHause
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Questionnaire/LCaStagingTemplate"
   * resource = LCaStagingTemplate
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Condition/LungCancerStaging"
   * resource = LungCancerStaging
-* entry[+]  
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/CTStage"
   * resource = CTStage
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/CNStage"
   * resource = CNStage
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/CMStage"
   * resource = CMStage
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PDL1Expression"
   * resource = PDL1Expression
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/TNMStageGroups"
   * resource = TNMStageGroups
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/Metastasis"
   * resource = Metastasis
 
 

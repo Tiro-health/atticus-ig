@@ -73,7 +73,7 @@ Description: "Datum waarop de diagnose is gesteld."
 * item[+]
   * linkId = "diagnosis-date"
   * text = "Incidentiedatum"
-  * code = $SCT#432213005 "Date of Diagnosis"
+  * code = $SCT#432213005 "Date of diagnosis"
   * insert DateField
   * extension[+]
     * url = $entryFormat
@@ -86,6 +86,7 @@ ValueSet: WHOScore
 Id: who-score
 Title: "WHO Score"
 Description: "SNOMED-CT bevindingen functioneringsniveau volgens Wereldgezondheidsorganisatie"
+* ^experimental = false
 * include codes from system $SCT where concept is-a #373802001 "WHO performance status finding"
 
 Instance: WHOScoreDropdown
@@ -122,13 +123,13 @@ Description: "Smoking Status"
   * linkId = "smoking-status"
   * insert CodingChips
   * text = "Smoking Status"
-  * code = $SCT#229819007 "Smoking status"
+  * code = $SCT#229819007 "Tobacco use and exposure"
   * answerOption[+]
-    * valueCoding = $SCT#266919005 "nooit gerookt"
+    * valueCoding = $SCT#266919005 "Never smoked"
   * answerOption[+]
-    * valueCoding = $SCT#8517006 "ex-roker"
+    * valueCoding = $SCT#8517006 "Former smoker"
   * answerOption[+]
-    * valueCoding = $SCT#77176002 "actieve roker"
+    * valueCoding = $SCT#77176002 "Smoker"
 
 
 
@@ -139,18 +140,19 @@ Id: clinical-tstage-lung-cancer
 Title: "Clinical TStage Lung Cancer"
 Description: "AJCC 8th Edition Clinical TStage for Lung Cancer"
 * ^status = #active
+* ^experimental = false
 * $SCT#1222604002 "Tx"
 * $SCT#1228882005 "T0"
-* $SCT#1228884006 "Tis"
-* $SCT#1228889001 "T1"
-* $SCT#1228891009 "T1mi"
-* $SCT#1228892002 "T1a"
-* $SCT#1228895000 "T1b"
-* $SCT#1228899006 "T1c"
-* $SCT#1228929004 "T2"
-* $SCT#1228931008 "T2a"
-* $SCT#1228934000 "T2b"
-* $SCT#1228938002 "T3"
+* $SCT#1228884006 "American Joint Committee on Cancer cTis"
+* $SCT#1228889001 "American Joint Committee on Cancer cT1"
+* $SCT#1228891009 "American Joint Committee on Cancer cT1mi"
+* $SCT#1228892002 "American Joint Committee on Cancer cT1a"
+* $SCT#1228895000 "American Joint Committee on Cancer cT1b"
+* $SCT#1228899006 "American Joint Committee on Cancer cT1c"
+* $SCT#1228929004 "American Joint Committee on Cancer cT2"
+* $SCT#1228931008 "American Joint Committee on Cancer cT2a"
+* $SCT#1228934000 "American Joint Committee on Cancer cT2b"
+* $SCT#1228938002 "cT3"
 * $SCT#1228944003 "T4"
 
 ValueSet: ClinicalNStageLungCancer
@@ -158,24 +160,26 @@ Id: clinical-nstage-lung-cancer
 Title: "Clinical NStage Lung Cancer"
 Description: "AJCC 8th Edition Clinical NStage for Lung Cancer"
 * ^status = #active
+* ^experimental = false
 * $SCT#1229966003 "Nx"
 * $SCT#1229967007 "N0"
-* $SCT#1229973008 "N1"
+* $SCT#1229973008 "cN1"
 * $SCT#1229978004 "N2"
-* $SCT#1229981009 "N2a"
-* $SCT#1229982002 "N2b"
-* $SCT#1229984001 "N3"
+* $SCT#1229981009 "American Joint Committee on Cancer cN2a"
+* $SCT#1229982002 "American Joint Committee on Cancer cN2b"
+* $SCT#1229984001 "American Joint Committee on Cancer cN3"
 
 ValueSet: ClinicalMStageLungCancer
 Id: clinical-mstage-lung-cancer
 Title: "Clinical MStage Lung Cancer"
 Description: "AJCC 8th Edition Clinical MStage for Lung Cancer"
 * ^status = #active
-* $SCT#1229901006 "M0"
-* $SCT#1229903009 "M1"
-* $SCT#1229904003 "M1a"
-* $SCT#1229907005 "M1b"
-* $SCT#1229910003 "M1c"
+* ^experimental = false
+* $SCT#1229901006 "American Joint Committee on Cancer cM0"
+* $SCT#1229903009 "American Joint Committee on Cancer cM1"
+* $SCT#1229904003 "American Joint Committee on Cancer cM1a"
+* $SCT#1229907005 "American Joint Committee on Cancer cM1b"
+* $SCT#1229910003 "American Joint Committee on Cancer cM1c"
 
 
 Instance: ClinicalTNMStage
@@ -187,7 +191,7 @@ Description: "Clinical TNM Stage"
 * item[+]
   * linkId = "clinical-tnm-stage"
   * text = "Clinical TNM Stage"
-  * code = $SCT#258219007 "TNM classification of malignant tumor before any treatment"
+  * code = $SCT#258219007 "Stage 2"
   * type = #group
   * item[+]
     * linkId = "t-stage"
@@ -215,11 +219,17 @@ Usage: #example
 Title: "Input Component Library"
 Description: "Library of reusable input controls and input groups for FHIR Questionnaire items"
 * type = #searchset
+* link.relation = #self
+* link.url = "http://fhir.tiro.health/Questionnaire?_tag=library-item"
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Questionnaire/BloodPressureFormated"
   * resource = BloodPressureFormated
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Questionnaire/BloodPressureInputGroup"
   * resource = BloodPressureInputGroup
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Questionnaire/6482fabe"
   * resource = DateOfDiagnosis
 * entry[+]
+  * fullUrl = "http://fhir.tiro.health/Questionnaire/ClinicalTNMStage"
   * resource = ClinicalTNMStage

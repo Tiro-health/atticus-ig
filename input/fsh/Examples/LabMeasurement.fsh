@@ -12,8 +12,8 @@ Usage: #example
 Title: "PSA"
 Description: "PSA is a measurement of the prostate specific antigen in a blood sample."
 * status = #draft
-* code =  $SCT#63476009 "Prostate-specific antigen (PSA) measurement (observable entity)"
-* permittedUnit[0] = $UCUM#ng/mL "nanogram per milliliter"
+* code =  $SCT#63476009 "Prostate specific antigen measurement"
+* permittedUnit[0] = $UCUM#ng/mL "ng/mL"
 * permittedUnit[+] = $UCUM#g/L "gram per liter"
 
 //Instance: Hemoglobin

@@ -13,5 +13,6 @@ ValueSet: NarrativeAlternativeFormatMimeTypes
 Id: narrative-alternative-format-mime-types
 Title: "Narrative Alternative Format MIME Types"
 Description: "MIME types supported for narrative alternative formats"
+* ^experimental = false
 * urn:ietf:bcp:13#text/rtf "RTF"
 * urn:ietf:bcp:13#text/plain "Plain Text"

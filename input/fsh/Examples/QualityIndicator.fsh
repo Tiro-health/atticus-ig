@@ -17,10 +17,10 @@ Description: "Percentage of patients with a TURB procedure for bladder cancer wh
 * name = "FUafterMOC"
 * status = #draft
 * group.population[+]
-  * code = #numerator
+  * code = http://terminology.hl7.org/CodeSystem/measure-population#numerator
   * description = "TURB procedures followed by a MOC or Follow-up containing anatomical pathology report with a diagnosis of bladder cancer"
 * group.population[+]
-  * code = #denominator
+  * code = http://terminology.hl7.org/CodeSystem/measure-population#denominator
   * description = """TURB procedures
   The following procedures are excluded:
   - TURB procedures with a specified reason of 'after previous instillation' (='na voorgaande instillatie')

@@ -32,6 +32,7 @@ ValueSet: QuestionTreeAnswerItemCode
 Id: question-tree-answer-item-code
 Title: "Question Tree Answer Item Code"
 Description: "The type of an answer in a question tree."
+* ^experimental = false
 * include codes from system http://hl7.org/fhir/ValueSet/questionnaire-item-type
 * exclude http://hl7.org/fhir/item-type#code
 

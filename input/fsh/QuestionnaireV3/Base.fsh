@@ -36,7 +36,7 @@ Description: "Profile for a Tiro Questionnaire"
   * type = #group
   * extension contains
     $itemControl named itemControl 1..1 MS
-  * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "Answer Container"
+  * extension[itemControl].valueCodeableConcept.coding = $questionnaire-item-control#list "List"
     //* valueCodeableConcept
     //  * coding[+] = $questionnaire-item-control#list
     //  * coding[+] = TiroItemControl#answer-container
@@ -118,8 +118,9 @@ CodeSystem: CSTemplateLanguages
 Id: template-languages
 Title: "Template Languages"
 Description: "Available template languages to generate a narrative for a Questionnaire item"
-* ^supplements = "http://hl7.org/fhir/CodeSystem/template-languages"
 * ^content = #complete
+* ^experimental = false
+* ^caseSensitive = true
 * #text/x.tiro-health.liquid "Liquid" "Liquid template language with custom Tiro.health tags and filters."
 * #text/x.tiro-health.jinja2 "Jinja2" "Jinja2 template language with custom Tiro.health tags and filters."
 
@@ -127,6 +128,7 @@ ValueSet: TemplateLanguages
 Id: template-languages
 Title: "Template Languages"
 Description: "Available template languages to generate a narrative for a Questionnaire item"
+* ^experimental = false
 * include codes from system CSTemplateLanguages
 
 Extension: NarrativeTemplate
@@ -155,6 +157,8 @@ CodeSystem: CSQuestionnaireItemOrientation
 Id: questionnaire-item-orientation
 Title: "Questionnaire Item Orientation"
 Description: "Orientation of the items in the Questionnaire"
+* ^experimental = false
+* ^caseSensitive = true
 * #horizontal "Horizontal"
 * #vertical "Vertical"
 
@@ -162,6 +166,7 @@ ValueSet: QuestionnaireItemOrientation
 Id: questionnaire-item-orientation
 Title: "Questionnaire Item Orientation"
 Description: "Orientation of the items in the Questionnaire"
+* ^experimental = false
 * include codes from system CSQuestionnaireItemOrientation
 
 Extension: Orientation
@@ -176,6 +181,10 @@ CodeSystem: TiroItemControl
 Id: tiro-item-control
 Title: "Tiro Questionnaire Item Control"
 Description: "Custom Questionnaire Item Control by Tiro Health"
+* ^experimental = false
+* ^caseSensitive = true
+* #answer-container "Answer Container" "Container that groups answer items together."
+* #answer-row "Answer Row" "A row within an answer container."
 * #question-group "Question Group" "Structure to group answers and subquestions in a hierarchical tree layout."
 * #drop-down "Dropdown" "Dropdown to select a single answer from a list of options."
 * #chips "Chips" "Chips to select one or more answers from a list of options."
@@ -278,8 +287,7 @@ RuleSet: TextArea
 * extension[+]
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Text Area"
-  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-area
-  * valueCodeableConcept.coding[1] = TiroItemControl#text-area
+  * valueCodeableConcept.coding[0] = TiroItemControl#text-area
 
 RuleSet: QuestionnaireV3
 * extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)

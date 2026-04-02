@@ -30,6 +30,8 @@ Id: uz-leuven-reo-addendum
 Title: "Addition codes to be used with the REO Multidisciplinary Discussion at UZ Leuven"
 Description: "Extra codes for the REO Multidisciplinary Discussion at UZ Leuven"
 * ^content = #complete
+* ^experimental = false
+* ^caseSensitive = true
 * #nsclc-nos "NSCLC NOS" "Non-Small Cell Lung Cancer, not otherwise specified"
 * #carcinoid-nos "Carcinoïd NOS" "Carcinoid, not otherwise specified"
 * #carcinoma-mixed "Mixed Carcinoma" "Mixed Carcinoma"
@@ -53,17 +55,19 @@ ValueSet: LungCancerDiagnosis
 Id: lung-cancer-diagnosis
 Title: "Lung Cancer Diagnosis"
 Description: "Diagnosis of Lung Cancer"
+* ^experimental = false
 * ^language = #nl-BE
-* $SCT#255725002 "NSCLC - adenocarcinoom"
-* $SCT#723301009 "NSCLC - spinocellulair carcinoom"
+* $SCT#254637007 "Non-small cell lung cancer"
+* $SCT#254626006 "Adenocarcinoma of lung"
+* $SCT#723301009 "Squamous non-small cell lung cancer"
 * REO#nsclc-nos "NSCLC NOS"
-* $SCT#1260072008 "NSCLC - sarcomatoïd carcinoom"
+* $SCT#1260072008 "Pseudosarcomatous carcinoma of lung"
 * $SCT#254632001 "Kleincellig longcarcinoom (SCLC)"
 * $SCT#189607006 "Carcinoïd - Typisch"
 * $SCT#128658008 "Carcinoïd - Atypisch"
 * REO#carcinoid-nos "Carcinoïd NOS"
-* $SCT#65278006 "Mesothelioom - Epithelioïd"
-* $SCT#399477001 "Mesothelioom - Sarcomatoïd"
+* $SCT#65278006 "Epithelioid mesothelioma, malignant"
+* $SCT#399477001 "Sarcomatoid mesothelioma"
 * REO#carcinoma-mixed "Mixed Carcinoma"
 * $SCT#128628002 "Large cell neuroendocrine carcinoma (LCNEC)"
 * $SCT#707596000 "Carcinosarcoma"
@@ -75,8 +79,9 @@ ValueSet: ClinicalMStageLungCancerREO
 Id: clinical-mstage-lung-cancer-reo
 Title: "Clinical M-Stage Lung Cancer with REO Addendum"
 Description: "Clinical M-Stage for Lung Cancer with REO Addendum"
-* codes from valueset ClinicalMStageLungCancer 
-* $SCT#1229912006 "M1c1"
+* ^experimental = false
+* codes from valueset ClinicalMStageLungCancer
+* $SCT#1229912006 "American Joint Committee on Cancer cM1c(1)"
 * $clinical-m-stage-lung-cancer-addendum#cm1c2 "M1c2"
 * $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
 
@@ -85,6 +90,7 @@ ValueSet: LungCancerLocationOfMetastasis
 Id: lung-cancer-location-of-metastasis
 Title: "Lung Cancer Location Of Metastasis"
 Description: "Location of metastasis for Lung Cancer"
+* ^experimental = false
 * $SCT#94222008 "bot"
 * $SCT#94225005 "hersenen"
 * $SCT#94493005 "pleura"
@@ -97,6 +103,7 @@ ValueSet: DetectedNotDetected
 Id: detected-not-detected
 Title: "Detected|Not Detected"
 Description: "LOINC Answer List LL744-4 for Detected|Not Detected"
+* ^experimental = false
 * $LOINC#LA11882-0 "Detected"
   * ^extension[$vsOrder].valueInteger = 0 
 * $LOINC#LA11883-8 "Not Detected"
@@ -106,6 +113,7 @@ ValueSet: PositiveNegative
 Id: positive-negative
 Title: "Positive Negative"
 Description: "Positive Negative from LOINC Answer List LL360-9"
+* ^experimental = false
 * $LOINC#LA6576-8 "Positive"
 * $LOINC#LA6577-6 "Negative"
 
@@ -113,6 +121,7 @@ ValueSet: JaNee
 Id: ja-nee
 Title: "Ja|Nee"
 Description: "SNOMED-CT codes for 'ja' and 'nee'"
+* ^experimental = false
 * $SCT#373066001 "ja"
   * ^extension[$vsOrder].valueInteger = 0 
 * $SCT#373067005 "nee"
@@ -132,16 +141,16 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
 * extension[+]
   * url = "http://fhir.tiro.health/StructureDefinition/orientation"
   * valueCode = #vertical
-* extension[+]
-  * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
-  * valueExpression.language = #text/x.tiro-health.liquid
-  * valueExpression.expression = "{{ subquestions | join: '\n' }}"
 * item[0]
   * linkId = "presentatie"
   * text = "# Presentatie" // some syntax to automatically generate a ordinal prefix
   * type = #group
   * repeats = true
   * code = $SCT#255259006 "First presentation" // probably not the right code
+  * extension[+]
+    * url = "http://fhir.tiro.health/StructureDefinition/narrative-template"
+    * valueExpression.language = #text/x.tiro-health.liquid
+    * valueExpression.expression = "{{ subquestions | join: '\n' }}"
   * item[+] // DATE OF DIAGNOSIS
     * linkId = "presentatie/incidentie-datum"
     * insert DateField
@@ -172,16 +181,16 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * insert QuestionGroup
       * linkId = "presentatie/diagnose/primaire-tumorlokalisatie"
       * text = "Primaire tumorlokalisatie"
-      * code =  $SCT#399687005 "Primary tumor site"
+      * code =  $SCT#399687005 "Primary tumour site"
       // Not relevant if the diagnosis is mesothelioma
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #!=
-        * answerCoding = $SCT#399477001 "Mesothelioom - Sarcomatoïd"
+        * answerCoding = $SCT#399477001 "Sarcomatoid mesothelioma"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #!=
-        * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
+        * answerCoding = $SCT#65278006 "Epithelioid mesothelioma, malignant"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #exists
@@ -192,40 +201,40 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/lokalisatie-links"
         * insert CodingChips
         * answerOption[+].valueCoding = $SCT#82414001 "linker long"
-        * answerOption[+].valueCoding = $SCT#82407001 "linker onderkwab"
+        * answerOption[+].valueCoding = $SCT#82407001 "Bronchus of left lower lobe"
         * answerOption[+].valueCoding = $SCT#82408000 "linker bovenkwab"
       * item[+]
         * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/lokalisatie-rechts"
         * insert CodingChips
-        * answerOption[+].valueCoding = $SCT#64353002 "rechter onderkwab"
-        * answerOption[+].valueCoding = $SCT#113250009 "rechter middenkwab"
-        * answerOption[+].valueCoding = $SCT#11339004 "rechter bovenkwab"
+        * answerOption[+].valueCoding = $SCT#64353002 "Bronchus of right lower lobe"
+        * answerOption[+].valueCoding = $SCT#113250009 "Bronchus of right middle lobe"
+        * answerOption[+].valueCoding = $SCT#11339004 "Bronchus of right upper lobe"
       * item[+]
         * linkId = "presentatie/diagnose/primaire-tumorlokalisatie/lokalisatie-hoofdbronchus"
         * insert CodingChips
-        * answerOption[+].valueCoding = $SCT#75245000 "hoofdbronchus Li"
-        * answerOption[+].valueCoding = $SCT#70074004 "hoofdbronchus Re"
-        * answerOption[+].valueCoding = $SCT#44567001 "trachea"
+        * answerOption[+].valueCoding = $SCT#75245000 "Left main bronchus"
+        * answerOption[+].valueCoding = $SCT#70074004 "Right main bronchus"
+        * answerOption[+].valueCoding = $SCT#44567001 "Trachea"
     * item[+] // SUBQUESTIONS
       * insert QuestionGroup
       * linkId = "presentatie/diagnose/primaire-tumorlokalisatie-mesothelioom"
       * text = "Primaire tumorlokalisatie"
-      * code = $SCT#399687005 "Primary tumor site" 
+      * code = $SCT#399687005 "Primary tumour site" 
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#399477001 "Mesothelioom - Sarcomatoïd"
+        * answerCoding = $SCT#399477001 "Sarcomatoid mesothelioma"
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
+        * answerCoding = $SCT#65278006 "Epithelioid mesothelioma, malignant"
       * enableBehavior = #any
       * disabledDisplay = #hidden
       * item[+]
-        * linkId = "presentatie/diagnose/primaire-tumorlokalisatie-mesothelioom"
+        * linkId = "presentatie/diagnose/primaire-tumorlokalisatie-mesothelioom/lokalisatie"
         * insert CodingChips
-        * answerOption[+].valueCoding = $SCT#40768004 "links"
-        * answerOption[+].valueCoding = $SCT#51872008 "rechts"
+        * answerOption[+].valueCoding = $SCT#40768004 "Left thorax"
+        * answerOption[+].valueCoding = $SCT#51872008 "Right thorax"
     * item[+]
       * insert QuestionGroup
       * linkId = "presentatie/diagnose/tnm-classificatie" // merge both TNM classifications and use answerOptionsToggleExpression
@@ -234,11 +243,11 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #!=
-        * answerCoding = $SCT#399477001 "Mesothelioom - Sarcomatoïd"
+        * answerCoding = $SCT#399477001 "Sarcomatoid mesothelioma"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #!=
-        * answerCoding = $SCT#65278006 "Mesothelioom - Epithelioïd"
+        * answerCoding = $SCT#65278006 "Epithelioid mesothelioma, malignant"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #exists
@@ -258,25 +267,25 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * url = $optionsToggle
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228884006 "Tis"
+            * valueCoding = $SCT#1228884006 "American Joint Committee on Cancer cTis"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228891009 "T1mi"
+            * valueCoding = $SCT#1228891009 "American Joint Committee on Cancer cT1mi"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228892002 "T1a"
+            * valueCoding = $SCT#1228892002 "American Joint Committee on Cancer cT1a"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228895000 "T1b"
+            * valueCoding = $SCT#1228895000 "American Joint Committee on Cancer cT1b"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228899006 "T1c"
+            * valueCoding = $SCT#1228899006 "American Joint Committee on Cancer cT1c"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228931008 "T2a"
+            * valueCoding = $SCT#1228931008 "American Joint Committee on Cancer cT2a"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228934000 "T2b"
+            * valueCoding = $SCT#1228934000 "American Joint Committee on Cancer cT2b"
           * extension[+]
             * url = "expression"
             * valueExpression.language = #text/fhirpath
@@ -286,10 +295,10 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * url = $optionsToggle
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228889001 "T1"
+            * valueCoding = $SCT#1228889001 "American Joint Committee on Cancer cT1"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1228929004 "T2"
+            * valueCoding = $SCT#1228929004 "American Joint Committee on Cancer cT2"
           * extension[+]
             * url = "expression"
             * valueExpression.language = #text/fhirpath
@@ -298,20 +307,20 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * item[+]
         * insert CodingDropdown
         * linkId = "presentatie/diagnose/tnm-classificatie/n-stage"
-        * code = $SCT#277206009 "cN category"
+        * code = $SCT#277206009 "Node stages"
         * text = "cN-stage"
         * answerValueSet = Canonical(ClinicalNStageLungCancer)
         * extension[+]
           * url = $optionsToggle
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229981009 "N2a"
+            * valueCoding = $SCT#1229981009 "American Joint Committee on Cancer cN2a"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229982002 "N2b"
+            * valueCoding = $SCT#1229982002 "American Joint Committee on Cancer cN2b"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229984001 "N3"
+            * valueCoding = $SCT#1229984001 "American Joint Committee on Cancer cN3"
           * extension[+]
             * url = "expression"
             * valueExpression.language = #text/fhirpath
@@ -327,19 +336,19 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * url = $optionsToggle
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229904003 "M1a"
+            * valueCoding = $SCT#1229904003 "American Joint Committee on Cancer cM1a"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229907005 "M1b"
+            * valueCoding = $SCT#1229907005 "American Joint Committee on Cancer cM1b"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229910003 "M1c"
+            * valueCoding = $SCT#1229910003 "American Joint Committee on Cancer cM1c"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229912006 "M1c1"
+            * valueCoding = $SCT#1229912006 "American Joint Committee on Cancer cM1c(1)"
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229912006 "M1c2"
+            * valueCoding = $SCT#1229912006 "American Joint Committee on Cancer cM1c(1)"
           * extension[+]
             * url = "option"
             * valueCoding = $clinical-m-stage-lung-cancer-addendum#cmx "Mx"
@@ -352,7 +361,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
           * url = $optionsToggle
           * extension[+]
             * url = "option"
-            * valueCoding = $SCT#1229903009 "M1"
+            * valueCoding = $SCT#1229903009 "American Joint Committee on Cancer cM1"
           * extension[+]
             * url = "expression"
             * valueExpression.language = #text/fhirpath
@@ -371,7 +380,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableWhen[+] // TODO: why doing inverse logic?
         * question = "presentatie/diagnose/tnm-classificatie/m-stage"
         * operator = #=
-        * answerCoding = $SCT#1229901006 "M0"
+        * answerCoding = $SCT#1229901006 "American Joint Committee on Cancer cM0"
       * enableWhen[+]
         * question = "presentatie/diagnose/tnm-classificatie/m-stage"
         * operator = #exists
@@ -392,15 +401,15 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#255725002 "NSCLC - adenocarcinoom"
+        * answerCoding = $SCT#254626006 "Adenocarcinoma of lung"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#723301009 "NSCLC - spinocellulair carcinoom"
+        * answerCoding = $SCT#723301009 "Squamous non-small cell lung cancer"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#1260072008 "NSCLC - sarcomatoïd carcinoom"
+        * answerCoding = $SCT#1260072008 "Pseudosarcomatous carcinoma of lung"
       * enableWhen[+]
         * question = "presentatie/diagnose"
         * operator = #=
@@ -509,19 +518,19 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * enableBehavior = #any
       * disabledDisplay = #hidden
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#255725002 "NSCLC - adenocarcinoom"
+        * answerCoding = $SCT#254626006 "Adenocarcinoma of lung"
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#723301009 "NSCLC - spinocellulair carcinoom"
+        * answerCoding = $SCT#723301009 "Squamous non-small cell lung cancer"
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
-        * answerCoding = $SCT#1260072008 "NSCLC - sarcomatoïd carcinoom"
+        * answerCoding = $SCT#1260072008 "Pseudosarcomatous carcinoma of lung"
       * enableWhen[+]
-        * question = "presentatie/diagnose/answer/row-0/diagnose"
+        * question = "presentatie/diagnose"
         * operator = #=
         * answerCoding = REO#nsclc-nos "NSCLC NOS"
       * item[+]
@@ -529,19 +538,19 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * insert DecimalTextbox(#% "%")
         * type = #quantity
         * text = "PD-L1"
-        * code[+] = $SCT#1255770005 "Presence of programmed cell death 1 ligand 1 in primary malignant neoplasm of lung by immunohistochemistry"
+        * code[+] = $SCT#1255770005 "Presence of PD-L1 in primary malignant neoplasm of lung by immunohistochemistry"
         * code[+] = $LOINC#85147-7 "PD-L1 by clone 22C3 in Tissue by Immune stain Report"
       * item[+]
         * linkId = "presentatie/diagnose/ihc-profile/p40"
         * insert CodingChips
         * text = "P40"
-        * code = $LOINC#99086-1 "p40 Ag [Presence] in Tissue by Immune stain"
+        * code = $LOINC#99086-1 "p40 protein [Presence] in Tissue by Immune stain"
         * answerValueSet = Canonical(DetectedNotDetected)
       * item[+]
         * linkId = "presentatie/diagnose/ihc-profile/ck7"
         * insert CodingChips
         * text = "CK7"
-        * code = $LOINC#40559-7 "TTF-1 [Presence] in Tissue by Immune stain"
+        * code = $LOINC#40559-7 "Thyroid transcription factor 1 [Presence] in Tissue by Immune stain"
         * answerValueSet = Canonical(DetectedNotDetected)
     * item[+]
       * linkId = "presentatie/diagnose/reprofile-weefsel-biopt"
@@ -574,18 +583,18 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * linkId = "presentatie/diagnose/rook-status"
       * insert CodingChips
       * text = "Rookstatus bij diagnose" 
-      * code = $SCT#229819007 "Tobacco smoking status"
+      * code = $SCT#229819007 "Tobacco use and exposure"
       * answerValueSet = "http://tiro.health/fhir/ValueSet/smoker-status"
       * item[+]
         * linkId = "presentatie/diagnose/pakjaren"
-        * code = $SCT#401201003 "Pack years"
-        * insert DecimalTextbox(#{PackYears} "pakjaar")
+        * code = $SCT#401201003 "Cigarette pack-years"
+        * insert DecimalTextbox(#{PackYears} "{PackYears}")
         * enableBehavior = #any
         * disabledDisplay = #protected
         * enableWhen[+]
           * question = "presentatie/diagnose/rook-status"
           * operator = #=
-          * answerCoding = $SCT#8517006 "Ex-smoker"
+          * answerCoding = $SCT#8517006 "Former smoker"
         * enableWhen[+]
           * question = "presentatie/diagnose/rook-status"
           * operator = #=
@@ -617,8 +626,8 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
       * item[+]
         * linkId = "presentatie/diagnose/longfunctie/answer/row-0/performed"
         * insert CodingChips
-        * answerOption[+].valueCoding = $SCT#398166005 "uitgevoerd"
-        * answerOption[+].valueCoding = $SCT#385660001 "niet uitgevoerd"
+        * answerOption[+].valueCoding = $SCT#398166005 "Performed"
+        * answerOption[+].valueCoding = $SCT#385660001 "Not done"
       * item[+]
         * insert DecimalTextbox(#% "%")
         * linkId = "presentatie/diagnose/longfunctie/answer/row-0/fev1"
@@ -627,7 +636,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * enableWhen[+]
           * question = "presentatie/diagnose/longfunctie/answer/row-0/performed"
           * operator = #=
-          * answerCoding = $SCT#398166005 "uitgevoerd"
+          * answerCoding = $SCT#398166005 "Performed"
         * disabledDisplay = #protected
       * item[+]
         * insert DecimalTextbox(#% "%")
@@ -637,7 +646,7 @@ Description: "Previous problems overview for REO Multidisplincary Discussion"
         * enableWhen[+]
           * question = "presentatie/diagnose/longfunctie/answer/row-0/performed"
           * operator = #=
-          * answerCoding = $SCT#398166005 "uitgevoerd"
+          * answerCoding = $SCT#398166005 "Performed"
         * disabledDisplay = #protected
     * item[+]
       * linkId = "presentatie/diagnose/opmerkingen"
@@ -682,17 +691,17 @@ Description: "Previous therapies overview for REO Multidisplincary Discussion"
     * extension[name].valueString = "radiotherapie"
     * extension[item][+]
       * extension[linkId].valueString = "record/behandeling"
-      * extension[answer].valueCoding = $SCT#429858000 "Radiotherapy"
+      * extension[answer].valueCoding = $SCT#108290001 "Radiation oncology AND/OR radiotherapy"
   * extension[InitialValueTemplate][+]
     * extension[name].valueString = "systeemtherapie"
     * extension[item][+]
       * extension[linkId].valueString = "record/behandeling"
-      * extension[answer].valueCoding = $SCT#429840000 "Systemic therapy"
+      * extension[answer].valueCoding = $SCT#266719004 "Oral chemotherapy"
   * extension[InitialValueTemplate][+]
     * extension[name].valueString = "chirurgie"
     * extension[item][+]
       * extension[linkId].valueString = "record/behandeling"
-      * extension[answer].valueCoding = $SCT#429840000 "Surgery"
+      * extension[answer].valueCoding = $SCT#387713003 "Surgical procedure"
   * item[+]
     * linkId = "record/therapie-lijn"
     * insert CodingDropdown
@@ -727,7 +736,7 @@ Description: "Previous therapies overview for REO Multidisplincary Discussion"
           * insert DecimalTextbox(#{Sessions} "")
         * item[+]
           * linkId = "record/specificatie/radiotherapie/bestralingsdosis/fractie-dosis"
-          * insert DecimalTextbox(#{Dose} "Gy")
+          * insert DecimalTextbox(#{Dose} "{Dose}")
     * item[+]
       * linkId = "record/specificatie/systeemtherapie"
       * type = #group
@@ -743,7 +752,7 @@ Description: "Previous therapies overview for REO Multidisplincary Discussion"
       * enableWhen[+]
         * question = "record/behandeling"
         * operator = #=
-        * answerCoding = $SCT#429840000 "Surgery"
+        * answerCoding = $SCT#387713003 "Surgical procedure"
       * item[+]
         * linkId = "record/specificatie/chirurgie/p-tnm"
         * type = #group

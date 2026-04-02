@@ -3,8 +3,9 @@ InstanceOf: Composition
 Usage: #example
 Title: "Prostate Cancer Staging Composition"
 Description: "Example of a Composition from a Prostate Cancer Staging report."
-* type = $LOINC#11488-4 "Consultation Note"
+* type = $LOINC#11488-4 "Consultverslag [bevinding] in {instelling} d.m.v. {rol} (document)"
 * date = 2023-05-24
+* subject = Reference(PCaPatient)
 * author = Reference(DrHause)
 * title = "Prostate Cancer Staging Composition"
 * status = #final
@@ -14,30 +15,37 @@ Description: "Example of a Composition from a Prostate Cancer Staging report."
   * code.coding[0] = $SCT#1003642006 "Past medical history section"
   * code.coding[+] = ReportSections#medical-history "Medical history section"
   * text.status = #generated
-  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de algemene medische voorgeschiedenis van de patiënt.</div>"
+  * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hier volgt een leesbaar textoverzicht van de algemene medische voorgeschiedenis van de patiënt.</div>"
+  * entry[+] = Reference(RaisedPSACondition)
+  * entry[+] = Reference(PCaCondition)
 * section[+]
   * title = "Prostaat-gerateerde voorgeschiedenis"
-  * code.coding[0] = $SCT#422625006 "history of present illness section"
+  * code.coding[0] = $SCT#422625006 "History of present illness section"
   * code.coding[+] = ReportSections#prostate-history "Prostate history section"
   * text.status = #generated
-  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de prostaat-gerelateerde medische voorgeschiedenis van de patiënt.</div>"
+  * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hier volgt een leesbaar textoverzicht van de prostaat-gerelateerde medische voorgeschiedenis van de patiënt.</div>"
+  * entry[+] = Reference(PCaPSA1)
+  * entry[+] = Reference(PCaPSA2)
 * section[+]
   * title = "Anamnese en klinisch onderzoek"
   * code = $SCT#371529009 "History and physical report"
   * text.status = #generated
-  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de anamnese en het klinisch onderzoek van de patiënt.</div>"
+  * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hier volgt een leesbaar textoverzicht van de anamnese en het klinisch onderzoek van de patiënt.</div>"
 * section[+]
   * title = "Technische onderzoeken"
   * code = $SCT#4201000179104 "Imaging report"
   * text.status = #generated
-  * text.div = "<div>Hier volgt een leesbaar textoverzicht van de technische onderzoeken van de patiënt.</div>"
+  * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hier volgt een leesbaar textoverzicht van de technische onderzoeken van de patiënt.</div>"
 * section[+]
   * title = "Staging prostaatkanker"
+  * entry[+] = Reference(PCacTStage)
+  * entry[+] = Reference(PCaEAURisk)
+  * entry[+] = Reference(PCaGleason)
 * section[+]
   * title = "Besluit bij verhoogde PSA"
   * code = $SCT#722091001 "Conclusion interpretation document"
   * text.status = #generated
-  * text.div = "<div>Hier volgt een leesbaar textoverzicht van het besluit bij verhoogde PSA van de patiënt.</div>"
+  * text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Hier volgt een leesbaar textoverzicht van het besluit bij verhoogde PSA van de patiënt.</div>"
 
 Instance: PCacTStage
 InstanceOf: Observation
@@ -47,7 +55,7 @@ Description: "Clinical T Stage observation of the prostate tumor."
 * code = $SCT#399537006 "Clinical TNM stage grouping (observable entity)"
 * status = #registered
 * subject = Reference(PCaPatient) 
-* valueCodeableConcept.coding = $SCT#1228892002 "cT1a"
+* valueCodeableConcept.coding = $SCT#1228892002 "American Joint Committee on Cancer cT1a"
 * valueCodeableConcept.text = "cT1a"
 * effectiveDateTime = "2023-05-23T00:00:00+00:00"
 * performer = Reference(DrHause)
@@ -119,9 +127,9 @@ Description: "Patient is diagnosed with raised PSA."
 * participant[0].actor = Reference(DrHause)
 * participant[0].function = http://terminology.hl7.org/CodeSystem/provenance-participant-type#custodian "Custodian"
 * participant[0].function.text = "Treating physician"
-* clinicalStatus = #active
+* clinicalStatus = http://terminology.hl7.org/CodeSystem/condition-clinical#active
 * subject = Reference(PCaPatient)
-* stage.assessment[0] = Reference(PCaPSA1) 
+* stage.assessment[0] = Reference(PCaPSA1)
 * stage.assessment[1] = Reference(PCaPSA2) 
 
 Instance: PCaCondition
@@ -130,8 +138,8 @@ Usage: #example
 Title: "Prostate Cancer"
 Description: "Patient is diagnosed with prostate cancer."
 * code = $SCT#254900004
-* clinicalStatus = #active
-* subject = Reference(PCaPatient) 
+* clinicalStatus = http://terminology.hl7.org/CodeSystem/condition-clinical#active
+* subject = Reference(PCaPatient)
 * recordedDate = "2023-05-23T00:00:00+00:00"
 * participant[0].actor = Reference(DrHause)
 * participant[0].function = http://terminology.hl7.org/CodeSystem/provenance-participant-type#custodian "Custodian"
@@ -142,21 +150,44 @@ Description: "Patient is diagnosed with prostate cancer."
 * stage.assessment[+] = Reference(PCaPSA2) 
 
 Instance: PCaStagingReport
-InstanceOf: Bundle 
+InstanceOf: Bundle
 Usage: #example
 Title: "Prostate Cancer Staging Report"
 Description: "FHIR Document containing all resources related to the Prostate Cancer diagnosis for PCaPatient by Dr. Hause."
-* type = #document 
-* entry[+].resource = PCaStagingComposition
-* entry[+].resource = PCacTStage
-* entry[+].resource = PCaEAURisk
-* entry[+].resource = PCaGleason
-* entry[+].resource = PCaPSA1
-* entry[+].resource = PCaPSA2
-* entry[+].resource = RaisedPSACondition
-* entry[+].resource = PCaCondition
-* entry[+].resource = PCaPatient
-* entry[+].resource = DrHause
+* type = #document
+* identifier.system = "urn:ietf:rfc:3986"
+* identifier.value = "urn:uuid:b1c2d3e4-f5a6-7890-abcd-ef1234567890"
+* timestamp = "2025-10-29T10:30:00Z"
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Composition/PCaStagingComposition"
+  * resource = PCaStagingComposition
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PCacTStage"
+  * resource = PCacTStage
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PCaEAURisk"
+  * resource = PCaEAURisk
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PCaGleason"
+  * resource = PCaGleason
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PCaPSA1"
+  * resource = PCaPSA1
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Observation/PCaPSA2"
+  * resource = PCaPSA2
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Condition/RaisedPSACondition"
+  * resource = RaisedPSACondition
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Condition/PCaCondition"
+  * resource = PCaCondition
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Patient/PCaPatient"
+  * resource = PCaPatient
+* entry[+]
+  * fullUrl = "http://fhir.tiro.health/Practitioner/DrHause"
+  * resource = DrHause
 
 Profile: PCaMDT
 Parent: EpisodeOfCare
