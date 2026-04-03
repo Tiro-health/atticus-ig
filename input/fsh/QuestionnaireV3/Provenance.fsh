@@ -47,12 +47,25 @@ Description: "Types of automated agents that can populate form fields"
 * include codes from system AgentTypes
 
 
+Extension: ProvenanceWhy
+Id: provenance-why
+Title: "Provenance Why (R6 Pre-adopt)"
+Description: "Pre-adoption of R6 Provenance.why — describes why the event recorded in this provenance occurred in textual form."
+Context: Provenance
+* value[x] only markdown
+
+
 Profile: FormProvenance
 Parent: Provenance
 Id: form-provenance
 Title: "Form Provenance"
 Description: "Profile for tracking the origin and method of data entry for form fields to support audit trails and transparency"
 * ^purpose = "Track the origin and method of data entry for form fields to support audit trails and transparency"
+
+// Why (R6 pre-adopt) - reasoning/rationale for the activity
+* extension contains ProvenanceWhy named why 0..1 MS
+* extension[why] ^short = "Why the event occurred (e.g. AI reasoning)"
+* extension[why] ^definition = "Textual explanation of why the recorded event occurred. For AI-populated fields, this captures the reasoning behind the AI's decision."
 
 // Target must reference QuestionnaireResponse and include targetElement
 * target 1..* MS
@@ -135,7 +148,11 @@ Instance: prov-002
 InstanceOf: FormProvenance
 Usage: #example
 Title: "AI Clipboard Population Provenance Example"
-Description: "Example of provenance tracking for AI-powered clipboard processing"
+Description: "Example of provenance tracking for AI-powered clipboard processing with reasoning"
+* extension[why].valueMarkdown = """
+  The clinical note states: "CT thorax toont een massa van 4.2cm in de rechter bovenkwab met invasie van de thoraxwand."
+  This indicates a tumor >4cm with chest wall invasion, corresponding to cT3 per AJCC 8th edition staging criteria.
+  """
 * target.reference = "QuestionnaireResponse/qr-123"
 * target.extension[targetElement].valueUri = "item-789"
 * recorded = "2025-10-29T10:32:00Z"
