@@ -180,19 +180,47 @@ Context: Questionnaire, Questionnaire.item
 CodeSystem: TiroItemControl
 Id: tiro-item-control
 Title: "Tiro Questionnaire Item Control"
-Description: "Custom Questionnaire Item Control by Tiro Health"
+Description: "Custom Questionnaire Item Control codes by Tiro Health for rendering FHIR Questionnaire items."
 * ^experimental = false
 * ^caseSensitive = true
+// Structural controls
 * #answer-container "Answer Container" "Container that groups answer items together."
 * #answer-row "Answer Row" "A row within an answer container."
 * #question-group "Question Group" "Structure to group answers and subquestions in a hierarchical tree layout."
+* #block "Block" "Structural block for sub-questionnaire references."
+// Single-select controls
 * #drop-down "Dropdown" "Dropdown to select a single answer from a list of options."
+* #radio "Radio" "Radio button group for single selection from a list of options."
+* #combobox "Combobox" "Autocomplete dropdown with search/filter capability."
+// Multi-select controls
 * #chips "Chips" "Chips to select one or more answers from a list of options."
-* #text-box "Textbox" "Textbox to enter characters."
-* #text-area "Text Area" "Text area to enter multiple lines of text."
-* #date-field "Date Field" "Date field to enter a date."
-* #calculator "Calculator" "Calculator to calculate a value based on a formula."
-* #summarized-group "Summarized Group" "Group that summarizes the answers of its child items."
+* #checkbox "Checkbox" "Checkbox group for multiple selection from a list of options."
+// Text input controls
+* #text-box "Textbox" "Single-line textbox to enter characters."
+* #text-field "Text Field" "Single-line text input field."
+* #text-area "Text Area" "Multi-line text area to enter longer text."
+* #textarea "Textarea" "Multi-line text area input."
+* #mention "Mention" "Text field with inline mention suggestions for coded values."
+* #transcription "Transcription" "Speech-to-text transcription input field."
+// Numeric input controls
+* #decimal-field "Decimal Field" "Decimal number input field with optional unit display."
+// Date/time controls
+* #date-field "Date Field" "Date picker field."
+* #time-field "Time Field" "Time picker field."
+// Calculation controls
+* #calculator "Calculator" "Calculator widget to compute a value based on a formula or external lookup."
+// Layout controls
+* #list "List" "Renders child items as an unordered list."
+* #table "Table" "Renders child items in a table layout with rows and columns."
+* #grid "Grid" "Renders child items in a grid layout."
+// Summary controls
+* #summarized-group "Summarized Group" "Group that displays a summary of its child items' answers."
+* #summarized-list "Summarized List" "List view that summarizes child items."
+* #compact-list "Compact List" "Compact list view with minimal spacing."
+// Help control
+* #help "Help" "Contextual help text or guidance for the user."
+// Display control
+* #text "Text" "Read-only text display."
 
 Extension: EnableSuggestions
 Id: enable-suggestions
@@ -288,6 +316,53 @@ RuleSet: TextArea
   * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
   * valueCodeableConcept.text = "Text Area"
   * valueCodeableConcept.coding[0] = TiroItemControl#text-area
+
+RuleSet: CodingRadio
+* type = #coding
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Coding Radio"
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#radio-button
+  * valueCodeableConcept.coding[1] = TiroItemControl#radio
+
+RuleSet: CodingCheckbox
+* type = #coding
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Coding Checkbox"
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#check-box
+  * valueCodeableConcept.coding[1] = TiroItemControl#checkbox
+
+RuleSet: CodingCombobox
+* type = #coding
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Coding Combobox"
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#autocomplete
+  * valueCodeableConcept.coding[1] = TiroItemControl#combobox
+
+RuleSet: TimeField
+* type = #time
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Time Field"
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#text-box
+  * valueCodeableConcept.coding[1] = TiroItemControl#time-field
+
+RuleSet: MentionField
+* type = #string
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Mention"
+  * valueCodeableConcept.coding[0] = $questionnaire-item-control#autocomplete
+  * valueCodeableConcept.coding[1] = TiroItemControl#mention
+
+RuleSet: TranscriptionField
+* type = #text
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
+  * valueCodeableConcept.text = "Transcription"
+  * valueCodeableConcept.coding[0] = TiroItemControl#transcription
 
 RuleSet: QuestionnaireV3
 * extension[RenderType].valueCanonical = Canonical(TreeLayoutRenderer)
