@@ -45,8 +45,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./output
-  # Deployment job
+  # Deployment job — only runs on push to master, not on PRs
   deploy:
+    if: github.event_name == 'push'
     permissions: write-all
     environment:
       name: github-pages
