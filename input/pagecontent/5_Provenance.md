@@ -2,158 +2,153 @@
 
 ## Overview
 
-Atticus uses FHIR Provenance resources to track the origin and lifecycle of every field populated in a QuestionnaireResponse. This enables full auditability — whether a value was entered manually, extracted by AI, computed by a FHIRPath expression, or loaded from a preset.
+Atticus uses FHIR Provenance resources to track the origin and lifecycle of data entered into forms. This enables full auditability and transparency about how each data field was populated, whether by manual user input, AI algorithms, calculations, or data imports.
 
-Each populated field receives its own [`FormProvenance`](StructureDefinition-form-provenance.html) resource. These are returned as repeated `parameter[name="provenance"]` entries alongside the QuestionnaireResponse in the [`$populate`](OperationDefinition-tiro-populate.html) response.
+## Architecture
 
-## How Provenance Is Linked to a Field
+### Core Concepts
 
-Each Provenance targets the enclosing QuestionnaireResponse and identifies the specific populated item via the standard [`targetElement`](https://hl7.org/fhir/extensions/StructureDefinition-targetElement.html) extension:
+1. **Provenance Resource**: A FHIR resource that records the origin and changes to data
+2. **Target Element**: Links provenance to specific QuestionnaireResponse items using extensions
+3. **Activity Codes**: Describe what type of operation was performed
+4. **Agents**: Identify who or what performed the action
 
-```
-Provenance.target[0].reference = "#"                        ← the QuestionnaireResponse
-Provenance.target[0].extension[targetElement].valueUri      ← QuestionnaireResponse.item.id (a UUID)
-```
+### Key Components
 
-Note: `targetElement` carries the item's **`id`** (a server-assigned UUID), not its `linkId`.
+- **CodeSystem: FormActivity** (`http://fhir.tiro.health/CodeSystem/form-activity`) - Activities specific to form field population
+- **CodeSystem: ISO 21089 Lifecycle** (`http://terminology.hl7.org/CodeSystem/iso-21089-lifecycle`) - Standard lifecycle events
+- **Extension: targetElement** (`http://hl7.org/fhir/StructureDefinition/targetElement`) - Links provenance to specific response items
 
-## Activity Codes
+## Activity Types
 
-Every Provenance carries at least one [`FormActivity`](CodeSystem-form-activity.html) code in `activity.coding` plus an optional [ISO 21089 lifecycle](http://terminology.hl7.org/CodeSystem/iso-21089-lifecycle) code. For activities that have a specific child code, the backend also includes the parent code (e.g. `definition` + `data-import`).
+### User Input Activities
 
-### User Input
+| Code     | Display      | Description                                     |
+| -------- | ------------ | ----------------------------------------------- |
+| `user`   | User input   | Manually entered data by the user               |
+| `manual` | Manual input | Manually entered data without system assistance |
 
-| Code | Description |
-|------|-------------|
-| `user` | Manually entered by the clinician |
-| `manual` | Manual input without system assistance |
+### Static Value Activities
 
-### Static Values
+| Code            | Display       | Description                              |
+| --------------- | ------------- | ---------------------------------------- |
+| `static`        | Static value  | Preconfigured value picked by a user     |
+| `preset`        | Preset        | Populated by a preset configuration      |
+| `initial-value` | Initial value | Populated by an initial value definition |
 
-| Code | Description |
-|------|-------------|
-| `static` | Preconfigured value set without active user choice |
-| `preset` | Loaded from a saved preset configuration |
-| `initial-value` | Populated by `Questionnaire.item.initial` |
+### Calculation Activities
 
-### Calculations
+| Code          | Display              | Description                                             |
+| ------------- | -------------------- | ------------------------------------------------------- |
+| `calculation` | Calculation          | A calculation has been performed based on an expression |
+| `fhirpath`    | FHIRPath calculation | A calculation performed using FHIRPath expression       |
 
-| Code | Description |
-|------|-------------|
-| `calculation` | Computed from a `calculatedExpression` (FHIRPath) |
+### AI-Powered Activities
 
-### AI-Powered
+| Code                | Display                 | Description                                  |
+| ------------------- | ----------------------- | -------------------------------------------- |
+| `ai`                | AI population           | An AI algorithm has generated field values   |
+| `speech-population` | Speech-based population | Speech-to-text solution generated the values |
+| `ai-clipboard`      | AI Clipboard            | AI engine processed clipboard content        |
 
-| Code | Description |
-|------|-------------|
-| `ai` | Generic AI population |
-| `ai-clipboard` | AI extraction from a clinical document (contextual-populate) |
-| `speech-population` | Speech-to-text population |
+### Data Import Activities
 
-### Data Import
+| Code          | Display     | Description                                              |
+| ------------- | ----------- | -------------------------------------------------------- |
+| `data-import` | Data Import | Values imported from other resources or external servers |
 
-| Code | Description |
-|------|-------------|
-| `data-import` | Import from FHIR resources or external data sources |
-| `initial-expression` | Evaluated from `Questionnaire.item.initialExpression` — sent alongside `data-import` |
-| `definition` | Matched via `Questionnaire.item.definition` to a FHIR resource — sent alongside `data-import` |
+### Lifecycle Activities
 
-### ISO 21089 Lifecycle
+| Code     | Display | Description                                      |
+| -------- | ------- | ------------------------------------------------ |
+| `submit` | Submit  | Form submitted for review or final processing    |
+| `amend`  | Amend   | Form amended or updated after initial submission |
 
-| Code | Description |
-|------|-------------|
-| `originate` | Initial creation (used for all population activities) |
-| `amend` | Modification of existing data |
-| `merge` | Combining data from multiple sources |
+## ISO 21089 Lifecycle Events
 
-## Agents
+Atticus uses standard ISO 21089 lifecycle events in combination with form-specific activities:
 
-All automated Atticus engines use `provenance-participant-type#assembler` as the agent type and a `Device` resource as `agent.who`. Source document authors (for AI clipboard) use `provenance-participant-type#author`.
+- **originate**: Initial creation of data (most form population activities)
+- **amend**: Modification of existing data
+- **merge**: Combining data from multiple sources
 
-| Device | Display | Used for |
-|--------|---------|----------|
-| `Device/atticus-fhirpath-engine` | Atticus FHIRPath Engine | `initialExpression`, `calculatedExpression` |
-| `Device/atticus-population-engine` | Atticus Population Engine | Initial values, repopulation, definition import |
-| `Device/atticus-preset-engine` | Atticus Preset Engine | Preset loading |
-| `Device/atticus-ai-marking-engine` | Atticus AI Marking Engine | HTML marking (labeling) |
-| `Device/atticus-ai-population-engine` | Atticus AI Population Engine | AI clipboard extraction |
+## Implementation
 
-> **Note:** The backend uses integer Device IDs `Device/1`–`Device/5`; the IG uses descriptive IDs for readability.
+### Creating Provenance Records
 
-The legacy [`AgentTypes`](CodeSystem-agent-types.html) CodeSystem (`fhirpath-engine`, `population-engine`, etc.) is retired. Existing persisted Provenance resources may still reference those codes.
+When a form field is populated, a Provenance resource is created with:
 
-## AI Reasoning — ProvenanceWhy and activity.text
+1. **Target**: Reference to the QuestionnaireResponse with `targetElement` extension pointing to the specific item.id
+2. **Activity**: Coding array combining form-specific activity and ISO 21089 lifecycle event
+3. **Recorded**: Timestamp when the activity occurred
+4. **Agent**: Who or what performed the action
 
-For AI-populated fields, the model's reasoning can be recorded in two places:
-
-- **`activity.text`**: Plain-string reasoning. This is what the backend currently populates.
-- **`extension[why]`** ([`ProvenanceWhy`](StructureDefinition-provenance-why.html)): Markdown reasoning — a pre-adoption of the R6 `Provenance.why` element. This is the intended location going forward.
-
-## AI Clipboard: Source Highlighting
-
-When `contextual-populate` extracts a value from a clinical document, the Provenance includes an `entity` pointing to the source `DocumentReference`. The [`html-element-id`](StructureDefinition-html-element-id.html) extension on `entity.what` carries the IDs of the labeled HTML spans that contained the extracted text — enabling the UI to highlight the source passage:
-
-```
-Provenance.entity[0].role = "source"
-Provenance.entity[0].what.reference = "DocumentReference/{id}"
-Provenance.entity[0].what.extension[html-element-id][0].valueString = "label-001"
-Provenance.entity[0].what.extension[html-element-id][1].valueString = "label-002"
-```
-
-## The $populate Response Shape
-
-The [`$populate`](OperationDefinition-tiro-populate.html) response is a `Parameters` resource with one entry per populated field:
-
-```
-Parameters
-├─ parameter[name="response"].resource     → QuestionnaireResponse
-├─ parameter[name="issues"].resource       → OperationOutcome (optional)
-└─ parameter[name="provenance"].resource   → FormProvenance  ← repeated, one per field
-   └─ parameter[name="provenance"].resource → FormProvenance
-   ...
-```
-
-### Contextual-Populate Flow
-
-`contextual-populate` mode accepts clinical documents as context and drives the full AI pipeline:
-
-1. Request supplies `context[name="clinical-artifacts"]` with one or more `DocumentReference` resources (HTML or PDF attachments).
-2. The AI marking pipeline processes up to 5 documents in parallel: labels HTML spans, identifies which spans correspond to each questionnaire item, and extracts answer values.
-3. Each extracted value gets a `FormProvenance` with:
-   - `activity.coding` = `ai-clipboard` + `data-import`
-   - `agent.who` = `Device/atticus-ai-population-engine`
-   - `entity.what.reference` = the source `DocumentReference`
-   - `entity.what.extension[html-element-id]` = span IDs for source highlighting
-   - `activity.text` (and/or `extension[why]`) = the model's reasoning
-
-## Examples
-
-### User Input
+### Example: User Input
 
 {% fragment Provenance/prov-001 JSON %}
 
-### AI Clipboard Population
+### Example: AI Clipboard Population
 
 {% fragment Provenance/prov-002 JSON %}
 
-### FHIRPath Calculation
+### Example: FHIRPath Calculation
 
 {% fragment Provenance/prov-003 JSON %}
 
-### Definition-Based Import
+## Agent Types
 
-{% fragment Provenance/prov-004 JSON %}
+Agents represent actors that perform or participate in actions:
 
-### Preset Population
+| Type                | Display           | Description                                    |
+| ------------------- | ----------------- | ---------------------------------------------- |
+| `fhirpath-engine`   | FHIRPath Engine   | FHIRPath expression evaluation engine          |
+| `population-engine` | Population Engine | Engine that populates forms from external data |
+| `preset-engine`     | Preset Engine     | Engine that applies preset configurations      |
 
-{% fragment Provenance/prov-005 JSON %}
+### Agent Structure
+
+Agents can include:
+
+- **type**: Classification of the agent (using `agent-types` CodeSystem)
+- **role**: Specific roles the agent played in the activity
+- **who**: Reference or display name identifying the agent
+- **onBehalfOf**: Reference to who the agent was acting on behalf of (e.g., AI acting on behalf of a practitioner)
+
+## Best Practices
+
+1. **Always Record Provenance**: Every data modification should have associated provenance
+2. **Use Hierarchical Codes**: Combine specific codes with parent codes (e.g., `ai-clipboard` with `ai`)
+3. **Include Timestamps**: Always populate the `recorded` field
+4. **Link to Specific Items**: Use `targetElement` extension to point to exact QuestionnaireResponse.item.id
+5. **Preserve Agents**: Include both automated agents and the user they're acting on behalf of
+6. **Track Amendments**: Use `amend` activity and ISO 21089 lifecycle when updating existing data
+
+## Use Cases
+
+### Audit Trail
+
+Track who entered what data and when, providing complete transparency for regulatory compliance.
+
+### Data Quality Assessment
+
+Identify fields populated by AI vs. manual entry to assess confidence levels.
+
+### Workflow Optimization
+
+Analyze which fields are frequently manually corrected after AI population to improve algorithms.
+
+### Regulatory Compliance
+
+Demonstrate compliance with requirements for tracking data provenance in clinical systems.
+
+### Data Lineage
+
+Trace data back to its source through the `entity` array with role "source" or "derivation".
 
 ## Related Resources
 
-- [FormProvenance profile](StructureDefinition-form-provenance.html)
-- [FormActivity CodeSystem](CodeSystem-form-activity.html)
-- [$populate OperationDefinition](OperationDefinition-tiro-populate.html)
-- [ProvenanceWhy extension](StructureDefinition-provenance-why.html)
-- [HtmlElementId extension](StructureDefinition-html-element-id.html)
 - [ISO 21089 Lifecycle CodeSystem](http://terminology.hl7.org/CodeSystem/iso-21089-lifecycle)
 - [FHIR Provenance Resource](http://hl7.org/fhir/provenance.html)
+- [QuestionnaireResponse](http://hl7.org/fhir/questionnaireresponse.html)
+- [FormActivity CodeSystem](CodeSystem-form-activity.html)
+- [AgentTypes CodeSystem](CodeSystem-agent-types.html)
