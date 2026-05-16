@@ -27,6 +27,11 @@ publisher:
 dependencies:
   hl7.fhir.uv.sdc: 4.0.0-ballot
   hl7.fhir.uv.extensions.r5: 5.2.0
+  openehr.base:
+    id: openehr
+    uri: http://openehr.org/fhir/ImplementationGuide/openehr.base
+    version: 0.1.0-snapshot
+    reason: Used to render openEHR archetypes (ADL) alongside FHIR profiles in this IG.
 #   hl7.fhir.us.core: 3.1.0
 #   hl7.fhir.us.mcode:
 #     id: mcode
@@ -67,6 +72,9 @@ dependencies:
 parameters:
   allow-extensible-warnings: true
   validation: [allow-any-extensions]
+  openehr: true
+  path-resource:
+    - input/archetypes
 # parameters:
 #   excludettl: true
 #   validation: [allow-any-extensions, no-broken-links]
