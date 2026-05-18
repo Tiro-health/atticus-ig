@@ -107,7 +107,7 @@ the specialisation node, not the base archetype.
 * method ^mapping[=].comment = "openEHR 'Modality' (DV_TEXT, at report level) → FHIR Observation.method (CodeableConcept). openEHR also has a 'Technique' element on protocol/items[at0087] for finer detail; that lands on Observation.method as well or is moved to ImagingStudy.series.modality if referenced."
 
 * derivedFrom 0..* MS
-* derivedFrom only Reference(ImagingStudy or DocumentReference or Media or DiagnosticReport)
+* derivedFrom only Reference(ImagingStudy or ImagingSelection or DocumentReference)
 * derivedFrom ^short = "Source image, study or report the measurement was taken from"
 * derivedFrom ^mapping[+].identity = "openehr-imaging-exam-result"
 * derivedFrom ^mapping[=].map = "protocol/items[at0106]/value  (Image details, DV_URI, 0..*)  +  protocol/items[at0092] (Study instance identifier)"
