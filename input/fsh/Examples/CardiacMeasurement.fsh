@@ -27,13 +27,14 @@ SNOMED CT code as soon as a suitable concept becomes available.
 * ^experimental = false
 * ^caseSensitive = true
 
-// Panel grouper codes (used on parent Observation.code) — LOINC has no
-// equivalent Holter summary panels for these. (24h heart rate uses the
-// real LOINC panel `43149-4` "Heart rate device panel" with a clarifying
-// `code.text`; no Tiro code needed there.)
-* #pause-panel "Sinus pause Holter panel"
-* #ventricular-ectopy-panel "Ventricular ectopy Holter panel"
-* #supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
+// All Holter panel grouper codes now use SNOMED CT finding codes
+// directly on `Observation.code`:
+//   - AFib panel             → SCT#49436004  "Atrial fibrillation"
+//   - Sinus pause panel      → SCT#5609005   "Sinus arrest"
+//   - Ventricular ectopy     → SCT#17338001  "Ventricular premature beats"
+//   - Supraventricular ectopy→ SCT#63593006  "Supraventricular premature beats"
+//   - 24h heart rate         → LOINC#43149-4 "Heart rate device panel" (+ code.text)
+// No Tiro panel grouper codes are needed.
 
 // AFib component metrics — no LOINC equivalents.
 * #afib-burden "Atrial fibrillation burden (% of recording in AF)"
@@ -308,7 +309,8 @@ no pause panel); components use Tiro local codes.
 * status = #final
 * subject = Reference(AZMMTestPatient1)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#pause-panel "Sinus pause Holter panel"
+* code = $SCT#5609005 "Sinus arrest"
+* code.text = "Sinus pause / arrest panel (pause count + longest pause)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
@@ -332,7 +334,8 @@ the panel grouper have no LOINC equivalents, so those come from
 * status = #final
 * subject = Reference(AZMMTestPatient1)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#ventricular-ectopy-panel "Ventricular ectopy Holter panel"
+* code = $SCT#17338001 "Ventricular premature beats"
+* code.text = "Ventricular ectopy panel (PVC count + VT longest run)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
@@ -357,7 +360,8 @@ from `TiroCardiacMetric`.
 * status = #final
 * subject = Reference(AZMMTestPatient1)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
+* code = $SCT#63593006 "Supraventricular premature beats"
+* code.text = "Supraventricular ectopy panel (PAC count + SVT run count)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
