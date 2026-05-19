@@ -28,11 +28,12 @@ SNOMED CT code as soon as a suitable concept becomes available.
 * ^caseSensitive = true
 
 // Panel grouper codes (used on parent Observation.code) — LOINC has no
-// equivalent Holter summary panels.
+// equivalent Holter summary panels for these. (24h heart rate uses the
+// real LOINC panel `43149-4` "Heart rate device panel" with a clarifying
+// `code.text`; no Tiro code needed there.)
 * #pause-panel "Sinus pause Holter panel"
 * #ventricular-ectopy-panel "Ventricular ectopy Holter panel"
 * #supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
-* #heart-rate-24h-panel "Heart rate 24h Holter panel"
 
 // AFib component metrics — no LOINC equivalents.
 * #afib-burden "Atrial fibrillation burden (% of recording in AF)"
@@ -240,13 +241,17 @@ Usage: #example
 Title: "Example: Holter 24h heart rate (avg 78, min 48, max 132 bpm)"
 Description: """
 24h heart rate summary from a Holter recording, with min / mean / max on
-components. LOINC has no 24h-HR panel grouper, so the parent uses the
-Tiro local panel code; components use the verified LOINC 24h-HR codes
-(min `8883-1`, mean `41924-2`, max `8873-2`).
+components. Parent code is LOINC `43149-4` "Heart rate device panel" —
+the closest LOINC panel concept; its defined members only cover the
+mean-by-time-window side (`41924-2` is one of them), so `code.text`
+clarifies that this instance also carries 24h max and 24h min. Component
+codes use the verified LOINC 24h-HR concepts (min `8883-1`, mean
+`41924-2`, max `8873-2`).
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#heart-rate-24h-panel "Heart rate 24h Holter panel"
+* code = $LOINC#43149-4 "Heart rate device panel"
+* code.text = "Holter 24h heart rate summary (mean / max / min)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
