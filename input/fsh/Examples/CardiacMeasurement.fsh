@@ -8,10 +8,16 @@ Id: tiro-cardiac-metric
 Title: "Tiro Cardiac Metric Codes"
 Description: """
 Local codes for cardiac monitoring metrics that have no equivalent in LOINC
-or SNOMED CT. Used as panel grouper codes on parent `Observation.code` and
-for component codes that LOINC does not currently define (atrial fibrillation
-burden, episode counts, longest-episode durations, ventricular and
-supraventricular ectopy counts, run lengths, …).
+or SNOMED CT. The set is deliberately small: each Tiro code documents a
+genuine terminology gap (AFib burden / episode statistics, sinus pause
+counts and longest pause, ventricular- and supraventricular-tachycardia
+run counts and longest runs, and per-panel Holter grouper codes that
+LOINC does not currently provide).
+
+Codes covered by LOINC or SNOMED CT are NOT duplicated here — see the
+example instances for the chosen LOINC/SCT codes (PVC count `LOINC#76126-2`,
+premature atrial contractions `LOINC#8615-7`, atrial fibrillation
+`SCT#49436004`, …).
 
 These codes are a stopgap. Each entry should be replaced with a LOINC or
 SNOMED CT code as soon as a suitable concept becomes available.
@@ -21,29 +27,30 @@ SNOMED CT code as soon as a suitable concept becomes available.
 * ^experimental = false
 * ^caseSensitive = true
 
-// Panel grouper codes (used on parent Observation.code)
-* #afib-panel "Atrial fibrillation Holter panel"
+// Panel grouper codes (used on parent Observation.code) — LOINC has no
+// equivalent Holter summary panels.
 * #pause-panel "Sinus pause Holter panel"
 * #ventricular-ectopy-panel "Ventricular ectopy Holter panel"
 * #supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
 * #heart-rate-24h-panel "Heart rate 24h Holter panel"
 
-// AFib component metrics
+// AFib component metrics — no LOINC equivalents.
 * #afib-burden "Atrial fibrillation burden (% of recording in AF)"
 * #afib-episode-count "Atrial fibrillation episode count"
 * #afib-longest-episode "Atrial fibrillation longest episode duration"
 
-// Sinus pause component metrics
+// Sinus pause component metrics — no LOINC equivalents.
 * #pause-count "Sinus pause count"
 * #longest-pause "Longest sinus pause duration"
 
-// Ventricular ectopy component metrics
-* #pvc-count "Premature ventricular contraction count"
+// Ventricular tachycardia run statistics — no LOINC equivalents. PVC count
+// uses LOINC#76126-2 directly and is not duplicated here.
 * #vt-run-count "Ventricular tachycardia run count"
 * #vt-longest-run "Ventricular tachycardia longest run length"
 
-// Supraventricular ectopy component metrics
-* #sveb-count "Supraventricular ectopic beat count"
+// Supraventricular tachycardia run statistics — no LOINC equivalents.
+// SVEB count uses LOINC#8615-7 "Premature atrial contractions" and is
+// not duplicated here.
 * #svt-run-count "Supraventricular tachycardia run count"
 * #svt-longest-run "Supraventricular tachycardia longest run length"
 
@@ -208,12 +215,16 @@ InstanceOf: CardiacMeasurement
 Usage: #example
 Title: "Example: ECG interpretation (sinus rhythm)"
 Description: """
-Cardiologist's overall impression of a 12-lead ECG. Uses LOINC 8601-0
+Cardiologist's overall impression of a 12-lead ECG. Uses LOINC 8601-7
 (EKG impression) — not LOINC 2230-1, which codes epinephrine in plasma.
+
+Note: issue #11's table cites `8601-0`, but the LOINC concept for
+"EKG impression" is actually `8601-7` (verified on loinc.org and used
+by HL7 US Core). `8601-0` does not exist.
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = $LOINC#8601-0 "EKG impression"
+* code = $LOINC#8601-7 "EKG impression"
 * valueCodeableConcept = $SCT#426177001 "Normal sinus rhythm"
 * method = $SCT#29303009 "Electrocardiographic procedure"
 * effectiveDateTime = "2026-05-12T09:14:00+02:00"
@@ -228,10 +239,10 @@ InstanceOf: CardiacMeasurement
 Usage: #example
 Title: "Example: Holter 24h heart rate (avg 78, min 48, max 132 bpm)"
 Description: """
-24h heart rate summary from a Holter recording, as a panel with average
-on the parent value and min/max on components. The parent uses a Tiro
-panel grouper code because LOINC has no 24h-HR panel concept; the
-components use the verified LOINC 24h-HR codes.
+24h heart rate summary from a Holter recording, with min / mean / max on
+components. LOINC has no 24h-HR panel grouper, so the parent uses the
+Tiro local panel code; components use the verified LOINC 24h-HR codes
+(min `8883-1`, mean `41924-2`, max `8873-2`).
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
@@ -239,7 +250,7 @@ components use the verified LOINC 24h-HR codes.
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
-* component[0].code = $LOINC#8884-9 "Heart rate 24 hour mean"
+* component[0].code = $LOINC#41924-2 "Heart rate 24 hour mean"
 * component[=].valueQuantity = 78 $UCUM#/min "beats per minute"
 * component[+].code = $LOINC#8873-2 "Heart rate--24 hour maximum"
 * component[=].valueQuantity = 132 $UCUM#/min "beats per minute"
@@ -253,14 +264,14 @@ Usage: #example
 Title: "Example: Holter atrial fibrillation panel"
 Description: """
 Atrial fibrillation summary from a 24h Holter recording: burden,
-episode count, longest episode. The parent carries a panel grouper
-code; the metrics each appear on a component. None of these metrics
-have a LOINC equivalent today, so component codes come from
-`TiroCardiacMetric`.
+episode count, longest episode. Parent code is `SCT#49436004 Atrial
+fibrillation` — the clinical finding being characterized — and each
+metric is carried on a component. None of the metrics has a LOINC
+equivalent today, so component codes come from `TiroCardiacMetric`.
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#afib-panel "Atrial fibrillation Holter panel"
+* code = $SCT#49436004 "Atrial fibrillation"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
@@ -299,8 +310,10 @@ Usage: #example
 Title: "Example: Holter ventricular ectopy panel"
 Description: """
 Ventricular ectopy summary from a 24h Holter recording: total PVC
-count and the longest VT run length. Parent is a Tiro panel grouper;
-components are Tiro local codes.
+count and VT run statistics. PVC count uses LOINC `76126-2`
+"Premature ventricular contractions [#]". The VT run statistics and
+the panel grouper have no LOINC equivalents, so those come from
+`TiroCardiacMetric`.
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
@@ -308,8 +321,8 @@ components are Tiro local codes.
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
-* component[0].code = TiroCardiacMetric#pvc-count "Premature ventricular contraction count"
-* component[=].valueQuantity = 248 $UCUM#1 "{count}"
+* component[0].code = $LOINC#76126-2 "Premature ventricular contractions [#]"
+* component[=].valueQuantity = 248 $UCUM#1 "{beats}"
 * component[+].code = TiroCardiacMetric#vt-run-count "Ventricular tachycardia run count"
 * component[=].valueQuantity = 2 $UCUM#1 "{count}"
 * component[+].code = TiroCardiacMetric#vt-longest-run "Ventricular tachycardia longest run length"
@@ -322,8 +335,11 @@ Usage: #example
 Title: "Example: Holter supraventricular ectopy panel"
 Description: """
 Supraventricular ectopy summary from a 24h Holter recording: total
-SVEB count and SVT run statistics. Parent is a Tiro panel grouper;
-components are Tiro local codes.
+SVEB count (a supraventricular ectopic beat is, clinically, a
+premature atrial contraction) and SVT run statistics. The SVEB count
+uses LOINC `8615-7` "Premature atrial contractions". The SVT run
+statistics and the panel grouper have no LOINC equivalents and come
+from `TiroCardiacMetric`.
 """
 * status = #final
 * category[procedure] = $ObsCat#procedure "Procedure"
@@ -331,8 +347,8 @@ components are Tiro local codes.
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
-* component[0].code = TiroCardiacMetric#sveb-count "Supraventricular ectopic beat count"
-* component[=].valueQuantity = 94 $UCUM#1 "{count}"
+* component[0].code = $LOINC#8615-7 "Premature atrial contractions"
+* component[=].valueQuantity = 94 $UCUM#1 "{beats}"
 * component[+].code = TiroCardiacMetric#svt-run-count "Supraventricular tachycardia run count"
 * component[=].valueQuantity = 4 $UCUM#1 "{count}"
 * component[+].code = TiroCardiacMetric#svt-longest-run "Supraventricular tachycardia longest run length"
