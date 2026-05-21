@@ -125,7 +125,7 @@ Usage: #example
 Title: "Example: ECG heart rate (72 bpm)"
 Description: "Resting heart rate from a 12-lead ECG."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8867-4 "Heart rate"
 * valueQuantity = 72 $UCUM#/min "beats per minute"
@@ -139,7 +139,7 @@ Usage: #example
 Title: "Example: ECG PR interval (160 ms)"
 Description: "PR interval from a 12-lead ECG."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8625-6 "P-R interval"
 * valueQuantity = 160 $UCUM#ms "ms"
@@ -153,7 +153,7 @@ Usage: #example
 Title: "Example: ECG QRS duration (92 ms)"
 Description: "QRS complex duration from a 12-lead ECG."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8633-0 "QRS duration"
 * valueQuantity = 92 $UCUM#ms "ms"
@@ -167,7 +167,7 @@ Usage: #example
 Title: "Example: ECG QT interval (380 ms)"
 Description: "QT interval from a 12-lead ECG (uncorrected)."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8634-8 "Q-T interval"
 * valueQuantity = 380 $UCUM#ms "ms"
@@ -181,7 +181,7 @@ Usage: #example
 Title: "Example: ECG QTc Bazett (415 ms)"
 Description: "QT interval corrected by Bazett's formula."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#76635-2 "QTc interval by Bazett formula"
 * valueQuantity = 415 $UCUM#ms "ms"
@@ -195,7 +195,7 @@ Usage: #example
 Title: "Example: ECG QTc Fridericia (405 ms)"
 Description: "QT interval corrected by Fridericia's formula."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#76634-5 "QTc interval by Fridericia formula"
 * valueQuantity = 405 $UCUM#ms "ms"
@@ -209,7 +209,7 @@ Usage: #example
 Title: "Example: ECG P wave duration (98 ms)"
 Description: "P wave duration from a 12-lead ECG."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8632-2 "P wave duration"
 * valueQuantity = 98 $UCUM#ms "ms"
@@ -230,7 +230,7 @@ Note: issue #11's table cites `8601-0`, but the LOINC concept for
 by HL7 US Core). `8601-0` does not exist.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8601-7 "EKG impression"
 * valueCodeableConcept = $SCT#426177001 "Normal sinus rhythm"
@@ -256,7 +256,7 @@ codes use the verified LOINC 24h-HR concepts (min `8883-1`, mean
 `41924-2`, max `8873-2`).
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#43149-4 "Heart rate device panel"
 * code.text = "Holter 24h heart rate summary (mean / max / min)"
@@ -283,7 +283,7 @@ metric is carried on a component. None of the metrics has a LOINC
 equivalent today, so component codes come from `TiroCardiacMetric`.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $SCT#49436004 "Atrial fibrillation"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
@@ -307,7 +307,7 @@ longest pause duration. Parent code is a Tiro panel grouper (LOINC has
 no pause panel); components use Tiro local codes.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $SCT#5609005 "Sinus arrest"
 * code.text = "Sinus pause / arrest panel (pause count + longest pause)"
@@ -332,7 +332,7 @@ the panel grouper have no LOINC equivalents, so those come from
 `TiroCardiacMetric`.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $SCT#17338001 "Ventricular premature beats"
 * code.text = "Ventricular ectopy panel (PVC count + VT longest run)"
@@ -358,7 +358,7 @@ statistics and the panel grouper have no LOINC equivalents and come
 from `TiroCardiacMetric`.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $SCT#63593006 "Supraventricular premature beats"
 * code.text = "Supraventricular ectopy panel (PAC count + SVT run count)"
@@ -377,7 +377,7 @@ Usage: #example
 Title: "Example: Holter QTc (420 ms)"
 Description: "Corrected QT interval derived from a 24h Holter recording."
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8636-3 "Q-T interval corrected"
 * valueQuantity = 420 $UCUM#ms "ms"
@@ -387,27 +387,27 @@ Description: "Corrected QT interval derived from a 24h Holter recording."
 
 
 // ─────────────────────────────────────────────────────────────────────
-// AZMM test patient — referenced by every example in this file.
-// Per Joeri Christiaens (AZMM, mail 2026-05-19): instead of creating
-// per-recording Patient resources, point Holter/ECG Observations at one
-// of the two existing AZMM test patients.
+// Example patient — referenced by every example Observation in this
+// file. A single shared test patient is used (rather than a fresh
+// Patient per recording) to keep the examples runnable on any FHIR
+// server seeded with this resource.
 // ─────────────────────────────────────────────────────────────────────
 
-Instance: AZMMTestPatient1
+Instance: ExampleHolterPatient
 InstanceOf: Patient
 Usage: #example
-Title: "AZMM test patient 1 (lS8whV3.114131)"
-Description: "Existing AZMM test patient already used in AZMM ↔ Tiro.health interop testing. The id mirrors the literal id used on AZMM's FHIR endpoint so Observations created here resolve there."
-* identifier.system = "https://fhir-ns.mijnziekenhuis.be/id/patient/azmm"
-* identifier.value = "lS8whV3.114131"
+Title: "Example Holter / ECG patient"
+Description: "Shared example patient used as the `subject` for every Observation example in this file."
+* identifier.system = "http://example.org/fhir/patient"
+* identifier.value = "example-patient-1"
 
 
 // ─────────────────────────────────────────────────────────────────────
 // CardiacVitalSigns profile — for the real-time / flowsheet feed case
 // (avg HR from a Holter or telemetry recording landing on a vital-signs
-// flowsheet). Per Joeri Christiaens (mail 2026-05-19), Holter
-// Observations are not always category=procedure: a hospital may also
-// emit recurring averages that belong in vital-signs.
+// flowsheet). Holter Observations are not always category=procedure:
+// implementations also emit recurring averages that belong in
+// vital-signs.
 //
 // Profile is a sibling, not a child, of CardiacMeasurement because the
 // fixed `category` value differs.
@@ -451,12 +451,13 @@ Usage: #example
 Title: "Example: Holter rolling average heart rate (78 bpm)"
 Description: """
 A single rolling-window average heart rate from a Holter monitor
-landing on the patient's flowsheet. Equivalent to Laurent Ganton's
-`CreateObservationEntry(Holter,…)` path (Fhir_Holter.txt l.5-9), which
-already emits `category = vital-signs`.
+landing on the patient's flowsheet. Represents the case where a Holter
+implementation emits recurring HR averages with `category =
+vital-signs` rather than the panel-style `procedure` Observations on
+`CardiacMeasurement`.
 """
 * status = #final
-* subject = Reference(AZMMTestPatient1)
+* subject = Reference(ExampleHolterPatient)
 * category[vitalSigns] = $ObsCat#vital-signs "Vital Signs"
 * code = $LOINC#8867-4 "Heart rate"
 * valueQuantity = 78 $UCUM#/min "beats per minute"
