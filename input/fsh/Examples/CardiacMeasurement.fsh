@@ -27,12 +27,14 @@ SNOMED CT code as soon as a suitable concept becomes available.
 * ^experimental = false
 * ^caseSensitive = true
 
-// Panel grouper codes (used on parent Observation.code) — LOINC has no
-// equivalent Holter summary panels.
-* #pause-panel "Sinus pause Holter panel"
-* #ventricular-ectopy-panel "Ventricular ectopy Holter panel"
-* #supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
-* #heart-rate-24h-panel "Heart rate 24h Holter panel"
+// All Holter panel grouper codes now use SNOMED CT finding codes
+// directly on `Observation.code`:
+//   - AFib panel             → SCT#49436004  "Atrial fibrillation"
+//   - Sinus pause panel      → SCT#5609005   "Sinus arrest"
+//   - Ventricular ectopy     → SCT#17338001  "Ventricular premature beats"
+//   - Supraventricular ectopy→ SCT#63593006  "Supraventricular premature beats"
+//   - 24h heart rate         → LOINC#43149-4 "Heart rate device panel" (+ code.text)
+// No Tiro panel grouper codes are needed.
 
 // AFib component metrics — no LOINC equivalents.
 * #afib-burden "Atrial fibrillation burden (% of recording in AF)"
@@ -43,16 +45,14 @@ SNOMED CT code as soon as a suitable concept becomes available.
 * #pause-count "Sinus pause count"
 * #longest-pause "Longest sinus pause duration"
 
-// Ventricular tachycardia run statistics — no LOINC equivalents. PVC count
+// Ventricular tachycardia longest run — no LOINC equivalent. PVC count
 // uses LOINC#76126-2 directly and is not duplicated here.
-* #vt-run-count "Ventricular tachycardia run count"
 * #vt-longest-run "Ventricular tachycardia longest run length"
 
-// Supraventricular tachycardia run statistics — no LOINC equivalents.
-// SVEB count uses LOINC#8615-7 "Premature atrial contractions" and is
-// not duplicated here.
+// Supraventricular tachycardia run count — no LOINC equivalent. SVEB
+// count uses LOINC#8615-7 "Premature atrial contractions" and is not
+// duplicated here.
 * #svt-run-count "Supraventricular tachycardia run count"
-* #svt-longest-run "Supraventricular tachycardia longest run length"
 
 
 Profile: CardiacMeasurement
@@ -125,6 +125,7 @@ Usage: #example
 Title: "Example: ECG heart rate (72 bpm)"
 Description: "Resting heart rate from a 12-lead ECG."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8867-4 "Heart rate"
 * valueQuantity = 72 $UCUM#/min "beats per minute"
@@ -138,6 +139,7 @@ Usage: #example
 Title: "Example: ECG PR interval (160 ms)"
 Description: "PR interval from a 12-lead ECG."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8625-6 "P-R interval"
 * valueQuantity = 160 $UCUM#ms "ms"
@@ -151,6 +153,7 @@ Usage: #example
 Title: "Example: ECG QRS duration (92 ms)"
 Description: "QRS complex duration from a 12-lead ECG."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8633-0 "QRS duration"
 * valueQuantity = 92 $UCUM#ms "ms"
@@ -164,6 +167,7 @@ Usage: #example
 Title: "Example: ECG QT interval (380 ms)"
 Description: "QT interval from a 12-lead ECG (uncorrected)."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8634-8 "Q-T interval"
 * valueQuantity = 380 $UCUM#ms "ms"
@@ -177,6 +181,7 @@ Usage: #example
 Title: "Example: ECG QTc Bazett (415 ms)"
 Description: "QT interval corrected by Bazett's formula."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#76635-2 "QTc interval by Bazett formula"
 * valueQuantity = 415 $UCUM#ms "ms"
@@ -190,6 +195,7 @@ Usage: #example
 Title: "Example: ECG QTc Fridericia (405 ms)"
 Description: "QT interval corrected by Fridericia's formula."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#76634-5 "QTc interval by Fridericia formula"
 * valueQuantity = 405 $UCUM#ms "ms"
@@ -203,6 +209,7 @@ Usage: #example
 Title: "Example: ECG P wave duration (98 ms)"
 Description: "P wave duration from a 12-lead ECG."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8632-2 "P wave duration"
 * valueQuantity = 98 $UCUM#ms "ms"
@@ -223,6 +230,7 @@ Note: issue #11's table cites `8601-0`, but the LOINC concept for
 by HL7 US Core). `8601-0` does not exist.
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8601-7 "EKG impression"
 * valueCodeableConcept = $SCT#426177001 "Normal sinus rhythm"
@@ -240,13 +248,18 @@ Usage: #example
 Title: "Example: Holter 24h heart rate (avg 78, min 48, max 132 bpm)"
 Description: """
 24h heart rate summary from a Holter recording, with min / mean / max on
-components. LOINC has no 24h-HR panel grouper, so the parent uses the
-Tiro local panel code; components use the verified LOINC 24h-HR codes
-(min `8883-1`, mean `41924-2`, max `8873-2`).
+components. Parent code is LOINC `43149-4` "Heart rate device panel" —
+the closest LOINC panel concept; its defined members only cover the
+mean-by-time-window side (`41924-2` is one of them), so `code.text`
+clarifies that this instance also carries 24h max and 24h min. Component
+codes use the verified LOINC 24h-HR concepts (min `8883-1`, mean
+`41924-2`, max `8873-2`).
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#heart-rate-24h-panel "Heart rate 24h Holter panel"
+* code = $LOINC#43149-4 "Heart rate device panel"
+* code.text = "Holter 24h heart rate summary (mean / max / min)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
@@ -270,6 +283,7 @@ metric is carried on a component. None of the metrics has a LOINC
 equivalent today, so component codes come from `TiroCardiacMetric`.
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $SCT#49436004 "Atrial fibrillation"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
@@ -278,9 +292,9 @@ equivalent today, so component codes come from `TiroCardiacMetric`.
 * component[0].code = TiroCardiacMetric#afib-burden "Atrial fibrillation burden"
 * component[=].valueQuantity = 12.5 $UCUM#% "%"
 * component[+].code = TiroCardiacMetric#afib-episode-count "Atrial fibrillation episode count"
-* component[=].valueQuantity = 7 $UCUM#1 "{count}"
+* component[=].valueQuantity = 7 $UCUM#1 "{episodes}"
 * component[+].code = TiroCardiacMetric#afib-longest-episode "Atrial fibrillation longest episode duration"
-* component[=].valueQuantity = 412 $UCUM#s "s"
+* component[=].valueQuantity = 23 $UCUM#min "min"
 
 
 Instance: example-holter-pause
@@ -293,13 +307,15 @@ longest pause duration. Parent code is a Tiro panel grouper (LOINC has
 no pause panel); components use Tiro local codes.
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#pause-panel "Sinus pause Holter panel"
+* code = $SCT#5609005 "Sinus arrest"
+* code.text = "Sinus pause / arrest panel (pause count + longest pause)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
 * component[0].code = TiroCardiacMetric#pause-count "Sinus pause count"
-* component[=].valueQuantity = 3 $UCUM#1 "{count}"
+* component[=].valueQuantity = 3 $UCUM#1 "{events}"
 * component[+].code = TiroCardiacMetric#longest-pause "Longest sinus pause duration"
 * component[=].valueQuantity = 2.8 $UCUM#s "s"
 
@@ -316,15 +332,15 @@ the panel grouper have no LOINC equivalents, so those come from
 `TiroCardiacMetric`.
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#ventricular-ectopy-panel "Ventricular ectopy Holter panel"
+* code = $SCT#17338001 "Ventricular premature beats"
+* code.text = "Ventricular ectopy panel (PVC count + VT longest run)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
 * component[0].code = $LOINC#76126-2 "Premature ventricular contractions [#]"
 * component[=].valueQuantity = 248 $UCUM#1 "{beats}"
-* component[+].code = TiroCardiacMetric#vt-run-count "Ventricular tachycardia run count"
-* component[=].valueQuantity = 2 $UCUM#1 "{count}"
 * component[+].code = TiroCardiacMetric#vt-longest-run "Ventricular tachycardia longest run length"
 * component[=].valueQuantity = 5 $UCUM#1 "{beats}"
 
@@ -342,17 +358,17 @@ statistics and the panel grouper have no LOINC equivalents and come
 from `TiroCardiacMetric`.
 """
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
-* code = TiroCardiacMetric#supraventricular-ectopy-panel "Supraventricular ectopy Holter panel"
+* code = $SCT#63593006 "Supraventricular premature beats"
+* code.text = "Supraventricular ectopy panel (PAC count + SVT run count)"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
 * component[0].code = $LOINC#8615-7 "Premature atrial contractions"
 * component[=].valueQuantity = 94 $UCUM#1 "{beats}"
 * component[+].code = TiroCardiacMetric#svt-run-count "Supraventricular tachycardia run count"
-* component[=].valueQuantity = 4 $UCUM#1 "{count}"
-* component[+].code = TiroCardiacMetric#svt-longest-run "Supraventricular tachycardia longest run length"
-* component[=].valueQuantity = 8 $UCUM#1 "{beats}"
+* component[=].valueQuantity = 4 $UCUM#1 "{events}"
 
 
 Instance: example-holter-qtc
@@ -361,9 +377,88 @@ Usage: #example
 Title: "Example: Holter QTc (420 ms)"
 Description: "Corrected QT interval derived from a 24h Holter recording."
 * status = #final
+* subject = Reference(ExampleHolterPatient)
 * category[procedure] = $ObsCat#procedure "Procedure"
 * code = $LOINC#8636-3 "Q-T interval corrected"
 * valueQuantity = 420 $UCUM#ms "ms"
 * method = $SCT#86184003 "Electrocardiographic ambulatory monitoring"
 * effectivePeriod.start = "2026-05-10T08:00:00+02:00"
 * effectivePeriod.end   = "2026-05-11T08:00:00+02:00"
+
+
+// ─────────────────────────────────────────────────────────────────────
+// Example patient — referenced by every example Observation in this
+// file. A single shared test patient is used (rather than a fresh
+// Patient per recording) to keep the examples runnable on any FHIR
+// server seeded with this resource.
+// ─────────────────────────────────────────────────────────────────────
+
+Instance: ExampleHolterPatient
+InstanceOf: Patient
+Usage: #example
+Title: "Example Holter / ECG patient"
+Description: "Shared example patient used as the `subject` for every Observation example in this file."
+* identifier.system = "http://example.org/fhir/patient"
+* identifier.value = "example-patient-1"
+
+
+// ─────────────────────────────────────────────────────────────────────
+// CardiacVitalSigns profile — for the real-time / flowsheet feed case
+// (avg HR from a Holter or telemetry recording landing on a vital-signs
+// flowsheet). Holter Observations are not always category=procedure:
+// implementations also emit recurring averages that belong in
+// vital-signs.
+//
+// Profile is a sibling, not a child, of CardiacMeasurement because the
+// fixed `category` value differs.
+// ─────────────────────────────────────────────────────────────────────
+
+Profile: CardiacVitalSigns
+Parent: Observation
+Id: CardiacVitalSigns
+Title: "Cardiac Vital Signs"
+Description: """
+FHIR Observation profile for cardiac measurements that flow into a
+vital-signs / flowsheet stream rather than into a final cardiology
+report. Typical use case: a Holter device emits a rolling average heart
+rate every hour and those values are written as discrete vital-signs
+Observations.
+
+`category` is fixed to `vital-signs` (the HL7 observation-category
+code) — this is the distinguishing constraint from `CardiacMeasurement`,
+which fixes `category` to `procedure`. Use `CardiacMeasurement` for the
+cardiologist's final report and panel-style summaries; use this profile
+for individual real-time measurements.
+"""
+
+* category 1..* MS
+* category ^slicing.discriminator.type = #pattern
+* category ^slicing.discriminator.path = "$this"
+* category ^slicing.rules = #open
+* category contains vitalSigns 1..1 MS
+* category[vitalSigns] = $ObsCat#vital-signs "Vital Signs"
+
+* status 1..1 MS
+* code 1..1 MS
+* subject 1..1 MS
+* effective[x] 1..1 MS
+* effective[x] only dateTime or Period
+
+
+Instance: example-holter-heart-rate-vitals
+InstanceOf: CardiacVitalSigns
+Usage: #example
+Title: "Example: Holter rolling average heart rate (78 bpm)"
+Description: """
+A single rolling-window average heart rate from a Holter monitor
+landing on the patient's flowsheet. Represents the case where a Holter
+implementation emits recurring HR averages with `category =
+vital-signs` rather than the panel-style `procedure` Observations on
+`CardiacMeasurement`.
+"""
+* status = #final
+* subject = Reference(ExampleHolterPatient)
+* category[vitalSigns] = $ObsCat#vital-signs "Vital Signs"
+* code = $LOINC#8867-4 "Heart rate"
+* valueQuantity = 78 $UCUM#/min "beats per minute"
+* effectiveDateTime = "2026-05-10T09:00:00+02:00"
